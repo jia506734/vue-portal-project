@@ -1,32 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-Vue.use(Vuex)
+import action from './action.js'
+import mutations from './mutations.js'
 
 // 引入 axios
 import axios from 'axios'
 Vue.use(Vuex)
 
+const state={
+  //全局变量
+}
 
 const store = new Vuex.Store({
   // 定义状态
-  state: {
-    test01: {
-      name: 'Wise Wrong'
-    },
-    test02: {
-      tell: '12312345678'
-    }
+  state:{
+    count:0
   },
-  actions: {
-    // 封装一个 ajax 方法
-    saveForm (context) {
-      axios({
-        method: 'post',
-        url: '/user',
-        data: context.state.test02
-      })
-    }
+  mutations:{
+    increment:state => state.count ++,
+    decrement:state => state.count --,
   }
+  
 })
 
 export default store
