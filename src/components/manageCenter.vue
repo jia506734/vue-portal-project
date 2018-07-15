@@ -1,11 +1,10 @@
 <template>
     <div>
-        <vhead></vhead>
         <div class="content_section">
             <el-row style="height: 100%;">
-                <el-col :span="4"  style="min-height: 100%;">
-                    <el-menu :default-active="defaultActive" style="min-height: 100%;background-color: #d2d2d2;" >
-                        <el-submenu index="1" style="background-color: #d2d2d2;">
+                <el-col :span="4"  style="min-height: 100%; background-color: rgb(208, 219, 239)">
+                    <el-menu :default-active="defaultActive" style="min-height: 100%;background-color: rgb(208, 219, 239)" >
+                        <el-submenu index="1">
                             <template slot="title">资源中心首页</template>
                             <el-menu-item index="userList">智慧校园</el-menu-item>
                             <el-menu-item index="shopList">智慧医院</el-menu-item>
@@ -27,7 +26,7 @@
                         </el-submenu>
                     </el-menu>
                 </el-col>
-                <e-col :span="20">
+                <!-- <e-col :span="20">
                     <div style="margin-left:10px;">
                         <header class="resourceCenter_title">资源中心首页</header>
                         <div class="resourceCenter_content">
@@ -37,41 +36,24 @@
                             <div class="content_list">3.智能家居</div>
                             <div class="content_list">4.智能工业</div>
                             <div class="content_list">5.智能仓储</div>
-                            <div class="content_list">6.智能车载</div>
-                            <div class="content_list">此外，还包括了开发过程中的返回码说明，常见错误和资费说明。</div>
-                        </div>
-                    </div>
-                </e-col>
-		   </el-row>
+                            <div class="content_list">6.智能车 -->
+            </el-row>
         </div>
-         <!-- <div class="">
-            <header class="resourceCenter_title">资源中心首页</header>
-            <div class="resourceCenter_content">
-                <div class="content_list">资源中心是探为开放平台用户所需所有相关资源的汇集地，包括：</div>
-                <div class="content_list">1.智慧校园</div>
-                <div class="content_list">2.智慧医院</div>
-                <div class="content_list">3.智能家居</div>
-                <div class="content_list">4.智能工业</div>
-                <div class="content_list">5.智能仓储</div>
-                <div class="content_list">6.智能车载</div>
-                <div class="content_list">此外，还包括了开发过程中的返回码说明，常见错误和资费说明。</div>
-            </div>
-        </div> -->
     </div>
 </template>
 <script>
-    import vhead from "./vhead"
     export default {
 		computed: {
 			defaultActive: function(){
 				return this.$route.path.replace('/', '');
 			}
         },
-        components:{vhead},
     }
 </script>
 <style  scoped>
-    
+    /* .el-submenu__title{
+        color: #bfcbd9 !important
+    } */
     .content_section{
         margin-top: 20px;
         background-color: #d2d2d2;

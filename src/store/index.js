@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import action from './action.js'
+import actions from './actions.js'
 import mutations from './mutations.js'
 
 // 引入 axios
@@ -11,16 +11,11 @@ const state={
   //全局变量
 }
 
-const store = new Vuex.Store({
-  // 定义状态
-  state:{
-    count:0
-  },
-  mutations:{
-    increment:state => state.count ++,
-    decrement:state => state.count --,
-  }
-  
+export default new Vuex.Store({
+	state,
+	actions,
+	mutations,
 })
 
-export default store
+
+

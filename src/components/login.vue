@@ -53,7 +53,7 @@
 		},
 		methods: {
 			async submitForm(formName) {
-                this.$router.push('common')
+                this.$router.push('manage')
 			},
 		},
 	}

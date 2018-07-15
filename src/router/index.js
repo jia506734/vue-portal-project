@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import common from '@/components/common'
+import manage from '@/components/manage'
 import login from '@/components/login'
+//import main from '@/components/page/main'
 
 
 Vue.use(Router)
@@ -22,14 +23,14 @@ export default new Router({
     //   }
     // },
     {
-      path: '/common',
-      component: common,
+      path: '/manage',
+      component: manage,
       name: '',
-      children: [{
-        path: '',
-        //component: home,
-        meta: [],
-      }]
+      // children: [{
+      //   path: '',
+      //   component: main,
+      //   meta: [],
+      // }]
     }
   ]
 })
