@@ -2,60 +2,78 @@
     <div>
         <div class="content_section">
             <el-row style="height: 100%;">
-                <el-col :span="4"  style="min-height: 100%; background-color: rgb(208, 219, 239)">
-                    <el-menu :default-active="defaultActive" style="min-height: 100%;background-color: rgb(208, 219, 239)" >
+                <el-col :span="4"  style="height: 100%;background: #545c64;">
+                    <el-menu :default-active="defaultActive" 
+                    class="el-menu-vertical-demo"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b" >
                         <el-submenu index="1">
-                            <template slot="title">资源中心首页</template>
-                            <el-menu-item index="userList">智慧校园</el-menu-item>
-                            <el-menu-item index="shopList">智慧医院</el-menu-item>
-                            <el-menu-item index="foodList">智能家居</el-menu-item>
-                            <el-menu-item index="orderList">智能工业</el-menu-item>
-                            <el-menu-item index="adminList">智能仓储</el-menu-item>
+                            <template slot="title">线路管理</template>
+                            <el-menu-item index="1-1">线路管理-同业</el-menu-item>
+                            <el-menu-item index="1-2">线路管理-网店</el-menu-item>
+                            <el-submenu index="1-3">
+                                <template slot="title">新建线路</template>
+                                <el-menu-item index="1-3-1">第一步基本信息</el-menu-item>
+                                <el-menu-item index="1-3-2">第二步-团队&费用</el-menu-item>
+                                <el-menu-item index="1-3-3">第三步-线路详情</el-menu-item>
+                                <el-menu-item index="1-3-4">第四步-目的地简介</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
                         <el-submenu index="2">
-                            <template slot="title">返回码说明</template>
-                            <el-menu-item index="userList">返回码说明</el-menu-item>
+                            <template slot="title">门票管理</template>
+                            <el-menu-item index="2-1">门票管理-同业</el-menu-item>
+                            <el-menu-item index="2-2">门票管理-网店</el-menu-item>
+                            <el-submenu index="2-3">
+                                <template slot="title">新建线路-新增</template>
+                                <el-menu-item index="2-3-1">基本信息</el-menu-item>
+                                <el-menu-item index="2-3-2">门票价格</el-menu-item>
+                                <el-menu-item index="2-3-3">景区介绍</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
-                        <el-submenu index="3">
-                            <template slot="title">常见错误</template>
-                            <el-menu-item index="userList">常见错误F&Q</el-menu-item>
-                        </el-submenu>
-                        <el-submenu index="4">
-                            <template slot="title">资费说明</template>
-                            <el-menu-item index="userList">资费说明</el-menu-item>
+                        <el-menu-item index="3">
+                            <template slot="title">机票管理</template>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <template slot="title">保险管理</template>
+                        </el-menu-item>
+                        <el-menu-item index="5">
+                            <span slot="title">分销商管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="6">
+                            <span slot="title">配置管理</span>
+                        </el-menu-item>
+                        <el-submenu index="7">
+                            <template slot="title">权限管理</template>
+                            <el-menu-item index="7-1">菜单管理</el-menu-item>
+                            <el-menu-item index="7-2">用户管理</el-menu-item>
+                           <el-menu-item index="7-3">权限管理</el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-col>
-                <!-- <e-col :span="20">
-                    <div style="margin-left:10px;">
-                        <header class="resourceCenter_title">资源中心首页</header>
-                        <div class="resourceCenter_content">
-                            <div class="content_list">资源中心是探为开放平台用户所需所有相关资源的汇集地，包括：</div>
-                            <div class="content_list">1.智慧校园</div>
-                            <div class="content_list">2.智慧医院</div>
-                            <div class="content_list">3.智能家居</div>
-                            <div class="content_list">4.智能工业</div>
-                            <div class="content_list">5.智能仓储</div>
-                            <div class="content_list">6.智能车 -->
+                <el-col :span="20">
+                    <management ></management>
+                </el-col>
             </el-row>
         </div>
     </div>
 </template>
 <script>
+    import management from "./page/Management"
     export default {
 		computed: {
 			defaultActive: function(){
 				return this.$route.path.replace('/', '');
 			}
         },
+        components:{
+            management
+        }
     }
 </script>
 <style  scoped>
-    /* .el-submenu__title{
-        color: #bfcbd9 !important
-    } */
+   
     .content_section{
-        margin-top: 20px;
         background-color: #d2d2d2;
         height:860px;
     }
