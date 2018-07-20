@@ -1,5 +1,5 @@
 <template>
     <div>
-        资质认证
+        机票管理
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
     <div>
-        基本信息
+        门票管理
     </div>
 </template>
