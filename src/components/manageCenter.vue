@@ -59,7 +59,7 @@
 
 <style  scoped>
     .content_section{
-        background-color: #d2d2d2;
+        /* background-color: #d2d2d2; */
         height:860px;
     }
     .resourceCenter_title{

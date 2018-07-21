@@ -1,13 +1,8 @@
 <template>
     <div>
-        <div>
-            <el-input style="width:250px;margin-right:15px" placeholder="请输入内容" suffix-icon="el-icon-search" 
-            v-model="input21"> </el-input>
-            <el-button type="primary">新建线路</el-button>
-            <el-button type="danger">删除线路</el-button>
-        </div>
         <div style="margin-top:15px;">
           <el-table
+            :border ='showBorder'
             ref="multipleTable"
             :data="tableData3"
             tooltip-effect="dark"
@@ -15,23 +10,55 @@
              <!-- @selection-change="handleSelectionChange" -->
             <el-table-column
               type="selection"
-              width="55">
+              width="55"
+              style="text-align:center">
             </el-table-column>
             <el-table-column
-              label="日期"
-              width="120">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
+              label="操作"
+              width="180">
+              <template slot-scope="scope">
+                  <el-button v-if="type=='my'" size="mini"  
+                  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button v-if="type=='my'" size="mini" type="success" 
+                  @click="handleDelete(scope.$index, scope.row)">上架</el-button>
+                  <el-button v-if="type=='my'" size="mini" type="danger" 
+                  @click="handleDelete(scope.$index, scope.row)">下架</el-button>
+                  <el-button v-if="type=='trade'" size="mini" 
+                  type="warning" @click="handleDelete(scope.$index, scope.row)">收藏</el-button>
+                  <el-button v-if="type=='store'" size="mini"  
+                  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button v-if="type=='store'" size="mini" type="info" 
+                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  <el-button v-if="type=='store'" size="mini" type="danger" 
+                  @click="handleDelete(scope.$index, scope.row)">下架</el-button>
+              </template>
             </el-table-column>
             <el-table-column
               prop="name"
-              label="姓名"
-              width="120">
+              label="线路"
+              width="500">
+            </el-table-column>
+             <el-table-column
+              prop="dateCount"
+              label="活动天数"
+               width="100">
             </el-table-column>
             <el-table-column
-              prop="address"
-              label="地址"
-              show-overflow-tooltip>
+              prop="date"
+              label="发布时间"
+               width="140">
             </el-table-column>
+            <el-table-column
+             
+              label="状态"
+               width="120">
+               <template slot-scope="scope"><span style="text-align: center;">{{ scope.row.status }}</span></template>>
+            </el-table-column>
+            <!-- <el-table-column
+              prop="address"
+              label="活动天数"
+              show-overflow-tooltip>
+            </el-table-column> -->
           </el-table>
         </div>
     </div>
@@ -42,44 +69,82 @@
 export default {
      data(){
     return{
-        input21:'',
+        showBorder:true,
+        
       tableData3: [{
           date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '上架'
         }, {
           date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '下架'
         }, {
           date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '上架'
         }, {
           date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '上架'
         }, {
           date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '上架'
         }, {
           date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '下架'
         }, {
           date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          dateCount:'3',
+          name: '哈哈哈，追不上吧，就是这么强大。啦啦啦啦啦啦阿里',
+          status: '上架'
         }],
         multipleSelection: []
     }
   },
     props:['type'],
     created(){
-        console.log(this.type);
+    },
+    methods:{
+        handleEdit(index, row){
+
+        },
+        handleDelete(index, row) {
+            console.log(index, row);
+      }
+    },
+    watch:{
+        // type(){
+        //     let aa = this.type;
+        // }
     },
 }
 
 </script>
+
+<style>
+    .el-table th{
+        text-align: center !important;
+    }
+    .el-table .cell{
+        text-align: center;
+    }
+</style>
+
+<style scoped>
+    .el-button--mini, .el-button--mini.is-round{
+        padding: 5px 9px !important;
+    }
+
+</style>
+
+
 
