@@ -4,7 +4,10 @@
       <span class="route-manage-top">线路管理</span>
     </div>
     <div class="operate-button">
-      <el-button type="primary" >新建线路</el-button>
+      <el-button type="primary" @click="toNewRoute" >新建线路</el-button>
+      <!-- <router-link to="toNewRoute">
+        <el-button type="primary" >新建线路</el-button>
+      </router-link> -->
       <el-button type="danger">删除线路</el-button>
       <el-input style="width:250px;margin-right:20px" placeholder="请输入线路名称" suffix-icon="el-icon-search" 
             v-model="input21"> </el-input>
@@ -28,6 +31,7 @@
 
 <script>
 import commonRoute from '../common/commonRoute'
+import route from '../../router'
 export default {
   data(){
     return{
@@ -42,7 +46,10 @@ export default {
   methods:{
       handleClick(tab, event) {
         this.tabName =this.activeName
-      }
+      },
+      toNewRoute(){
+        this.$router.push('/newRoute')
+      },
   },
 }
 </script>

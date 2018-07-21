@@ -9,6 +9,8 @@ import insuranceManage from '@/components/page/insuranceManage'
 import distributorManage from '@/components/page/distributorManage'
 import configurationManage from '@/components/page/configurationManage'
 import authorManage from '@/components/page/authorManage'
+import newRoute from '@/components/page/newRoute'
+
 
 Vue.use(Router)
 // const routeManage = r => require.ensure([], () => r(require('@/page/routeManage')), 'routeManage');
@@ -57,6 +59,11 @@ export default new Router({
         path: '/authorManage',
         component: authorManage,
         meta: ['权限管理'],
+      },
+      {
+        path: '/newRoute',
+        component: newRoute,
+         meta: ['新建线路'],
       },
     ]
     }
