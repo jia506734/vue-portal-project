@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="width:100%">
         <div class="route-manage" >
             <span class="route-manage-top">线路管理 > 新建线路</span>
         </div>
@@ -11,6 +11,19 @@
                             <el-form-item label="线路名称" prop="name">
                                 <el-input v-model="ruleForm.name" placeholder="请输入线路名称"></el-input>
                             </el-form-item>
+                            <el-form-item label="线路美图" prop="routePic">
+                                <el-upload
+                                    class="upload-demo"
+                                    action="https://jsonplaceholder.typicode.com/posts/"
+                                    :on-preview="handlePreview"
+                                    :on-remove="handleRemove"
+                                    :file-list="fileList2"
+                                    list-type="picture">
+                                    <el-button size="small" type="primary">点击上传</el-button>
+                                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                    </el-upload>
+                            </el-form-item>
+
                             <el-form-item label="国内境外" prop="resource">
                                 <el-radio-group v-model="ruleForm.resource">
                                 <el-radio label="国内"></el-radio>
@@ -87,6 +100,8 @@
 export default {
     data(){
         return{
+            fileList2:[],
+            activeName2: 'first',
             ruleForm: {
                 name: '',
                 from:'',
@@ -106,7 +121,7 @@ export default {
             rules: {
                 name: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    // { min: 1, max: 50, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 from: [
                     { required: true, message: '请输入出发地', trigger: 'blur' },
@@ -147,25 +162,39 @@ export default {
         }
     },
     methods: {
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('submit!');
+                
             } else {
-                console.log('error submit!!');
-                return false;
+                this.activeName2 = 'second'
+                // return false;
             }
             });
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        handleClick(tab, event) {
+            console.log(tab, event);
         }
+
     }
 }
 </script>
 
 
 <style scoped>
+    .demo-ruleForm{
+        height: 800px;
+        overflow-y: auto
+    }
   .route-manage{
     width:100%;
     height:40px;
