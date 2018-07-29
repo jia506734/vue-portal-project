@@ -52,7 +52,7 @@
 </script>
 <style>
     .el-menu-vertical{
-        width: 222px;
+        /* width: 222px; */
     }
 </style>
 

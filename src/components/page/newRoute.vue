@@ -220,7 +220,54 @@
                         </el-row>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="线路详情" name="third">线路详情</el-tab-pane>
+                <el-tab-pane label="线路详情" name="third">
+                    <div style="margin-left:20px;">
+                        <el-row>
+                            <el-col :span="3"><span>行程天数</span></el-col>
+                            <el-col :span="3">
+                                <el-select v-model="dayvalue" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in days"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="1"><span style="padding-left:15px">天</span></el-col>
+                            <el-col :span="3">
+                                <el-select v-model="nightvalue" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in nights"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="1"><span style="padding-left:15px">晚</span></el-col>
+                        </el-row>
+                        <el-row style="margin-top: 20px;">
+                            <el-col :span="3"><span>线路编辑模式</span></el-col>
+                            <el-col :span="20">
+                                <el-radio-group v-model="routeEditType">
+                                <el-radio label="按天编辑"></el-radio>
+                                <el-radio label="综合行程"></el-radio>
+                                </el-radio-group>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-top: 20px;">
+                            <el-col :span="3">行程详情</el-col>
+                            <el-col :span="21">
+                                <!-- <quill-editor ref="myTextEditor"
+                                :content="content"
+                                :options = "editorOption"
+                                @change="onEditorChange($event)"></quill-editor> -->
+                            </el-col>
+                        </el-row>
+                    </div>
+
+                </el-tab-pane>
                 <el-tab-pane label="目的地简介" name="fourth">目的地简介</el-tab-pane>
             </el-tabs>
         </div>
@@ -228,12 +275,17 @@
 </template>
 
 <script>
+import { quillEditor } from 'vue-quill-editor'
 export default {
     data(){
         return{
             tableData:[
                 {Sun:'',Mon:'1',Tues:'2',Wed:'3',Thur:'4',Fri:'5',Sat:'6'},
             ],
+            dayvalue:'',
+            nightvalue:'',
+            editorOption:'',
+            content:"",
             fileList2:[],
             activeName2: 'first',
             ruleForm: {
@@ -252,12 +304,25 @@ export default {
                 theme:[],
                 resource: '',
             },
+            routeEditType:'',
             ruleFormcharge:{
                 start:'',
                 end:'',
                 goTime:[],
                 marketCharge:'',
             },
+            days:[
+                {label:"一天",value:"1"},
+                {label:"三天",value:"3"},
+                {label:"五天",value:"5"},
+                {label:"七天",value:"7"},
+            ],
+            nights:[
+                {label:"一晚",value:"1"},
+                {label:"二晚",value:"2"},
+                {label:"四晚",value:"4"},
+                {label:"六晚",value:"6"},
+            ],
             rulescharge:{
                 start: [
                     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -318,7 +383,13 @@ export default {
             }
         }
     },
+    components:{
+        quillEditor
+    },
     methods: {
+        onEditorChange({ editor, html, text }) {//富文本编辑器  文本改变时 设置字段值
+            this.content = html
+        },
         //应用价格
         applyCharge(){
 
@@ -367,6 +438,9 @@ export default {
     .tableleft{
         margin-left: 30px;
         margin-top: 20px;
+    }
+    .demo-ruleFormcharge .el-input--small{
+        width: 20%;
     }
     .timeTable{
         width:100%;
