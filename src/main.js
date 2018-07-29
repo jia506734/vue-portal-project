@@ -10,6 +10,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueI18n from 'vue-i18n'
 import assets from './assets/cookie.js'
+import  VueQuillEditor from 'vue-quill-editor'
 
 //import '/tools/getBrowserLang'
 
@@ -17,6 +18,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use(VueQuillEditor)
 
 Vue.prototype.assets= assets;
 // var browserLang = (getBrowerLang()==="zh-CN"?'zh':'en')

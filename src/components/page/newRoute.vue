@@ -259,23 +259,52 @@
                         <el-row style="margin-top: 20px;">
                             <el-col :span="3">行程详情</el-col>
                             <el-col :span="21">
-                                <!-- <quill-editor ref="myTextEditor"
-                                :content="content"
-                                :options = "editorOption"
-                                @change="onEditorChange($event)"></quill-editor> -->
+                                <!-- <quill-editor v-model="editorContent" ref="myQuillEditor" 
+                                :options="editorOption" 
+                                ></quill-editor> -->
+                                <!-- @blur="onEditorBlur($event)" 
+                                @focus="onEditorFocus($event)"
+                                @change="onEditorChange($event)" -->
                             </el-col>
                         </el-row>
                     </div>
 
                 </el-tab-pane>
-                <el-tab-pane label="目的地简介" name="fourth">目的地简介</el-tab-pane>
+                <el-tab-pane label="目的地简介" name="fourth">
+                    <div>
+                        <el-row>
+                            <el-col :span="9">
+                                <img style="width:360px" src="../../assets/pictrue/1.jpg">
+                            </el-col>
+                            <el-col :span="15">
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>国道318线——中国人的景观大道，藏民俗风情体验圣地;</el-col>
+                               </el-row>
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>新都桥——摄影家的天堂，如诗如画的世外桃源;</el-col>
+                               </el-row>
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>理塘县——世界高城、雪域圣地、草原明珠;</el-col>
+                               </el-row>
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>然乌湖——著名的高原冰川湖，面积22平方公里，海拔3850米。湖畔是茂密的原始森林，碧蓝的湖水，森林倒映，清澈见底，湖面的水鸟成群，一派仙境景色;</el-col>
+                               </el-row>
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>嘎啦桃花村——林芝桃花节举办地，桃花、青稞、雪山、森林相映衬，美不胜收;</el-col>
+                               </el-row>
+                               <el-row>
+                                   <el-col :span="24"><i class="el-icon-star-on"></i>圣城拉萨布达拉宫——雪域高原一颗璀璨、圣洁的明珠。</el-col>
+                               </el-row>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
 export default {
     data(){
         return{
@@ -284,7 +313,8 @@ export default {
             ],
             dayvalue:'',
             nightvalue:'',
-            editorOption:'',
+            editorContent:'',
+            editorOption:{},
             content:"",
             fileList2:[],
             activeName2: 'first',
@@ -383,13 +413,9 @@ export default {
             }
         }
     },
-    components:{
-        quillEditor
-    },
+
+
     methods: {
-        onEditorChange({ editor, html, text }) {//富文本编辑器  文本改变时 设置字段值
-            this.content = html
-        },
         //应用价格
         applyCharge(){
 
@@ -427,6 +453,31 @@ export default {
 
 
 <style scoped>
+    .quill-editor {
+        height: 745px;
+    }
+    .quill-editor .ql-container {
+        height: 680px;
+    }
+    .line{
+        padding-left: 35px;
+    }
+    .limit {
+        height: 30px;
+        border: 1px solid #ccc;
+        line-height: 30px;
+        text-align: right;
+    }
+    .limit span {
+        color: #ee2a7b;
+    }
+    .ql-snow .ql-editor img {
+        max-width: 480px;
+    }
+
+    .ql-editor .ql-video {
+        max-width: 480px;
+    }
     .demo-ruleForm{
         height: 811px;
         overflow-y: auto

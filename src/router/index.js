@@ -10,10 +10,9 @@ import distributorManage from '@/components/page/distributorManage'
 import configurationManage from '@/components/page/configurationManage'
 import authorManage from '@/components/page/authorManage'
 import newRoute from '@/components/page/newRoute'
-
+import newTicket from '@/components/page/newTicket'
 
 Vue.use(Router)
-// const routeManage = r => require.ensure([], () => r(require('@/page/routeManage')), 'routeManage');
 
 export default new Router({
   routes: [
@@ -63,6 +62,11 @@ export default new Router({
       {
         path: '/newRoute',
         component: newRoute,
+         meta: ['新建线路'],
+      },
+      {
+        path: '/newTicket',
+        component: newTicket,
          meta: ['新建线路'],
       },
     ]
