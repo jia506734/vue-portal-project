@@ -17,5 +17,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  background-image: url(/assets/pictrue/7.jpg)
 }
 </style>
