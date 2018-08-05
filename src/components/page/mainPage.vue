@@ -80,7 +80,7 @@
     .totalData{
         width:90%;
         height: 240px;
-        background: white;
+        background: #ccc8b7;
         font-size: 14px;
     }
     .row-el{

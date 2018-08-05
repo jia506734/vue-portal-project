@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content_section">
-            <el-row style="height: 100%;background:#ddd">
+            <el-row style="height: 100%;">
                 <el-col :span="4"  style="height: 112%;background: #545c64;">
                     <el-menu :default-active="defaultActive" 
                     class="el-menu-vertical"
@@ -46,11 +46,16 @@
 </template>
 <script>
     export default {
-		computed: {
-			defaultActive: function(){
-				return this.$route.path.replace('/', '');
-			}
-        },
+        data(){
+            return{
+                defaultActive:'mainPage',
+            }
+        }
+		// computed: {
+		// 	defaultActive: function(){
+		// 		return this.$route.path.replace('/', '');
+		// 	}
+        // },
     }
 </script>
 <style>
