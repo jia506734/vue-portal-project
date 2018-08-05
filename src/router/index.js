@@ -11,6 +11,8 @@ import configurationManage from '@/components/page/configurationManage'
 import authorManage from '@/components/page/authorManage'
 import newRoute from '@/components/page/newRoute'
 import newTicket from '@/components/page/newTicket'
+import mainPage from '@/components/page/mainPage'
+
 
 Vue.use(Router)
 
@@ -24,7 +26,13 @@ export default new Router({
       path: '/manage',
       component: manage,
       name: '',
-      children: [{
+      children: [
+        {
+          path: '/mainPage',
+          component: mainPage,
+          meta: ['主页'],
+        },
+        {
         path: '/routeManage',
         component: routeManage,
         meta: ['线路管理'],
