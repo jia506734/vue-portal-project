@@ -22,6 +22,5 @@ export default {
   bottom: 0;
   position: absolute;
   right: 0;
-  background-image: url(/assets/pictrue/7.jpg)
 }
 </style>

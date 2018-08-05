@@ -57,7 +57,7 @@
 		},
 		methods: {
 			async submitForm(formName) {
-                this.$router.push('manage')
+                this.$router.push('mainPage')
 			},
 		},
 	}
