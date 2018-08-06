@@ -95,6 +95,34 @@
                     :visible.sync="addNewVisible"
                     width="30%"
                     :before-close="handleClose">
+                    <el-dialog
+                        title="菜单顺序"
+                        :visible.sync="orderVisible"
+                        width="30%"
+                        append-to-body>
+                        <el-row style="margin-top: -25px;">
+                            <el-col :span="24">
+                                <i class="el-icon-sort-up"></i><span style="padding-right:10px">上移</span>
+                                <i class="el-icon-sort-down"></i><span>下移</span>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <div style="height:200px;width:100%;border:1px solid #ddd">
+                                    <el-row>
+                                        <el-col :span="24">1.菜单1</el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="24">2.菜单2</el-col>
+                                    </el-row>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <div style="text-align:center;margin-top:15px">
+                            <el-button type="primary" @click="orderVisible = false">确定</el-button>
+                            <el-button @click="orderVisible = false">关闭</el-button>
+                        </div>
+                    </el-dialog>
                     <div>
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                             <el-form-item label="菜单名称" prop="name">
@@ -108,7 +136,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="菜单顺序" prop="order">
-                                <el-input v-model="ruleForm.order"></el-input>
+                                <div style="width:100%;height:30px;border:1px solid #ddd;" @click="orderVisible = true"></div>
                             </el-form-item>
                             <el-form-item label="菜单样式" prop="style">
                                 <el-input v-model="ruleForm.style"></el-input>
@@ -124,8 +152,10 @@
                                 <el-button @click="resetForm('ruleForm')">取消</el-button>
                             </el-form-item>
                             </el-form>
+                            
                     </div>
                 </el-dialog>
+
             </el-tab-pane>
             <el-tab-pane label="用户管理" name="second">用户管理</el-tab-pane>
             <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
@@ -140,6 +170,7 @@
         menuCode:'',//菜单Code
         menuName:'',//菜单名称
         menuFather:'',//父级菜单
+        orderVisible:false,
         tableData: [{
           date: '2016-05-02',
           name: '王小虎',
