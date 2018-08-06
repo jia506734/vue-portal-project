@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="content_section">
-            <el-row style="height: 100%;">
-                <el-col :span="4"  style="height: 112%;background: #545c64;">
+            <el-row style="height: calc(100% - 50px)">
+                <el-col :span="4"  style="height: 100%;background: #545c64;">
                     <el-menu :default-active="defaultActive" 
                     class="el-menu-vertical"
                     background-color="#545c64"
