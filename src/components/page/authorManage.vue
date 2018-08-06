@@ -16,7 +16,9 @@
                         <el-col  :span="2">
                             <span style="cursor: pointer;" @click="addNewClick"><i class="el-icon-circle-plus"></i>新增</span>
                         </el-col>
-                        <el-col style="cursor: pointer;" :span="3"><i class="el-icon-circle-plus"></i>资源号</el-col>
+                        <el-col  :span="3">
+                            <span style="cursor: pointer;" @click="resourceNewClick"><i class="el-icon-circle-plus"></i>资源号</span>
+                        </el-col>
                     </el-row>
                     <el-table
                         :data="tableData"
@@ -155,7 +157,42 @@
                             
                     </div>
                 </el-dialog>
-
+                    <el-dialog
+                        title="菜单管理>资源号新建"
+                        :visible.sync="resourceNewVisible"
+                        width="50%">
+                        <div>
+                            <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                                <el-form-item label="菜单名称" prop="name">
+                                    <el-input v-model="ruleForm.name"></el-input>
+                                </el-form-item>
+                                <el-form-item label="父级菜单" prop="fatherMenu">
+                                    <el-select v-model="ruleForm.fatherMenu" placeholder="请选择父级菜单">
+                                    <el-option label="首页" value="indexPage"></el-option>
+                                    <el-option label="集中巡检" value="secondSelect"></el-option>
+                                    <el-option label="分析评估" value="analyze"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="菜单顺序" prop="order">
+                                    <div style="width:100%;height:30px;border:1px solid #ddd;" @click="orderVisible = true"></div>
+                                </el-form-item>
+                                <el-form-item label="菜单样式" prop="style">
+                                    <el-input v-model="ruleForm.style"></el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单图标" prop="icon">
+                                    <el-input v-model="ruleForm.icon"></el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单首地址" prop="mainMenu">
+                                    <el-input v-model="ruleForm.mainMenu"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+                                    <el-button @click="resetForm('ruleForm')">取消</el-button>
+                                </el-form-item>
+                                </el-form> -->
+                                
+                            </div>
+                    </el-dialog>
             </el-tab-pane>
             <el-tab-pane label="用户管理" name="second">用户管理</el-tab-pane>
             <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
@@ -170,6 +207,7 @@
         menuCode:'',//菜单Code
         menuName:'',//菜单名称
         menuFather:'',//父级菜单
+        resourceNewVisible:false,
         orderVisible:false,
         tableData: [{
           date: '2016-05-02',
@@ -221,6 +259,9 @@
         },
         addNewClick(){
             this.addNewVisible= true;
+        },
+        resourceNewClick(){
+            this.resourceNewVisible = true
         },
         handleClose(done) {
         this.$confirm('确认关闭？')
