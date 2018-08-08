@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height:100%;">
         <div class="header_container">
             <div class="header_left">
                 <div>慧城天下</div>

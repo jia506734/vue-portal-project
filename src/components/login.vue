@@ -5,18 +5,20 @@
 		  		<div class="manage_tip">
 		  			<h1>LOGO</h1>
 		  		</div>
-				<div style="float:left;margin-bottom:20px;">LOGIN 登录</div>
+				<div class="text_left" style="margin-bottom:20px;">LOGIN 登录</div>
 		    	<el-form :model="loginForm" :rules="rules" ref="loginForm">
 					<el-form-item prop="username">
+						<div class="text_left">用户名</div>
 						<el-input v-model="loginForm.username" placeholder="手机号/邮箱登录"><span>dsfsf</span></el-input>
 					</el-form-item>
 					<el-form-item prop="password">
+						<div class="text_left">密码</div>
 						<el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
 					</el-form-item>
 					<el-form-item>
 				    	<el-button  type="primary" @click="submitForm('loginForm')" class="submit_btn">登录></el-button>
-						<span class="else-button">注册账号</span>
-						<span class="else-button">忘记密码?</span>
+						<div class="else-button">注册账号</div>
+						<div class="else-button">忘记密码?</div>
 						
 				  	</el-form-item>
 				</el-form>
@@ -61,6 +63,9 @@
 </script>
 
 <style  scoped>
+	.text_left{
+		text-align: left;
+	}
 	.login_page{
 		    left: 0;
     top: 0;
@@ -74,6 +79,9 @@
 	.else-button{
  		font-size:12px;float:right
 	}
+	.else-button + .else-button {
+		padding-right:10px;
+	}
 	.manage_tip{
 		position: absolute;
 		width: 100%;
@@ -83,6 +91,8 @@
 		font-size: 25px;
 	}
 	.submit_btn{
+		width:100px;
+		text-align: center;
 		float: left;
 	}
 	.form_contianer{

@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;overflow-y:scroll;">
+  <div style="height:100%;">
     <div class="route-manage" >
       <span class="route-manage-top">线路管理</span>
     </div>

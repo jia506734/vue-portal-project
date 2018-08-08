@@ -1,12 +1,13 @@
 <template>
-    <div>
+    <div style="height: calc(100% - 50px);">
         <div class="content_section">
-            <el-row style="height: calc(100% - 50px)">
-                <el-col :span="4"  style="height: 100%;background: #545c64;">
+            <el-row class="content_container">
+                <el-col  style="height: 100%;background: #545c64;position:absolute;width:140px;">
                     <el-menu :default-active="defaultActive" 
                     class="el-menu-vertical"
-                    background-color="#545c64"
-                    text-color="#fff"
+                   style="background:#545c64; width:100%;"
+                   text-color="#fff"
+                   text
                     router
                     active-text-color="#ffd04b" >
                     <el-menu-item index="mainPage">
@@ -35,7 +36,7 @@
                         </el-menu-item>
                     </el-menu>
                 </el-col>
-                <el-col :span="20" >
+                <el-col  style="position:relative;left:140px;width:calc(100% - 140px);height:100%;overflow:scroll;">
                    <keep-alive>
 				     <router-view></router-view>
 				  </keep-alive>
@@ -67,9 +68,13 @@
 <style  scoped>
     .content_section{
         /* background-color: #d2d2d2; */
-        height:860px;
+        /* height:860px; */
+        height:100%;
     }
-    .resourceCenter_title{
+    .content_container{
+        height:100%;
+    }
+    .resourceCenter_title{  
         height:30px;
         border-bottom: 1px solid #000000;
     }
