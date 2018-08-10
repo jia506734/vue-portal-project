@@ -209,10 +209,10 @@
                             <span style="cursor: pointer;" @click="resourceNewClick"><i class="el-icon-circle-plus"></i>角色绑定</span>
                         </el-col>
                         <el-col  :span="2">
-                            <span style="cursor: pointer;" @click=""><i class="el-icon-circle-plus"></i>导入</span>
+                            <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>导入</span>
                         </el-col>
                         <el-col  :span="3">
-                            <span style="cursor: pointer;" @click=""><i class="el-icon-circle-plus"></i>导出</span>
+                            <span style="cursor: pointer;"><i class="el-icon-circle-plus"></i>导出</span>
                         </el-col>
                     </el-row>
                     <el-table
@@ -278,64 +278,58 @@
                     :visible.sync="userNewVisible"
                     width="35%">
                     <div>
-                        <el-form :inline="true" :model="userInline" class="demo-form-inline" >
-                            <el-form-item label="用户名" >
-                                <el-input v-model="userInline.name" placeholder="用户名"></el-input>
+                        <el-form ref="form" :model="userInline" label-width="100px">
+                            <el-form-item label="用户名">
+                                <el-input v-model="userInline.name"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户姓名">
-                                <el-select v-model="userInline.names" placeholder="请选择">
+                            <el-form-item label="用户性别">
+                                <el-select v-model="userInline.sex" placeholder="请选择">
                                     <el-option
-                                        v-for="item in options"
+                                        v-for="item in sexs"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                        </el-form>
-                        <el-form :inline="true" :model="userInline" class="demo-form-inline">
                             <el-form-item label="手机">
-                                <el-input v-model="userInline.phone" placeholder="手机"></el-input>
+                                <el-input v-model="userInline.phone"></el-input>
                             </el-form-item>
                             <el-form-item label="邮件">
-                                <el-input v-model="userInline.mail" placeholder="邮件"></el-input>
+                                <el-input v-model="userInline.mail"></el-input>
                             </el-form-item>
-                        </el-form>
-                        <el-form :inline="true" :model="userInline" class="demo-form-inline">
-                                <el-form-item label="有效日期">
-                                    <el-date-picker
-                                        v-model="userInline.date"
-                                        type="date"
-                                        placeholder="选择日期">
-                                    </el-date-picker>
-                                </el-form-item>
-                                <el-form-item label="是否有效">
-                                    <el-select v-model="userInline.valid" placeholder="请选择">
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-form>
-                        <el-form :inline="true"  :model="userInline" class="demo-form-inline">
+                             <el-form-item label="有效日期">
+                                <el-date-picker
+                                    v-model="userInline.date"
+                                    type="date"
+                                    placeholder="选择日期">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="是否有效">
+                                <el-select v-model="userInline.valid" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in isValid"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
                             <el-form-item label="系统管理员">
                                 <el-select v-model="userInline.sysAdmin" placeholder="请选择">
                                     <el-option
-                                        v-for="item in options"
+                                        v-for="item in roles"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit">保存</el-button>
+                                <el-button>取消</el-button>
+                            </el-form-item>
                         </el-form>
-                    </div>
-                    <div>
-                        <el-button>保存</el-button>
-                        <el-button>取消</el-button>
                     </div>
                 </el-dialog>
             </el-tab-pane>
@@ -348,7 +342,7 @@
                     </el-row>
                     <el-row style="margin-top:20px">
                         <el-col  :span="2">
-                            <span style="cursor: pointer;" @click=""><i class="el-icon-circle-plus"></i>新增</span>
+                            <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>新增</span>
                         </el-col>
                         <el-col  :span="3">
                             <span style="cursor: pointer;" @click="roleNewVisible = true"><i class="el-icon-circle-plus"></i>角色授权</span>
@@ -404,6 +398,7 @@
     </div>
 </template>
 <script>
+  import axios from "axios"
   export default {
     data() {
       return {
@@ -414,6 +409,25 @@
         resourceNewVisible:false,
         orderVisible:false,
         roleNewVisible:false,
+                sexs: [{
+          value: '保密',
+          label: '保密'
+        }, {
+          value: '帅哥',
+          label: '帅哥'
+        }, {
+          value: '靓女',
+          label: '靓女'
+        }, {
+          value: '大叔',
+          label: '大叔'
+        }, {
+          value: '萝莉',
+          label: '萝莉'
+        }],
+        isValid:[{value: '是', label: '1'},{ value: '否',label: '0'}],
+        roles:[{value: '系统管理员', label: 'sysAdmin'},{ value: '设备管理员',label: 'machineAdmin'}],
+
         roleData:[{
             roleName:'',
             roleDesc:'',
@@ -426,7 +440,7 @@
         }],
         userInline:{
             name:'',
-            names:'',
+            sex:'',
             phone:'',
             mail:'',
             date:'',
@@ -469,22 +483,7 @@
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
         }],
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+
         value: '',
         addNewVisible:false,
         userNewVisible:false,
@@ -516,6 +515,14 @@
       };
     },
     methods: {
+        /*
+        用户新增
+        */
+        onSubmit(){
+            let postData= this.userInline;
+            axios
+            .post(this.$config.authUrl+"/")
+        },
         handleClick(tab, event) {
             console.log(tab, event);
         },
@@ -558,6 +565,9 @@
   };
 </script>
 <style scoped>
+    .el-dialog__title{
+        color: #777;
+    }
     .role-div{
         width: 96%;
         margin-left: 10px;
