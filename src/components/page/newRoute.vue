@@ -259,6 +259,7 @@
                         <el-row style="margin-top: 20px;">
                             <el-col :span="3">行程详情</el-col>
                             <el-col :span="21">
+                                <div id="editorElem" style="text-align:left"></div>
                                 <!-- <quill-editor v-model="editorContent" ref="myQuillEditor" 
                                 :options="editorOption" 
                                 ></quill-editor> -->
@@ -305,9 +306,12 @@
 </template>
 
 <script>
+import E from 'wangeditor';
 export default {
+    name: 'editor',
     data(){
         return{
+             editorContent: '',
             tableData:[
                 {Sun:'',Mon:'1',Tues:'2',Wed:'3',Thur:'4',Fri:'5',Sat:'6'},
             ],
@@ -413,9 +417,18 @@ export default {
             }
         }
     },
-
+    mounted(){
+        var editor = new E('#editorElem');
+        editor.customConfig.onchange = (html) => {
+            this.editorContent = html
+        };
+        editor.create()
+    },
 
     methods: {
+        getContent: function () {
+            console.log(this.editorContent);
+        },
         //应用价格
         applyCharge(){
 
