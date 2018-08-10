@@ -259,13 +259,14 @@
                         <el-row style="margin-top: 20px;">
                             <el-col :span="3">行程详情</el-col>
                             <el-col :span="21">
-                                <div id="editorElem" style="text-align:left"></div>
-                                <!-- <quill-editor v-model="editorContent" ref="myQuillEditor" 
-                                :options="editorOption" 
-                                ></quill-editor> -->
-                                <!-- @blur="onEditorBlur($event)" 
-                                @focus="onEditorFocus($event)"
-                                @change="onEditorChange($event)" -->
+                                <!-- <div id="editorElem" style="text-align:left"></div> -->
+                                <div class="edit_container">
+                                    <quill-editor v-model="infoForm.a_content"
+                                            ref="myQuillEditor"
+                                            class="editer"
+                                            :options="editorOption" @ready="onEditorReady($event)">
+                                    </quill-editor>
+                                </div>
                             </el-col>
                         </el-row>
                     </div>
@@ -306,15 +307,27 @@
 </template>
 
 <script>
-import E from 'wangeditor';
+// import E from 'wangeditor';
+import { quillEditor } from 'vue-quill-editor' //调用编辑器
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 export default {
-    name: 'editor',
+    
+    // name: 'editor',
     data(){
         return{
              editorContent: '',
             tableData:[
                 {Sun:'',Mon:'1',Tues:'2',Wed:'3',Thur:'4',Fri:'5',Sat:'6'},
             ],
+            infoForm: {
+                a_title: '',
+                a_source: '',
+                a_content:'',
+                editorOption: {}
+            },
+
             dayvalue:'',
             nightvalue:'',
             editorContent:'',
@@ -417,18 +430,31 @@ export default {
             }
         }
     },
-    mounted(){
-        var editor = new E('#editorElem');
-        editor.customConfig.onchange = (html) => {
-            this.editorContent = html
-        };
-        editor.create()
+    computed: {
+        editor() {
+            return this.$refs.myQuillEditor.quill
+        }
+    },
+    components: {
+        //使用编辑器
+        quillEditor
     },
 
+    // mounted(){
+    //     var editor = new E('#editorElem');
+    //     editor.customConfig.onchange = (html) => {
+    //         this.editorContent = html
+    //     };
+    //     editor.create()
+    // },
+
     methods: {
-        getContent: function () {
-            console.log(this.editorContent);
+        // getContent: function () {
+        //     console.log(this.editorContent);
+        // },
+        onEditorReady(editor) {
         },
+
         //应用价格
         applyCharge(){
 
