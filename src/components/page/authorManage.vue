@@ -278,12 +278,12 @@
                     :visible.sync="userNewVisible"
                     width="35%">
                     <div>
-                        <el-form ref="form" :model="userInline" label-width="100px">
+                         <el-form ref="form" :model="userInline" label-width="100px">
                             <el-form-item label="用户名">
-                                <el-input v-model="userInline.name"></el-input>
+                                <el-input v-model="userInline.userName"></el-input>
                             </el-form-item>
                             <el-form-item label="用户性别">
-                                <el-select v-model="userInline.sex" placeholder="请选择">
+                                <el-select v-model="userInline.userSex" placeholder="请选择">
                                     <el-option
                                         v-for="item in sexs"
                                         :key="item.value"
@@ -292,21 +292,27 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="手机">
-                                <el-input v-model="userInline.phone"></el-input>
+                            <el-form-item label="用户密码">
+                                <el-input v-model="userInline.userPwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="邮件">
-                                <el-input v-model="userInline.mail"></el-input>
+                            <el-form-item label="用户所属租户code">
+                                <el-input v-model="userInline.userTenantCode"></el-input>
                             </el-form-item>
-                             <el-form-item label="有效日期">
+                            <el-form-item label="用户手机">
+                                <el-input v-model="userInline.userMobile"></el-input>
+                            </el-form-item>
+                            <el-form-item label="用户邮件">
+                                <el-input v-model="userInline.userEmail"></el-input>
+                            </el-form-item>
+                                <el-form-item label="有效日期">
                                 <el-date-picker
-                                    v-model="userInline.date"
+                                    v-model="userInline.validDate"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="是否有效">
-                                <el-select v-model="userInline.valid" placeholder="请选择">
+                            <el-form-item label="用户状态">
+                                <el-select v-model="userInline.userStatus" placeholder="请选择">
                                     <el-option
                                         v-for="item in isValid"
                                         :key="item.value"
@@ -425,7 +431,7 @@
           value: '萝莉',
           label: '萝莉'
         }],
-        isValid:[{value: '是', label: '1'},{ value: '否',label: '0'}],
+        isValid:[{value: '1', label: '是'},{ value: '0',label: '否'}],
         roles:[{value: '系统管理员', label: 'sysAdmin'},{ value: '设备管理员',label: 'machineAdmin'}],
 
         roleData:[{
@@ -439,13 +445,14 @@
             valid:''
         }],
         userInline:{
-            name:'',
-            sex:'',
-            phone:'',
-            mail:'',
-            date:'',
-            valid:'',
-            sysAdmin:''
+            userName:'',
+            userSex:'',
+            userPwd:'',//密码
+            userMobile:'',
+            userTenantCode:'',//用户所属租户code
+            userEmail:'',
+            validDate:'',
+            userStatus:'',
         },
         userData:[
             {
@@ -520,8 +527,12 @@
         */
         onSubmit(){
             let postData= this.userInline;
+            debugger
             axios
-            .post(this.$config.authUrl+"/")
+            .post("http://139.199.101.146:10010/auth/user",postData)
+             .then(function(response){
+                 console.log(response);
+             })
         },
         handleClick(tab, event) {
             console.log(tab, event);
