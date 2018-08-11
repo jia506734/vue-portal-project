@@ -278,12 +278,12 @@
                     :visible.sync="userNewVisible"
                     width="35%">
                     <div>
-                         <el-form ref="form" :model="userInline" label-width="100px">
-                            <el-form-item label="用户名">
+                        <el-form :model="userInline" :rules="rulesInline" ref="userInline" label-width="120px" class="demo-userInline">
+                            <el-form-item label="用户名" prop="userName">
                                 <el-input v-model="userInline.userName"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户性别">
-                                <el-select v-model="userInline.userSex" placeholder="请选择">
+                            <el-form-item label="用户性别" prop="userSex">
+                                <el-select v-model="userInline.userSex" placeholder="请选择用户性别">
                                     <el-option
                                         v-for="item in sexs"
                                         :key="item.value"
@@ -292,39 +292,39 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="用户密码">
+                            <el-form-item label="用户密码" prop="userPwd">
                                 <el-input v-model="userInline.userPwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户所属租户code">
+                            <el-form-item label="用户所属租户" prop="userTenantCode">
                                 <el-input v-model="userInline.userTenantCode"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户手机">
+                            <el-form-item label="用户手机" prop="userMobile">
                                 <el-input v-model="userInline.userMobile"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户邮件">
+                            <el-form-item label="用户邮件" prop="userEmail">
                                 <el-input v-model="userInline.userEmail"></el-input>
                             </el-form-item>
-                                <el-form-item label="有效日期">
+                            <el-form-item label="有效日期" prop="validDate">
                                 <el-date-picker
                                     v-model="userInline.validDate"
                                     type="date"
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="用户状态">
-                                <el-select v-model="userInline.userStatus" placeholder="请选择">
+                            <el-form-item label="用户状态" prop="userStatus">
+                                <el-select v-model="userInline.userStatus" placeholder="请选择用户状态">
                                     <el-option
-                                        v-for="item in isValid"
+                                        v-for="item in forUserStatus"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="系统管理员">
-                                <el-select v-model="userInline.sysAdmin" placeholder="请选择">
+                            <el-form-item label="系统管理员" prop="sysAdmin">
+                                <el-select v-model="userInline.sysAdmin" placeholder="请选择系统管理员">
                                     <el-option
-                                        v-for="item in roles"
+                                        v-for="item in forRoles"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -332,8 +332,8 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmit">保存</el-button>
-                                <el-button>取消</el-button>
+                                <el-button type="primary" @click="onSubmit('userInline')">立即创建</el-button>
+                                <el-button @click="resetForm('userInline')">重置</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -415,24 +415,33 @@
         resourceNewVisible:false,
         orderVisible:false,
         roleNewVisible:false,
-                sexs: [{
-          value: '保密',
-          label: '保密'
-        }, {
-          value: '帅哥',
-          label: '帅哥'
-        }, {
-          value: '靓女',
-          label: '靓女'
-        }, {
-          value: '大叔',
-          label: '大叔'
-        }, {
-          value: '萝莉',
-          label: '萝莉'
-        }],
-        isValid:[{value: '1', label: '是'},{ value: '0',label: '否'}],
-        roles:[{value: '系统管理员', label: 'sysAdmin'},{ value: '设备管理员',label: 'machineAdmin'}],
+        userInline:{
+            userName:'',
+            userSex:'',
+            userPwd:'',//密码
+            userMobile:'',
+            userTenantCode:'',//用户所属租户code
+            userEmail:'',
+            validDate:'',
+            userStatus:'',
+        },
+        rulesInline:{
+            userName: [
+                { required: true, message: '请输入用户名称', trigger: 'blur' },
+            ],
+            userPwd:[
+                { required: true, message: '请输入用户密码', trigger: 'blur' },
+            ],
+            userTenantCode:[
+                { required: true, message: '请输入所属租户', trigger: 'blur' },
+            ],
+            userMobile:[
+                { required: true, message: '请输入手机号', trigger: 'blur' },
+            ],
+        },
+        forUserStatus:[{label:"有效",value:"1"},{label:"无效",value:"0"}],
+        sexs: [{value: '保密',label: '保密'}, {value: '帅哥',label: '帅哥'}, {value: '靓女',label: '靓女'}, {value: '大叔',label: '大叔'}, {value: '萝莉',label: '萝莉'}],
+        forRoles:[{value: 'sysAdmin', label: '系统管理员'},{ value: 'machineAdmin',label: '设备管理员'}],
 
         roleData:[{
             roleName:'',
@@ -444,52 +453,9 @@
             roleDesc:'',
             valid:''
         }],
-        userInline:{
-            userName:'',
-            userSex:'',
-            userPwd:'',//密码
-            userMobile:'',
-            userTenantCode:'',//用户所属租户code
-            userEmail:'',
-            validDate:'',
-            userStatus:'',
-        },
-        userData:[
-            {
-                sex: '2016-05-02',
-                name: '王小虎',
-                phone: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                sex: '2016-05-04',
-                name: '王小虎',
-                phone: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                sex: '2016-05-01',
-                name: '王小虎',
-                phone: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                sex: '2016-05-03',
-                name: '王小虎',
-                phone: '上海市普陀区金沙江路 1516 弄'
-            }
-        ],
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        
+        userData:[],
+        tableData: [],
 
         value: '',
         addNewVisible:false,
@@ -539,14 +505,32 @@
         /*
         用户新增
         */
-        onSubmit(){
+        onSubmit(formName){
             let postData= this.userInline;
-            debugger
-            axios
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                axios
             .post("/auth/user",postData)
              .then(function(response){
-                 console.log(response);
+                 debugger
+                 if(response.data.data.success){
+                    this.userNewVisible = false;
+                 }else{
+
+                 }
              })
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+            });
+            
+        },
+        /*
+        重置用户新增界面
+        */
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
         handleClick(tab, event) {
             console.log(tab, event);
