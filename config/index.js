@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+       '/auth': {
+            // 测试环境
+            target: 'http://139.199.101.146:10010',  // 接口域名
+            changeOrigin: true,  //是否跨域
+            // pathRewrite: {
+            //     '^/auth': ''   
+            // }              
+        }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

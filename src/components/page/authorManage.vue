@@ -521,7 +521,21 @@
         }
       };
     },
+    created(){
+        //用户查询
+        this.getUserData();
+    },
     methods: {
+        /*
+        用户新增
+        */
+        getUserData(){
+            axios
+            .get("/auth/all_users")
+             .then(function(response){
+                 console.log(response);
+             })
+        },
         /*
         用户新增
         */
@@ -529,7 +543,7 @@
             let postData= this.userInline;
             debugger
             axios
-            .post("http://139.199.101.146:10010/auth/user",postData)
+            .post("/auth/user",postData)
              .then(function(response){
                  console.log(response);
              })
