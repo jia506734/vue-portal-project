@@ -196,10 +196,10 @@
                 <div style="margin-left:20px;">
                     <el-row>
                         <el-col :span="1" >用户名</el-col>
-                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="menuCode" placeholder="输入用户名"></el-input></el-col>
+                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="userName" placeholder="输入用户名"></el-input></el-col>
                         <el-col :span="1">手机</el-col>
-                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="menuName" placeholder="输入手机"></el-input></el-col>
-                        <el-col :span="4"><el-button type="primary">查询</el-button></el-col>
+                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="userPhone" placeholder="输入手机"></el-input></el-col>
+                        <el-col :span="4"><el-button type="primary" @click="searchUserData">查询</el-button></el-col>
                     </el-row>
                     <el-row style="margin-top:20px">
                         <el-col  :span="2">
@@ -222,28 +222,30 @@
                         label="用户名"
                         width="130">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.Name }}</span>
+                            <span>{{ scope.row.userName }}</span>
                         </template>
                         </el-table-column>
                         <el-table-column
                         label="性别"
                         width="130">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.sex }}</span>
+                            <span v-if="scope.row.userSex==0">保密</span>
+                            <span v-if="scope.row.userSex==1">帅哥</span>
+                            <span v-if="scope.row.userSex==2">靓女</span>
                         </template>
                         </el-table-column>
                         <el-table-column
                         label="手机"
                         width="130">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.phone }}</span>
+                            <span>{{ scope.row.userMobile }}</span>
                         </template>
                         </el-table-column>
                         <el-table-column
                         label="有效期"
                         width="130">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.date }}</span>
+                            <span>{{ scope.row.validDate }}</span>
                         </template>
                         </el-table-column>
                         <el-table-column
@@ -257,18 +259,19 @@
                         label="是否有效"
                         width="130">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.valid }}</span>
+                            <span v-if="scope.row.userStatus==1">是</span>
+                            <span v-if="scope.row.userStatus==0">否</span>
                         </template>
                         </el-table-column>
                         <el-table-column label="操作"  width="200">
                         <template slot-scope="scope">
                             <el-button
                             size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleUserEdit(scope.$index, scope.row)">编辑</el-button>
                             <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            @click="handleUserDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
                         </el-table-column>
                     </el-table>
@@ -285,7 +288,7 @@
                             <el-form-item label="用户性别" prop="userSex">
                                 <el-select v-model="userInline.userSex" placeholder="请选择用户性别">
                                     <el-option
-                                        v-for="item in sexs"
+                                        v-for="item in forSexs"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -305,7 +308,7 @@
                                 <el-input v-model="userInline.userEmail"></el-input>
                             </el-form-item>
                             <el-form-item label="有效日期" prop="validDate">
-                                <el-date-picker
+                                <el-date-picker format="yyyy-MM-dd"
                                     v-model="userInline.validDate"
                                     type="date"
                                     placeholder="选择日期">
@@ -332,7 +335,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmit('userInline')">立即创建</el-button>
+                                <el-button type="primary" @click="onUserSubmit('userInline')">立即创建</el-button>
                                 <el-button @click="resetForm('userInline')">重置</el-button>
                             </el-form-item>
                         </el-form>
@@ -415,7 +418,11 @@
         resourceNewVisible:false,
         orderVisible:false,
         roleNewVisible:false,
+        isUserCreated:false,
+        userName:'',
+        userPhone:'',
         userInline:{
+            userId:'',
             userName:'',
             userSex:'',
             userPwd:'',//密码
@@ -440,9 +447,8 @@
             ],
         },
         forUserStatus:[{label:"有效",value:"1"},{label:"无效",value:"0"}],
-        sexs: [{value: '保密',label: '保密'}, {value: '帅哥',label: '帅哥'}, {value: '靓女',label: '靓女'}, {value: '大叔',label: '大叔'}, {value: '萝莉',label: '萝莉'}],
-        forRoles:[{value: 'sysAdmin', label: '系统管理员'},{ value: 'machineAdmin',label: '设备管理员'}],
-
+        forSexs: [{value: '0',label: '保密'}, {value: '1',label: '帅哥'}, {value: '2靓女',label: '靓女'}],
+        forRoles:[{value: '1', label: '系统管理员'},{ value: '0',label: '设备管理员'}],
         roleData:[{
             roleName:'',
             roleDesc:'',
@@ -453,7 +459,6 @@
             roleDesc:'',
             valid:''
         }],
-        
         userData:[],
         tableData: [],
 
@@ -489,42 +494,108 @@
     },
     created(){
         //用户查询
-        this.getUserData();
+        // this.getUserManageData();
     },
     methods: {
         /*
-        用户新增
+        获取用户管理数据
         */
-        getUserData(){
+        getUserManageData(){
+            let _this=this;
             axios
             .get("/auth/all_users")
              .then(function(response){
-                 console.log(response);
+                 _this.userData = response.data.data;
+             })
+        },
+        /*
+        获取菜单管理数据
+        */
+        getMenuManageData(){
+
+        },
+
+        /*
+        获取角色管理数据
+        */
+        getRoleManageData(){
+
+        },
+        //查询指定用户
+        searchUserData(){
+            let _this=this;
+            axios
+            .get("/auth/users?userName="+this.userName+"&userPhone="+this.userPhone)
+             .then(function(response){
+                 _this.userData = response.data.data;
              })
         },
         /*
         用户新增
         */
-        onSubmit(formName){
+        onUserSubmit(formName){
+            debugger
             let postData= this.userInline;
+            let _this= this;
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                axios
-            .post("/auth/user",postData)
-             .then(function(response){
-                 debugger
-                 if(response.data.data.success){
-                    this.userNewVisible = false;
-                 }else{
+                debugger
+                if(postData.userSex =="保密"){
+                    postData.userSex=0;
+                }
+                if(postData.userSex =="帅哥"){
+                    postData.userSex=1;
+                }
+                if(postData.userSex =="靓女"){
+                    postData.userSex=2;
+                }
+                postData.userSex=parseInt(postData.userSex);
+                let date = new Date(postData.validDate)
+                postData.validDate =date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); 
+                if(this.isUserCreated){
+                    axios
+                    .post("/auth/user",postData)
+                        .then(function(response){
+                            if(response.data.success){
+                                _this.userNewVisible = false;
+                                _this.getUserManageData();
+                                _this.$notify({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
 
-                 }
-             })
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
+                            }else{
+                                _this.$notify.error({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                    }else{
+                    axios
+                    .put("/auth/user",postData)
+                        .then(function(response){
+                            debugger
+                            if(response.data.success){
+                                _this.userNewVisible = false;
+                                _this.getUserManageData();
+                                _this.$notify({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }else{
+                                _this.$notify.error({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                    }
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
             });
-            
         },
         /*
         重置用户新增界面
@@ -533,7 +604,15 @@
             this.$refs[formName].resetFields();
         },
         handleClick(tab, event) {
-            console.log(tab, event);
+            if(tab.name=="first"){
+                this.getMenuManageData();
+            }
+            if(tab.name=="second"){
+                this.getUserManageData();
+            }
+            if(tab.name=="third"){
+                this.getRoleManageData();
+            }
         },
         handleEdit(index, row) {
             console.log(index, row);
@@ -541,11 +620,44 @@
         handleDelete(index, row) {
             console.log(index, row);
         },
+        handleUserEdit(index, row){
+            debugger
+            this.userNewVisible = true;
+            this.userInline.userId= row.userId;
+            this.userInline.userName= row.userName;
+            if(row.userSex==0){
+                this.userInline.userSex="保密";
+            }else if(row.userSex==1){
+                this.userInline.userSex="帅哥";
+            }else{
+                this.userInline.userSex="靓女";
+            }
+            this.userInline.userPwd= row.userPwd;
+            this.userInline.userTenantCode= row.userTenantCode;
+            this.userInline.userEmail= row.userEmail;
+            this.userInline.userMobile= row.userMobile;
+            if(row.userStatus==1){
+                this.userInline.validDate="是";
+            }else if(row.userStatus==0){
+                this.userInline.validDate= "否";
+            }
+            if(row.sysAdmin==1){
+                this.userInline.sysAdmin="系统管理员";
+            }else if(row.sysAdmin==0){
+                this.userInline.sysAdmin= "设备管理员";
+            }
+            this.isUserCreated= false;
+        },
+        handleUsertDelete(index, row) {
+            debugger
+            console.log(index, row);
+        },
         addNewClick(){
             this.addNewVisible= true;
         },
         userNewClick(){
             this.userNewVisible= true;
+            this.isUserCreated = true;
         },
         resourceNewClick(){
             this.resourceNewVisible = true
