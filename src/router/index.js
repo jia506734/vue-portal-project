@@ -19,9 +19,10 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/HuiChengTianXia',
       component: login
     },
+    
     {
       path: '/manage',
       component: manage,
