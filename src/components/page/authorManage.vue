@@ -198,7 +198,7 @@
                         <el-col :span="1" >用户名</el-col>
                         <el-col :span="5" style="margin-right:30px;"><el-input v-model="userName" placeholder="输入用户名"></el-input></el-col>
                         <el-col :span="1">手机</el-col>
-                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="userPhone" placeholder="输入手机"></el-input></el-col>
+                        <el-col :span="5" style="margin-right:30px;"><el-input v-model="userMobile" placeholder="输入手机"></el-input></el-col>
                         <el-col :span="4"><el-button type="primary" @click="searchUserData">查询</el-button></el-col>
                     </el-row>
                     <el-row style="margin-top:20px">
@@ -510,7 +510,7 @@
         tenantData:[],//租户表格
         tableLoading:false,
         userName:'',
-        userPhone:'',
+        userMobile:'',
         options4: [],
         loading: false,
         states: ["Alabama", "Alaska", "Arizona",
@@ -666,7 +666,7 @@
         searchUserData(){
             let _this=this;
             axios
-            .get("/auth/users?userName="+this.userName+"&userPhone="+this.userPhone)
+            .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
              .then(function(response){
                  _this.userData = response.data.data;
              })
