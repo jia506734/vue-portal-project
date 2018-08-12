@@ -2,15 +2,15 @@
     <div style="height: calc(100% - 50px);">
         <div class="content_section">
             <el-row class="content_container">
-                <el-col  style="height: 100%;background: #545c64;position:absolute;width:140px;">
+                <el-col  style="height: 100%;background: #545c64;position:absolute;width:200px;">
                     <el-menu :default-active="defaultActive" 
-                    class="el-menu-vertical"
-                   style="background:#545c64; width:100%;"
-                   text-color="#fff"
-                   text
-                    router
-                    active-text-color="#ffd04b" >
-                    <el-menu-item index="mainPage">
+                        class="el-menu-vertical"
+                        style="background:#545c64; width:100%;"
+                        text-color="#fff"
+                         text
+                        router
+                        active-text-color="#ffd04b" >
+                        <el-menu-item index="mainPage">
                             <span slot="title">主页</span>
                         </el-menu-item>
                         <el-menu-item index="routeManage">
@@ -19,24 +19,20 @@
                         <el-menu-item index="ticketManage">
                             <span slot="title">门票管理</span>
                         </el-menu-item>
-                        <!-- <el-menu-item index="airLineManage">
-                            <template slot="title">机票管理</template>
-                        </el-menu-item> -->
-                        <!-- <el-menu-item index="insuranceManage">
-                            <template slot="title">保险管理</template>
-                        </el-menu-item>
-                        <el-menu-item index="distributorManage">
-                            <span slot="title">分销商管理</span>
-                        </el-menu-item>
-                        <el-menu-item index="configurationManage">
-                            <span slot="title">配置管理</span>
-                        </el-menu-item> -->
-                        <el-menu-item index="authorManage">
-                           <span slot="title">权限管理</span>
-                        </el-menu-item>
+                        <el-submenu  index="authorManage">
+                            <template slot="title">
+                                <span>权限管理</span>
+                            </template>
+                            <el-menu-item-group style="background:rgb(84, 92, 100)">
+                                <el-menu-item index="/authorManage/menuManage">菜单管理</el-menu-item>
+                                <el-menu-item index="/authorManage/userManage">用户管理</el-menu-item>
+                                <el-menu-item index="/authorManage/roleManage">角色管理</el-menu-item>
+                                <el-menu-item index="/authorManage/tenantManage">租户管理</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
                     </el-menu>
                 </el-col>
-                <el-col  style="position:relative;left:140px;width:calc(100% - 140px);height:100%;overflow:scroll;">
+                <el-col  style="position:relative;left:200px;width:calc(100% - 200px);height:100%;overflow:scroll;">
                    <keep-alive>
 				     <router-view></router-view>
 				  </keep-alive>

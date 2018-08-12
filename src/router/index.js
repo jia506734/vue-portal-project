@@ -8,7 +8,11 @@ import airLineManage from '@/components/page/airLineManage'
 import insuranceManage from '@/components/page/insuranceManage'
 import distributorManage from '@/components/page/distributorManage'
 import configurationManage from '@/components/page/configurationManage'
-import authorManage from '@/components/page/authorManage'
+import authorManage from '@/components/page/authorManage'//权限管理
+import menuManage from '@/components/authorMgt/menuManage'
+import roleManage from '@/components/authorMgt/roleManage'
+import userManage from '@/components/authorMgt/userManage'
+import tenantManage from '@/components/authorMgt/tenantManage'
 import newRoute from '@/components/page/newRoute'
 import newTicket from '@/components/page/newTicket'
 import mainPage from '@/components/page/mainPage'
@@ -64,10 +68,52 @@ export default new Router({
         meta: ['配置管理'],
       },
       {
-        path: '/authorManage',
-        component: authorManage,
-        meta: ['权限管理'],
-      },
+          path: '/authorManage/menuManage',
+          component: menuManage,
+          meta: ['菜单管理'],
+        },
+        {
+          path: '/authorManage/userManage',
+          component: userManage,
+          meta: ['用户管理'],
+        },
+        {
+          path: '/authorManage/roleManage',
+          component: roleManage,
+          meta: ['角色管理'],
+        },
+        {
+          path: '/authorManage/tenantManage',
+          component: tenantManage,
+          meta: ['租户管理'],
+        },
+      // {
+      //   path: '/authorManage',
+      //   component: authorManage,
+      //   meta: ['权限管理'],
+      //   children:[
+      //     {
+      //       path: '/menuManage',
+      //       component: menuManage,
+      //       meta: ['菜单管理'],
+      //     },
+      //     {
+      //       path: '/userManage',
+      //       component: userManage,
+      //       meta: ['用户管理'],
+      //     },
+      //     {
+      //       path: '/roleManage',
+      //       component: roleManage,
+      //       meta: ['角色管理'],
+      //     },
+      //     {
+      //       path: '/tenantManage',
+      //       component: tenantManage,
+      //       meta: ['租户管理'],
+      //     },
+      //   ]
+      // },
       {
         path: '/newRoute',
         component: newRoute,
