@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="top-class">菜单管理</div>
     <div style="margin-left:20px;margin-top:20px;">
       <el-row>
           <el-col :span="2" >菜单Code</el-col>
@@ -252,4 +253,13 @@ export default {
     },
 }
 </script>
+
+<style scope>
+  .top-class{
+    height: 35px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    line-height: 35px;
+  }
+</style>
 

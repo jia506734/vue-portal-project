@@ -1,5 +1,6 @@
 <template>
    <div>
+      <div class="top-class">用户管理</div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
             <el-col :span="1" >用户名</el-col>
@@ -24,6 +25,7 @@
         </el-row>
         <el-table
             :data="userData"
+             v-loading = "tableLoading"
             style="width: 100%;margin-top:20px">
             <el-table-column
             label="用户名"
@@ -166,6 +168,7 @@ export default {
             validDate:'',
             userStatus:'',
         },
+        tableLoading:false,
         rulesInline:{//用户规则
             userName: [
                 { required: true, message: '请输入用户名称', trigger: 'blur' },
@@ -198,9 +201,11 @@ export default {
         */
         getUserManageData(){
             let _this=this;
+            _this.tableLoading= true;
             axios
             .get("/auth/all_users")
              .then(function(response){
+                 _this.tableLoading= false;
                  _this.userData = response.data.data;
              })
         },
@@ -294,3 +299,11 @@ export default {
 }
 </script>
 
+<style scope>
+  .top-class{
+    height: 35px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    line-height: 35px;
+  }
+</style>

@@ -1,9 +1,125 @@
 <template>
-  <div>sadasd</div>
+  <div>
+      <div class="top-class">用户管理</div>
+      <div style="margin-left:20px;margin-top:20px;">
+        <el-row>
+            <el-col :span="1" >角色名</el-col>
+            <el-col :span="5" style="margin-right:30px;"><el-input v-model="roleName" placeholder="输入角色名"></el-input></el-col>
+            <el-col :span="4"><el-button type="primary" @click="searchRoleData">查询</el-button></el-col>
+        </el-row>
+        <el-row style="margin-top:20px">
+            <el-col  :span="2">
+                <span style="cursor: pointer;" @click="roleNewClick"><i class="el-icon-circle-plus"></i>新增</span>
+            </el-col>
+            <el-col  :span="3">
+                <span style="cursor: pointer;" @click="roleNewVisible = true"><i class="el-icon-circle-plus"></i>角色授权</span>
+            </el-col>
+        </el-row>
+        <el-table
+            :data="roleData"
+            style="width: 100%;margin-top:20px">
+            <el-table-column
+            label="角色"
+            width="130">
+            <template slot-scope="scope">
+                <span>{{ scope.row.roleName }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
+            label="角色描述"
+            width="130">
+            <template slot-scope="scope">
+                <span>{{ scope.row.roleDesc }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
+            label="是否有效"
+            width="130">
+            <template slot-scope="scope">
+                <span>{{ scope.row.valid }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column label="操作"  width="200">
+            <template slot-scope="scope">
+                <el-button
+                size="mini"
+                @click="handleRoleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <el-dialog
+        title="角色管理>新建"
+        :visible.sync="roleNewAddVisible"
+        width="40%">
+        <div class="role-div">
+            
+        </div>
+    </el-dialog>
+    <el-dialog
+        title="角色管理>角色授权"
+        :visible.sync="roleNewVisible"
+        width="40%">
+        <div class="role-div">
+            
+        </div>
+    </el-dialog>
+  </div>
 </template>
 <script>
+import axios from "axios"
 export default {
-    
+    data(){
+      return{
+        roleName:'',
+        roleNewAddVisible:false,
+        roleNewVisible:false,
+        isCreate:false,//是否新建
+        roleData:[{
+            roleName:'',
+            roleDesc:'',
+            valid:''
+        },
+        {
+            roleName:'',
+            roleDesc:'',
+            valid:''
+        }],
+      }
+    },
+    methods:{
+      //查询指定用户
+        searchRoleData(){
+            // let _this=this;
+            // axios
+            // .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
+            //  .then(function(response){
+            //      _this.userData = response.data.data;
+            //  })
+        },
+        roleNewClick(){
+          this.roleNewAddVisible=true;
+          this.isCreate=true;
+        },
+        handleRoleEdit(index, row) {
+            console.log(index, row);
+        },
+        handleDelete(index, row) {
+            console.log(index, row);
+        },
+    }
 }
 </script>
 
+<style scope>
+  .top-class{
+    height: 35px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    line-height: 35px;
+  }
+</style>
