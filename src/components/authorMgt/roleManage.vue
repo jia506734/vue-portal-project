@@ -57,7 +57,24 @@
         :visible.sync="roleNewAddVisible"
         width="40%">
         <div class="role-div">
-            
+            <el-form :model="roleInline" :rules="rulesInline" ref="roleInline" label-width="120px" class="demo-roleInline">
+                <el-form-item label="租户" prop="authTenant">
+                    <el-input v-model="roleInline.authTenant"></el-input>
+                </el-form-item>
+                <el-form-item label="角色ID" prop="roleId">
+                    <el-input v-model="roleInline.roleId"></el-input>
+                </el-form-item>
+                <el-form-item label="角色名称" prop="roleName">
+                    <el-input v-model="roleInline.roleName"></el-input>
+                </el-form-item>
+                <el-form-item label="角色描述" prop="roleDesc">
+                    <el-input type="textarea" v-model="roleInline.roleDesc"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onRoleSubmit('userInline')">确定</el-button>
+                    <el-button @click="resetForm('userInline')">重置</el-button>
+                </el-form-item>
+            </el-form>
         </div>
     </el-dialog>
     <el-dialog
@@ -79,19 +96,104 @@ export default {
         roleNewAddVisible:false,
         roleNewVisible:false,
         isCreate:false,//是否新建
-        roleData:[{
+        roleData:[],
+        roleInline:{//用户form
+            authTenant:'',
+            roleId:'',
             roleName:'',
             roleDesc:'',
-            valid:''
         },
-        {
-            roleName:'',
-            roleDesc:'',
-            valid:''
-        }],
+        rulesInline:{
+          authTenant:[
+                { required: true, message: '请输入租户', trigger: 'blur' },
+            ],
+           roleId: [
+                { required: true, message: '请输入用户ID', trigger: 'blur' },
+            ],
+            roleName:[
+                { required: true, message: '请输入用户名称', trigger: 'blur' },
+            ],
+        },
       }
     },
+    created(){
+      this.getAllDate();
+    },
     methods:{
+        //角色编辑
+        handleRoleEdit(index, row){
+            this.roleNewAddVisible=true;
+            this.isCreate=false;
+            this.roleInline.authTenant = row.authTenant;
+            this.roleInline.roleId = row.roleId;
+            this.roleInline.roleName = row.roleName;
+            this.roleInline.roleDesc = row.roleDesc;
+        },
+      //角色新增
+        onRoleSubmit(formName){
+            let postData = this.roleInline;
+            let _this = this;
+            this.$refs[formName].validate((valid) => {
+                if (valid){
+                    if(this.isCreate){
+                        axios
+                        .post("/role/roel",postData)
+                        .then(function(response){
+                            if(response.data.success){
+                                _this.roleNewAddVisible=false;
+                                _this.isCreate=false
+                                _this.getAllDate();
+                                _this.$notify({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+
+                            }else{
+                                _this.$notify.error({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                    }else{
+                        axios
+                        .put("/role/roel",postData)
+                        .then(function(response){
+                            if(response.data.success){
+                               _this.roleNewAddVisible=false;
+                                _this.isCreate=false
+                                _this.getAllDate();
+                                _this.$notify({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+
+                            }else{
+                                _this.$notify.error({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                    }
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            })
+            
+        },
+      //查询所有角色
+      getAllDate(){
+        let _this=this;
+            _this.tableLoading= true;
+            axios
+            .get("/auth/role/all_roles")
+             .then(function(response){
+                 _this.tableLoading= false;
+                 _this.roleData = response.data.data;
+             })
+      },
       //查询指定用户
         searchRoleData(){
             // let _this=this;
@@ -102,6 +204,12 @@ export default {
             //  })
         },
         roleNewClick(){
+          roleInline={//用户form
+              authTenant:'',
+              roleId:'',
+              roleName:'',
+              roleDesc:'',
+          },
           this.roleNewAddVisible=true;
           this.isCreate=true;
         },
@@ -110,6 +218,12 @@ export default {
         },
         handleDelete(index, row) {
             console.log(index, row);
+        },
+         /*
+        重置新增界面
+        */
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         },
     }
 }
