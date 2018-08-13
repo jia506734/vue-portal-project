@@ -1,15 +1,24 @@
 <template>
     <div style="height:100%;">
         <div class="header_container">
-            <div class="header_left">
-                <div>慧城天下</div>
+            <el-row>
+                <el-col :span="19" style="height: 50px">
+                    <img :src="url" style="height: 50px;width: 200px;" />
+                </el-col>
+                <el-col :span="2" style="margin-left:0px;">wulongbin-2@16..</el-col>
+                <el-col :span="1" style="margin-left:0px;">{{ $t('manage.Notify') }}</el-col>
+                <el-col :span="1" style="margin-left:0px;">{{ $t('manage.LogOut') }}</el-col>
+            </el-row>
+            <!--<div><span>慧程天下</span>慧程天下</div>-->
+        
+            <!--<div class="header_left">
+                <div>慧程天下</div>
             </div>
             <div class="header_right">
                 <span class="header_tiplist">wulongbin-2@16.. </span>
                 <span class="header_tiplist">{{ $t('manage.Notify') }}</span>
                 <span class="header_tiplist">{{ $t('manage.LogOut') }}</span>
-                <!-- <span class="header_tiplist" @click="changeLang">{{ $t('language.name') }}</span> -->
-            </div>
+            </div>-->
         </div>
         <manage-center></manage-center>
     </div>
@@ -19,6 +28,7 @@
     export default {
         data(){
             return{
+                url:require( '../../static/image/Logo.jpg'),
             }
         },
 		computed: {
@@ -41,6 +51,7 @@
 <style  scoped>
         .header_container{
         height: 50px;
+        line-height: 50px;
         background-color: #1b1731;
         color: white;
     }
