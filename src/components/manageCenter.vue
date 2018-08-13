@@ -24,10 +24,10 @@
                                 <span>权限管理</span>
                             </template>
                             <el-menu-item-group style="background:rgb(84, 92, 100)">
-                                <el-menu-item index="/authorManage/menuManage">菜单管理</el-menu-item>
-                                <el-menu-item index="/authorManage/userManage">用户管理</el-menu-item>
-                                <el-menu-item index="/authorManage/roleManage">角色管理</el-menu-item>
-                                <el-menu-item index="/authorManage/tenantManage">租户管理</el-menu-item>
+                                <el-menu-item index="/menuManage">菜单管理</el-menu-item>
+                                <el-menu-item index="/userManage">用户管理</el-menu-item>
+                                <el-menu-item index="/roleManage">角色管理</el-menu-item>
+                                <el-menu-item index="/tenantManage">租户管理</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>

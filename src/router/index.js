@@ -8,7 +8,7 @@ import airLineManage from '@/components/page/airLineManage'
 import insuranceManage from '@/components/page/insuranceManage'
 import distributorManage from '@/components/page/distributorManage'
 import configurationManage from '@/components/page/configurationManage'
-import authorManage from '@/components/page/authorManage'//权限管理
+//import authorManage from '@/components/page/authorManage'//权限管理
 import menuManage from '@/components/authorMgt/menuManage'
 import roleManage from '@/components/authorMgt/roleManage'
 import userManage from '@/components/authorMgt/userManage'
@@ -19,8 +19,8 @@ import mainPage from '@/components/page/mainPage'
 
 
 Vue.use(Router)
-
 export default new Router({
+  
   routes: [
     {
       path: '/HuiChengTianXia',
@@ -68,22 +68,22 @@ export default new Router({
         meta: ['配置管理'],
       },
       {
-          path: '/authorManage/menuManage',
+          path: '/menuManage',
           component: menuManage,
           meta: ['菜单管理'],
         },
         {
-          path: '/authorManage/userManage',
+          path: '/userManage',
           component: userManage,
           meta: ['用户管理'],
         },
         {
-          path: '/authorManage/roleManage',
+          path: '/roleManage',
           component: roleManage,
           meta: ['角色管理'],
         },
         {
-          path: '/authorManage/tenantManage',
+          path: '/tenantManage',
           component: tenantManage,
           meta: ['租户管理'],
         },
