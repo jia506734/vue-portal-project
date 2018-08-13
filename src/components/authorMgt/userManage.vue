@@ -203,7 +203,7 @@ export default {
             let _this=this;
             _this.tableLoading= true;
             axios
-            .get("/auth/all_users")
+            .get("http://139.199.101.146:10010/auth/all_users")
              .then(function(response){
                  _this.tableLoading= false;
                  _this.userData = response.data.data;
@@ -213,7 +213,7 @@ export default {
         searchUserData(){
             let _this=this;
             axios
-            .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
+            .get("http://139.199.101.146:10010/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
              .then(function(response){
                  _this.userData = response.data.data;
              })
@@ -246,7 +246,7 @@ export default {
                 postData.validDate =date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); 
                 if(this.isUserCreated){
                     axios
-                    .post("/auth/user",postData)
+                    .post("http://139.199.101.146:10010/auth/user",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.userNewVisible = false;
@@ -265,7 +265,7 @@ export default {
                         })
                     }else{
                     axios
-                    .put("/auth/user",postData)
+                    .put("http://139.199.101.146:10010/auth/user",postData)
                         .then(function(response){
                             
                             if(response.data.success){

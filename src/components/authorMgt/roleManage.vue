@@ -137,7 +137,7 @@ export default {
                 if (valid){
                     if(this.isCreate){
                         axios
-                        .post("/role/roel",postData)
+                        .post("http://139.199.101.146:10010/role/roel",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.roleNewAddVisible=false;
@@ -157,7 +157,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("/role/roel",postData)
+                        .put("http://139.199.101.146:10010/role/roel",postData)
                         .then(function(response){
                             if(response.data.success){
                                _this.roleNewAddVisible=false;
@@ -188,7 +188,7 @@ export default {
         let _this=this;
             _this.tableLoading= true;
             axios
-            .get("/auth/role/all_roles")
+            .get("http://139.199.101.146:10010/auth/role/all_roles")
              .then(function(response){
                  _this.tableLoading= false;
                  _this.roleData = response.data.data;

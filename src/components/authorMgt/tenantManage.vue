@@ -163,7 +163,7 @@ export default {
             let _this=this;
             _this.tableLoading = true;
             axios
-            .get("/auth/all_tenants")
+            .get("http://139.199.101.146:10010/auth/all_tenants")
              .then(function(response){
                  _this.tableLoading = false;
                  _this.tenantData = response.data.data;
@@ -177,7 +177,7 @@ export default {
                 if (valid){
                     if(this.isTenantCreated){
                         axios
-                        .post("/auth/tenant",postData)
+                        .post("http://139.199.101.146:10010/auth/tenant",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.tenantNewVisible=false;
@@ -197,7 +197,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("/auth/tenant",postData)
+                        .put("http://139.199.101.146:10010/auth/tenant",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.tenantNewVisible=false;
@@ -227,7 +227,7 @@ export default {
         tenantSearch(){
             let _this=this;
             axios
-            .get("/auth/tenants?tenantName="+this.tenantName)
+            .get("http://139.199.101.146:10010/auth/tenants?tenantName="+this.tenantName)
              .then(function(response){
                  _this.tenantData = response.data.data;
              })
