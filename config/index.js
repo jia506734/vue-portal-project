@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
        '/auth': {
             // 测试环境
-            target: 'http://139.199.101.146:10010',  // 接口域名
+            target: 'http://139.199.101.146:10011',  // 接口域名
             changeOrigin: true,  //是否跨域
             // pathRewrite: {
             //     '^/auth': ''   

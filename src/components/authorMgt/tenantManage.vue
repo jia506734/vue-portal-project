@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="top-class">租户管理</div>
+    <div class="top-class"><span style="margin-left: 10px;">租户管理</span></div>
     <div style="margin-left:20px;margin-top:20px;">
         <el-row>
             <el-col :span="1" >租户名称</el-col>
@@ -163,7 +163,7 @@ export default {
             let _this=this;
             _this.tableLoading = true;
             axios
-            .get("http://139.199.101.146:10010/auth/all_tenants")
+            .get("/auth/all_tenants")
              .then(function(response){
                  _this.tableLoading = false;
                  _this.tenantData = response.data.data;
@@ -177,7 +177,7 @@ export default {
                 if (valid){
                     if(this.isTenantCreated){
                         axios
-                        .post("http://139.199.101.146:10010/auth/tenant",postData)
+                        .post("/auth/tenant",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.tenantNewVisible=false;
@@ -197,7 +197,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("http://139.199.101.146:10010/auth/tenant",postData)
+                        .put("/auth/tenant",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.tenantNewVisible=false;
@@ -227,7 +227,7 @@ export default {
         tenantSearch(){
             let _this=this;
             axios
-            .get("http://139.199.101.146:10010/auth/tenants?tenantName="+this.tenantName)
+            .get("/auth/tenants?tenantName="+this.tenantName)
              .then(function(response){
                  _this.tenantData = response.data.data;
              })

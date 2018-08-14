@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="top-class">菜单管理</div>
+    <div class="top-class"><span style="margin-left: 10px;">菜单管理</span></div>
     <div style="margin-left:20px;margin-top:20px;">
       <el-row>
           <el-col :span="2" >菜单Code</el-col>
@@ -20,6 +20,7 @@
           </el-col>
       </el-row>
       <el-table
+            v-loading = "tableLoading"
           :data="menuData"
           style="width: 100%;margin-top:20px">
           <el-table-column
@@ -94,8 +95,7 @@
   <el-dialog
       title="菜单管理>新增"
       :visible.sync="addNewVisible"
-      width="30%"
-      :before-close="handleClose">
+      width="30%">
       <el-dialog
           title="菜单顺序"
           :visible.sync="orderVisible"
@@ -150,7 +150,7 @@
               </el-form-item>
               <el-form-item>
                   <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
-                  <el-button @click="resetForm('ruleForm')">取消</el-button>
+                  <el-button @click="addNewVisible=false">取消</el-button>
               </el-form-item>
           </el-form>
       </div>
@@ -160,34 +160,30 @@
       :visible.sync="resourceNewVisible"
       width="35%">
       <div>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="资源号名称" :rules="[{ required: true, message: '请输入资源号名称', trigger: 'blur' }]">
-                  <el-input v-model="formInline.resourceName" placeholder="资源号名称"></el-input>
+            <el-form :model="formInline" :rules="rulesLine" ref="formInline" label-width="100px" class="demo-formInline">
+              <el-form-item label="资源号名称" prop="resourceName">
+                  <el-input v-model="formInline.resourceName"></el-input>
               </el-form-item>
               <el-form-item label="父级菜单">
-                  <el-button type="primary">用户管理</el-button>
+                   <el-button type="primary">用户管理</el-button>
               </el-form-item>
-          </el-form>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="资源号顺序">
+              <el-form-item label="资源号顺序" prop="resourceOrder">
                   <el-input v-model="formInline.resourceOrder" placeholder="资源号名称"></el-input>
               </el-form-item>
-              <el-form-item label="资源号样式">
-                  <el-input v-model="formInline.resourceStyle" placeholder="资源号样式"></el-input>
+              <el-form-item label="资源号样式" prop="resourceStyle">
+                  <el-input v-model="formInline.resourceStyle" placeholder="资源号名称"></el-input>
+              </el-form-item>
+              <el-form-item label="资源号图标" prop="resourceIcon">
+                  <el-input v-model="formInline.resourceIcon"></el-input>
+              </el-form-item>
+              <el-form-item label="资源号服务" prop="resourceService" >
+                  <el-input v-model="formInline.resourceService"></el-input>
+              </el-form-item>
+              <el-form-item>
+                  <el-button type="primary" @click="submitForm('formInline')">保存</el-button>
+                  <el-button @click="resourceNewVisible=false">取消</el-button>
               </el-form-item>
           </el-form>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="资源号图标">
-                  <el-input v-model="formInline.resourceIcon" placeholder="资源号图标"></el-input>
-              </el-form-item>
-              
-          </el-form>
-          <el-form :inline="true"  :model="formInline" class="demo-form-inline">
-              <el-form-item label="资源号服务" :rules="[{ required: true, message: '请输入资源号服务', trigger: 'blur' }]">
-                  <el-input v-model="formInline.resourceService" placeholder="资源号服务"></el-input>
-              </el-form-item>
-          </el-form>
-          
       </div>
   </el-dialog>
   </div>
@@ -203,6 +199,11 @@ export default {
         addNewVisible:false,
         orderVisible:false,
         resourceNewVisible:false,
+        tableLoading:false,
+        rulesLine:{
+            resourceName:[{ required: true, message: '请输入资源号名称', trigger: 'blur' }],
+            resourceService:[{ required: true, message: '请输入资源号服务', trigger: 'blur' }],
+        },
         formInline: {
             resourceName: '',
             resourceOrder: '',
@@ -220,8 +221,7 @@ export default {
         },
         rules: {
           name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { required: true, message: '请输入资源号名称', trigger: 'blur' },
           ],
          
           mainMenu: [
@@ -231,6 +231,16 @@ export default {
       }
     },
     methods:{
+        submitForm(formName){
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                alert('submit!');
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
+        },
         addNewClick(){
             this.addNewVisible= true;
         },

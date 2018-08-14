@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div class="top-class">用户管理</div>
+      <div class="top-class"><span style="margin-left: 10px;">角色管理</span></div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
             <el-col :span="1" >角色名</el-col>
@@ -16,6 +16,7 @@
             </el-col>
         </el-row>
         <el-table
+            v-loading = "tableLoading"
             :data="roleData"
             style="width: 100%;margin-top:20px">
             <el-table-column
@@ -97,6 +98,7 @@ export default {
         roleNewVisible:false,
         isCreate:false,//是否新建
         roleData:[],
+        tableLoading:false,
         roleInline:{//用户form
             authTenant:'',
             roleId:'',
@@ -137,7 +139,7 @@ export default {
                 if (valid){
                     if(this.isCreate){
                         axios
-                        .post("http://139.199.101.146:10010/role/roel",postData)
+                        .post("/role/roel",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.roleNewAddVisible=false;
@@ -157,7 +159,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("http://139.199.101.146:10010/role/roel",postData)
+                        .put("/role/roel",postData)
                         .then(function(response){
                             if(response.data.success){
                                _this.roleNewAddVisible=false;
@@ -186,9 +188,9 @@ export default {
       //查询所有角色
       getAllDate(){
         let _this=this;
-            _this.tableLoading= true;
+            _this.tableLoading= false;
             axios
-            .get("http://139.199.101.146:10010/auth/role/all_roles")
+            .get("/auth/all_roles")
              .then(function(response){
                  _this.tableLoading= false;
                  _this.roleData = response.data.data;
