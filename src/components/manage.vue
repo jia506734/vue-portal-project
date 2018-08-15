@@ -2,12 +2,12 @@
     <div style="height:100%;">
         <div class="header_container">
             <el-row>
-                <el-col :span="19" style="height: 50px">
+                <el-col :span="16" style="height: 50px">
                     <img :src="url" style="height: 50px;width: 200px;" />
                 </el-col>
-                <el-col :span="2" style="margin-left:0px;">wulongbin-2@16..</el-col>
-                <el-col :span="1" style="margin-left:0px;">{{ $t('manage.Notify') }}</el-col>
-                <el-col :span="1" style="margin-left:0px;">{{ $t('manage.LogOut') }}</el-col>
+                <el-col :span="4" class="user-style">wulongbin-2@16..</el-col>
+                <el-col :span="1" class="notify-style">{{ $t('manage.Notify') }}</el-col>
+                <el-col :span="1" class="logout-style">{{ $t('manage.LogOut') }}</el-col>
             </el-row>
             <!--<div><span>慧程天下</span>慧程天下</div>-->
         
@@ -51,7 +51,7 @@
 <style  scoped>
         .header_container{
         height: 50px;
-        line-height: 50px;
+        /* line-height: 50px; */
         background-color: #1b1731;
         color: white;
     }
@@ -61,6 +61,21 @@
         margin-top: 15px;
         margin-left: 50px;
         text-align: left;
+    }
+    .user-style{
+        position: absolute;
+        left: 73%;
+        top: 16px;
+    }
+    .notify-style{
+        position: absolute;
+        left: 85%;
+        top: 12px;
+    }
+    .logout-style{
+        position: absolute;
+        left: 90%;
+        top: 12px;
     }
     .header_left_content{
         font-size: 13px;

@@ -3,7 +3,7 @@
       <div class="top-class"><span style="margin-left: 10px;">用户管理</span></div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
-            <el-col :span="1" >用户名</el-col>
+            <el-col :span="2" >用户名</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="userName" placeholder="输入用户名"></el-input></el-col>
             <el-col :span="1">手机</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="userMobile" placeholder="输入手机"></el-input></el-col>

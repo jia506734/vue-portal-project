@@ -33,7 +33,7 @@
                         </el-submenu>
                     </el-menu>
                 </el-col>
-                <el-col  style="position:relative;left:200px;width:calc(100% - 200px);height:100%;overflow:scroll;">
+                <el-col  style="position:relative;left:200px;width:calc(100% - 200px);height:100%;overflow-y:scroll;">
                    <keep-alive>
 				     <router-view></router-view>
 				  </keep-alive>
@@ -64,8 +64,6 @@
 
 <style  scoped>
     .content_section{
-        /* background-color: #d2d2d2; */
-        /* height:860px; */
         height:100%;
     }
     .content_container{
