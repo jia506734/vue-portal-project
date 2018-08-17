@@ -3,7 +3,7 @@
     <div class="top-class"><span style="margin-left: 10px;">租户管理</span></div>
     <div style="margin-left:20px;margin-top:20px;">
         <el-row>
-            <el-col :span="1" >租户名称</el-col>
+            <el-col :span="2" >租户名称</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="tenantName" placeholder="输入租户名"></el-input></el-col>
             <el-col :span="4"><el-button type="primary" @click="tenantSearch">查询</el-button></el-col>
         </el-row>
@@ -50,7 +50,7 @@
         </el-table>
     </div>
     <el-dialog
-        title="租户管理>新建"
+        :title="createOrEdit"
         :visible.sync="tenantNewVisible"
         width="40%">
         <div class="tenant-div">
@@ -79,7 +79,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitTenantForm('tenantForm')">确定</el-button>
-                    <el-button @click="resetForm('tenantForm')">重置</el-button>
+                    <el-button @click="tenantNewVisible=false">取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -92,6 +92,7 @@ export default {
     data(){
       return{
         tenantName:'',
+        createOrEdit:'租户管理>新建',
         tenantForm:{//租户form
             tenantName:'',
             tenantDesc:'',
@@ -240,6 +241,7 @@ export default {
             this.tenantForm.tenantName = row.tenantName;
             this.tenantForm.tenantDesc = row.tenantDesc;
             this.tenantForm.tenantAdminId = row.tenantAdminId;
+            this.createOrEdit='租户管理>编辑';
         },
         //租户删除
         handleDelete(index, row) {

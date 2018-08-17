@@ -105,7 +105,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户密码" prop="userPwd">
-                    <el-input v-model="userInline.userPwd"></el-input>
+                    <el-input v-model="userInline.userPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="用户所属租户" prop="userTenantCode">
                     <el-input v-model="userInline.userTenantCode"></el-input>
@@ -156,6 +156,21 @@
 import axios from "axios"
 export default {
     data(){
+         var checkEmail = (rule, value, callback) => {
+            if (!value) {
+                return callback();
+            }
+            if (value) {
+                setTimeout(() => {
+                    var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                    if (!reg.test(value)) {
+                        callback(new Error('请输入有效的电子邮箱！'));
+                    } else {
+                        callback();
+                    }
+                }, 500);
+            }
+        };
       return{
         userInline:{//用户form
             userId:'',
@@ -175,12 +190,19 @@ export default {
             ],
             userPwd:[
                 { required: true, message: '请输入用户密码', trigger: 'blur' },
+                { min: 8, max: 15, message: '长度在 8 到 15 个字符', trigger: 'blur' },
+                {pattern: /^(\w){6,20}$/,message: '只能输入6-20个字母、数字、下划线'}
             ],
             userTenantCode:[
                 { required: true, message: '请输入所属租户', trigger: 'blur' },
             ],
             userMobile:[
                 { required: true, message: '请输入手机号', trigger: 'blur' },
+                {pattern: /^[1-9]\d*$/,message: '只能输入数字'},
+                 { min: 11, max: 11, message: '请输入正确的手机号码', trigger: 'blur' },
+            ],
+            userEmail: [
+                {validator: checkEmail, trigger: 'blur,change'}
             ],
         },
         forUserStatus:[{label:"有效",value:"1"},{label:"无效",value:"0"}],

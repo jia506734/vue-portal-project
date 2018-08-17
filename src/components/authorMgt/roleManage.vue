@@ -3,7 +3,7 @@
       <div class="top-class"><span style="margin-left: 10px;">角色管理</span></div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
-            <el-col :span="1" >角色名</el-col>
+            <el-col :span="2" >角色名</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="roleName" placeholder="输入角色名"></el-input></el-col>
             <el-col :span="4"><el-button type="primary" @click="searchRoleData">查询</el-button></el-col>
         </el-row>
@@ -33,13 +33,13 @@
                 <span>{{ scope.row.roleDesc }}</span>
             </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
             label="是否有效"
             width="130">
             <template slot-scope="scope">
                 <span>{{ scope.row.valid }}</span>
             </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作"  width="200">
             <template slot-scope="scope">
                 <el-button
@@ -54,17 +54,24 @@
         </el-table>
     </div>
     <el-dialog
-        title="角色管理>新建"
+        :title="createOrEdit"
         :visible.sync="roleNewAddVisible"
-        width="40%">
+        width="35%">
         <div class="role-div">
             <el-form :model="roleInline" :rules="rulesInline" ref="roleInline" label-width="120px" class="demo-roleInline">
                 <el-form-item label="租户" prop="authTenant">
-                    <el-input v-model="roleInline.authTenant"></el-input>
+                    <el-select v-model="roleInline.authTenant" placeholder="请选择">
+                        <el-option
+                        v-for="item in tenantData"
+                        :key="item.tenantId"
+                        :label="item.tenantName"
+                        :value="item.tenantId">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="角色ID" prop="roleId">
+                <!-- <el-form-item label="角色ID" prop="roleId">
                     <el-input v-model="roleInline.roleId"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="角色名称" prop="roleName">
                     <el-input v-model="roleInline.roleName"></el-input>
                 </el-form-item>
@@ -72,8 +79,8 @@
                     <el-input type="textarea" v-model="roleInline.roleDesc"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onRoleSubmit('userInline')">确定</el-button>
-                    <el-button @click="resetForm('userInline')">重置</el-button>
+                    <el-button type="primary" @click="onRoleSubmit('roleInline')">确定</el-button>
+                    <el-button @click="roleNewAddVisible=false">取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -94,23 +101,21 @@ export default {
     data(){
       return{
         roleName:'',
+        createOrEdit:'角色管理>新建',
         roleNewAddVisible:false,
         roleNewVisible:false,
         isCreate:false,//是否新建
-        roleData:[],
+        roleData:[],//
+        tenantData:[],//所有租户
         tableLoading:false,
         roleInline:{//用户form
             authTenant:'',
-            roleId:'',
             roleName:'',
             roleDesc:'',
         },
         rulesInline:{
           authTenant:[
                 { required: true, message: '请输入租户', trigger: 'blur' },
-            ],
-           roleId: [
-                { required: true, message: '请输入用户ID', trigger: 'blur' },
             ],
             roleName:[
                 { required: true, message: '请输入用户名称', trigger: 'blur' },
@@ -120,6 +125,7 @@ export default {
     },
     created(){
       this.getAllDate();
+      this.getAllTenant();
     },
     methods:{
         //角色编辑
@@ -127,9 +133,9 @@ export default {
             this.roleNewAddVisible=true;
             this.isCreate=false;
             this.roleInline.authTenant = row.authTenant;
-            this.roleInline.roleId = row.roleId;
             this.roleInline.roleName = row.roleName;
             this.roleInline.roleDesc = row.roleDesc;
+            this.createOrEdit = "角色管理>编辑"
         },
       //角色新增
         onRoleSubmit(formName){
@@ -139,7 +145,7 @@ export default {
                 if (valid){
                     if(this.isCreate){
                         axios
-                        .post("/role/roel",postData)
+                        .post("auth/role",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.roleNewAddVisible=false;
@@ -159,7 +165,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("/role/roel",postData)
+                        .put("/auth/role",postData)
                         .then(function(response){
                             if(response.data.success){
                                _this.roleNewAddVisible=false;
@@ -196,30 +202,34 @@ export default {
                  _this.roleData = response.data.data;
              })
       },
+      //查询所有 租户
+      getAllTenant(){
+          let _this=this;
+        axios
+        .get("/auth/all_tenants")
+        .then(function(response){
+            _this.tenantData = response.data.data;
+        })
+      },
       //查询指定用户
         searchRoleData(){
-            // let _this=this;
-            // axios
-            // .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
-            //  .then(function(response){
-            //      _this.userData = response.data.data;
-            //  })
+            let _this=this;
+            _this.tableLoading= true;
+            axios
+            .get("/auth/roles?roleName="+this.roleName)
+             .then(function(response){
+                 _this.tableLoading= false;
+                 _this.roleData = response.data.data;
+             })
         },
         roleNewClick(){
-          roleInline={//用户form
+          this.roleInline={//用户form
               authTenant:'',
-              roleId:'',
               roleName:'',
               roleDesc:'',
           },
           this.roleNewAddVisible=true;
           this.isCreate=true;
-        },
-        handleRoleEdit(index, row) {
-            console.log(index, row);
-        },
-        handleDelete(index, row) {
-            console.log(index, row);
         },
          /*
         重置新增界面
