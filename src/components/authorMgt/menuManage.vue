@@ -15,14 +15,25 @@
           <el-col  :span="2">
               <span style="cursor: pointer;" @click="addNewClick"><i class="el-icon-circle-plus"></i>新增</span>
           </el-col>
+          <el-col  :span="2">
+                <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
+            </el-col>
           <el-col  :span="3">
               <span style="cursor: pointer;" @click="resourceNewClick"><i class="el-icon-circle-plus"></i>资源号</span>
           </el-col>
       </el-row>
       <el-table
-            v-loading = "tableLoading"
+        tooltip-effect="dark"
+        @selection-change="handleSelectionChange"
+        ref="multipleTable"
+          border
+          v-loading = "tableLoading"
           :data="menuData"
           style="width: 100%;margin-top:20px">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
           label="Code"
           width="130">
@@ -83,11 +94,8 @@
           <template slot-scope="scope">
               <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
           </template>
           </el-table-column>
       </el-table>
@@ -219,6 +227,7 @@ export default {
           icon: '',
           mainMenu: ''
         },
+        multipleSelection:[],
         rules: {
           name: [
             { required: true, message: '请输入资源号名称', trigger: 'blur' },
@@ -231,6 +240,9 @@ export default {
       }
     },
     methods:{
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
         submitForm(formName){
             this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -250,6 +262,10 @@ export default {
             done();
             })
             .catch(_ => {});
+        },
+        //删除多项
+        moreDeleteClick(){
+
         },
         resourceNewClick(){
             this.resourceNewVisible = true

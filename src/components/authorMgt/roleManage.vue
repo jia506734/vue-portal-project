@@ -11,14 +11,25 @@
             <el-col  :span="2">
                 <span style="cursor: pointer;" @click="roleNewClick"><i class="el-icon-circle-plus"></i>新增</span>
             </el-col>
+            <el-col  :span="2">
+                <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
+            </el-col>
             <el-col  :span="3">
                 <span style="cursor: pointer;" @click="roleNewVisible = true"><i class="el-icon-circle-plus"></i>角色授权</span>
             </el-col>
         </el-row>
         <el-table
+            tooltip-effect="dark"
+            @selection-change="handleSelectionChange"
+            ref="multipleTable"
+            border
             v-loading = "tableLoading"
             :data="roleData"
             style="width: 100%;margin-top:20px">
+            <el-table-column
+            type="selection"
+            width="55">
+            </el-table-column>
             <el-table-column
             label="角色"
             width="130">
@@ -40,15 +51,12 @@
                 <span>{{ scope.row.valid }}</span>
             </template>
             </el-table-column> -->
-            <el-table-column label="操作"  width="200">
+            <el-table-column label="操作"  width="80">
             <template slot-scope="scope">
                 <el-button
                 size="mini"
-                @click="handleRoleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                type="primary"
+                @click="handleRoleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -90,7 +98,14 @@
         :visible.sync="roleNewVisible"
         width="40%">
         <div class="role-div">
-            
+            <el-tree
+            :props="props"
+            :load="loadNode"
+            lazy
+            show-checkbox
+            @check-change="handleCheckChange">
+
+            </el-tree>
         </div>
     </el-dialog>
   </div>
@@ -102,6 +117,7 @@ export default {
       return{
         roleName:'',
         createOrEdit:'角色管理>新建',
+        multipleSelection:'',
         roleNewAddVisible:false,
         roleNewVisible:false,
         isCreate:false,//是否新建
@@ -128,6 +144,17 @@ export default {
       this.getAllTenant();
     },
     methods:{
+        //树形控件
+        handleCheckChange(data, checked, indeterminate) {
+            console.log(data, checked, indeterminate);
+        },
+        handleNodeClick(data) {
+            console.log(data);
+        },
+      //多选选择项
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
         //角色编辑
         handleRoleEdit(index, row){
             this.roleNewAddVisible=true;
@@ -191,6 +218,10 @@ export default {
             })
             
         },
+      //批量删除
+      moreDeleteClick(){
+          
+      },
       //查询所有角色
       getAllDate(){
         let _this=this;

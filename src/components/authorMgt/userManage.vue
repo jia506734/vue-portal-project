@@ -6,12 +6,15 @@
             <el-col :span="2" >用户名</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="userName" placeholder="输入用户名"></el-input></el-col>
             <el-col :span="1">手机</el-col>
-            <el-col :span="5" style="margin-right:30px;"><el-input v-model="userMobile" placeholder="输入手机"></el-input></el-col>
+            <el-col :span="5" style="margin-right:30px;"><el-input v-model.number="userMobile" placeholder="输入手机"></el-input></el-col>
             <el-col :span="4"><el-button type="primary" @click="searchUserData">查询</el-button></el-col>
         </el-row>
         <el-row style="margin-top:20px">
             <el-col  :span="2">
                 <span style="cursor: pointer;" @click="userNewClick"><i class="el-icon-circle-plus"></i>新增</span>
+            </el-col>
+            <el-col  :span="2">
+                <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
             </el-col>
             <!--<el-col  :span="3">
                 <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>角色绑定</span>
@@ -24,9 +27,17 @@
             </el-col>-->
         </el-row>
         <el-table
+            border
+            ref="multipleTable"
             :data="userData"
+            tooltip-effect="dark"
+             @selection-change="handleSelectionChange"
              v-loading = "tableLoading"
             style="width: 100%;margin-top:20px">
+            <el-table-column
+            type="selection"
+            width="55">
+            </el-table-column>
             <el-table-column
             label="用户名"
             width="130">
@@ -72,16 +83,13 @@
                 <span v-if="scope.row.userStatus==0">否</span>
             </template>
             </el-table-column>
-            <el-table-column label="操作"  width="200">
-            <template slot-scope="scope">
-                <el-button
-                size="mini"
-                @click="handleUserEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button
-                size="mini"
-                type="danger"
-                @click="handleUserDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
+            <el-table-column label="操作"  width="80">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    type="primary"
+                    @click="handleUserEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -111,7 +119,7 @@
                     <el-input v-model="userInline.userTenantCode"></el-input>
                 </el-form-item>
                 <el-form-item label="用户手机" prop="userMobile">
-                    <el-input v-model="userInline.userMobile"></el-input>
+                    <el-input :maxlength=11 v-model.number="userInline.userMobile"></el-input>
                 </el-form-item>
                 <el-form-item label="用户邮件" prop="userEmail">
                     <el-input v-model="userInline.userEmail"></el-input>
@@ -183,6 +191,7 @@ export default {
             validDate:'',
             userStatus:'',
         },
+        roleData:[],//角色列表
         tableLoading:false,
         rulesInline:{//用户规则
             userName: [
@@ -199,7 +208,6 @@ export default {
             userMobile:[
                 { required: true, message: '请输入手机号', trigger: 'blur' },
                 {pattern: /^[1-9]\d*$/,message: '只能输入数字'},
-                 { min: 11, max: 11, message: '请输入正确的手机号码', trigger: 'blur' },
             ],
             userEmail: [
                 {validator: checkEmail, trigger: 'blur,change'}
@@ -212,12 +220,21 @@ export default {
         userMobile:'',
         userData:[],
         userNewVisible:false,
+        multipleSelection: []
       }
     },
     created(){
       this.getUserManageData();
+      this.getAllRoleDate();
     },
     methods:{
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        //批量删除
+        moreDeleteClick(){
+
+        },
       /*
         获取用户管理数据
         */
@@ -231,6 +248,16 @@ export default {
                  _this.userData = response.data.data;
              })
         },
+        //查询所有角色
+      getAllRoleDate(){
+        let _this=this;
+            axios
+            .get("/auth/all_roles")
+             .then(function(response){
+                 
+                 _this.roleData = response.data.data;
+             })
+      },
         //查询指定用户
         searchUserData(){
             let _this=this;

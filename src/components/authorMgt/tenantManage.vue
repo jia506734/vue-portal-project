@@ -11,10 +11,21 @@
             <el-col  :span="2">
                 <span style="cursor: pointer;" @click="addNewClick"><i class="el-icon-circle-plus"></i>新增</span>
             </el-col>
+            <el-col  :span="2">
+                <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
+            </el-col>
         </el-row>
         <el-table v-loading = "tableLoading"
+            tooltip-effect="dark"
+            @selection-change="handleSelectionChange"
+            ref="multipleTable"
+            border
             :data="tenantData"
             style="width: 180%;margin-top:20px">
+            <el-table-column
+            type="selection"
+            width="55">
+            </el-table-column>
             <el-table-column
             label="租户名称"
             width="200">
@@ -40,11 +51,8 @@
             <template slot-scope="scope">
                 <el-button
                 size="mini"
-                @click="handleTenantEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                type="primary"
+                @click="handleTenantEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -112,6 +120,7 @@ export default {
         tenantNewVisible:false,
         isTenantCreated:false,//是否新建
         tableLoading:false,
+        multipleSelection:[],
         tenantData:[],//租户表格
         loading:false,//远程搜索的
         options4: [],
@@ -143,6 +152,9 @@ export default {
       });
     },
     methods:{
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
       //新增按钮点击事件
       addNewClick(){
         this.tenantNewVisible=true;
@@ -153,11 +165,9 @@ export default {
             tenantAdminId:'',
         }
       },
-      /*
-        重置新增界面
-        */
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        //批量删除
+        moreDeleteClick(){
+
         },
       //查询所有租户
         getTenantManageData(){
