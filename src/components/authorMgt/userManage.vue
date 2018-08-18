@@ -16,7 +16,7 @@
             <el-col  :span="2">
                 <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
             </el-col>
-            <!--<el-col  :span="3">
+            <el-col  :span="3">
                 <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>角色绑定</span>
             </el-col>
             <el-col  :span="2">
@@ -24,7 +24,7 @@
             </el-col>
             <el-col  :span="3">
                 <span style="cursor: pointer;"><i class="el-icon-circle-plus"></i>导出</span>
-            </el-col>-->
+            </el-col>
         </el-row>
         <el-table
             border
