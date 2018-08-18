@@ -98,13 +98,20 @@
         :visible.sync="roleNewVisible"
         width="40%">
         <div class="role-div">
-            <el-tree
+            <!-- <el-tree
             :props="props"
             :load="loadNode"
             lazy
             show-checkbox
             @check-change="handleCheckChange">
 
+            </el-tree> -->
+            <el-tree
+            :props="props"
+            :load="loadNode"
+            lazy
+            @check-change="handleCheckChange"
+            show-checkbox>
             </el-tree>
         </div>
     </el-dialog>
@@ -129,6 +136,12 @@ export default {
             roleName:'',
             roleDesc:'',
         },
+         props: {
+          label: 'name',
+          children: 'zones',
+          isLeaf: 'leaf'
+        },
+        count: 1,
         rulesInline:{
           authTenant:[
                 { required: true, message: '请输入租户', trigger: 'blur' },
@@ -146,10 +159,33 @@ export default {
     methods:{
         //树形控件
         handleCheckChange(data, checked, indeterminate) {
+            debugger
             console.log(data, checked, indeterminate);
         },
         handleNodeClick(data) {
             console.log(data);
+        },
+        loadNode(node, resolve) {
+            debugger
+            if (node.level === 0) {
+            return resolve([{ name: '用户管理' },{ name: '角色管理' },{ name: '租户管理' },{ name: '菜单管理' }]);
+            }
+            if (node.level > 1) return resolve([]);
+
+            setTimeout(() => {
+            const data = [{
+                name: '新建',
+                leaf: true
+            }, {
+                name: '编辑',
+                leaf: true
+            }, {
+                name: '删除',
+                leaf: true
+            }];
+
+            resolve(data);
+            }, 500);
         },
       //多选选择项
         handleSelectionChange(val) {
