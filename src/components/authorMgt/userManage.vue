@@ -116,7 +116,12 @@
                     <el-input v-model="userInline.userPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="用户所属租户" prop="userTenantCode">
-                    <el-input v-model="userInline.userTenantCode"></el-input>
+                    <el-select v-model="userInline.userTenantCode" placeholder="请选择租户">
+                        <el-option v-for="(item,index) in tenantData" 
+                            :key="index" :label="item.tenantName" :value="item.tenantId">
+                        </el-option>
+                    </el-select>
+                    <!-- <el-input v-model="userInline.userTenantCode"></el-input> -->
                 </el-form-item>
                 <el-form-item label="用户手机" prop="userMobile">
                     <el-input :maxlength=11 v-model.number="userInline.userMobile"></el-input>
@@ -180,6 +185,7 @@ export default {
             }
         };
       return{
+        tenantData:[],//所有租户
         userInline:{//用户form
             userId:'',
             userName:'',
@@ -228,6 +234,15 @@ export default {
       this.getAllRoleDate();
     },
     methods:{
+        //查询所有租户
+        getTenantManageData(){
+            let _this=this;
+            axios
+            .get("/auth/all_tenants")
+             .then(function(response){
+                 _this.tenantData = response.data.data;
+             })
+        },
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },

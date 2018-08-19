@@ -111,6 +111,8 @@
             :load="loadNode"
             lazy
             @check-change="handleCheckChange"
+            node-key="id"
+            :default-expanded-keys="[1, 2]"
             show-checkbox>
             </el-tree>
         </div>
@@ -139,7 +141,7 @@ export default {
          props: {
           label: 'name',
           children: 'zones',
-          isLeaf: 'leaf'
+        //   isLeaf: 'leaf'
         },
         count: 1,
         rulesInline:{
@@ -159,33 +161,40 @@ export default {
     methods:{
         //树形控件
         handleCheckChange(data, checked, indeterminate) {
-            debugger
+            
             console.log(data, checked, indeterminate);
         },
         handleNodeClick(data) {
             console.log(data);
         },
         loadNode(node, resolve) {
-            debugger
-            if (node.level === 0) {
-            return resolve([{ name: '用户管理' },{ name: '角色管理' },{ name: '租户管理' },{ name: '菜单管理' }]);
+            if(node.label==="新建"||node.label==="编辑"||node.label==="删除"||node.level > 3){
+                return resolve([]);
             }
-            if (node.level > 1) return resolve([]);
-
+            if (node.level === 0) {
+                return resolve([{ name: 'Root' }]);
+            }
+            if (node.level === 1) {
+                return resolve([{ name: '线路管理' },{ name: '门票管理' },{ name: '权限管理' }]);
+            }
+            if (node.level === 2&&node.label === "权限管理") {
+                return resolve([{ name: '菜单管理' },{ name: '角色管理' },{ name: '用户管理' },{ name: ' 租户管理' }]);
+            }
             setTimeout(() => {
-            const data = [{
-                name: '新建',
-                leaf: true
-            }, {
-                name: '编辑',
-                leaf: true
-            }, {
-                name: '删除',
-                leaf: true
-            }];
+                const data = [{
+                    name: '新建',
+                    // leaf: true
+                }, {
+                    name: '编辑',
+                    // leaf: true
+                }, {
+                    name: '删除',
+                    // leaf: true
+                }];
 
-            resolve(data);
+                resolve(data);
             }, 500);
+            
         },
       //多选选择项
         handleSelectionChange(val) {

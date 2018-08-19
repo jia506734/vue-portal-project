@@ -34,35 +34,42 @@
             type="selection"
             width="55">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           label="Code"
           width="130">
           <template slot-scope="scope">
               <span>{{ scope.row.Code }}</span>
           </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           label="名称"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.Name }}</span>
+              <span>{{ scope.row.menuName }}</span>
           </template>
           </el-table-column>
           <el-table-column
           label="父级菜单"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.FatherMenu }}</span>
+              <span>{{ scope.row.parentMenuCode }}</span>
+          </template>
+          </el-table-column>
+          <el-table-column
+          label="租户"
+          width="130">
+          <template slot-scope="scope">
+              <span>{{ scope.row.tenantCode }}</span>
           </template>
           </el-table-column>
           <el-table-column
           label="顺序"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.Order }}</span>
+              <span>{{ scope.row.menuOrder }}</span>
           </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           label="样式"
           width="130">
           <template slot-scope="scope">
@@ -75,22 +82,29 @@
           <template slot-scope="scope">
               <span>{{ scope.row.Icon }}</span>
           </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           label="首地址"
-          width="130">
+          width="210">
           <template slot-scope="scope">
-              <span>{{ scope.row.Address }}</span>
+              <span>{{ scope.row.menuUrl }}</span>
           </template>
           </el-table-column>
           <el-table-column
           label="是否可见"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.IsSeen }}</span>
+              <span>{{ getLabelById(scope.row.menuVisibility) }}</span>
           </template>
           </el-table-column>
-          <el-table-column label="操作"  width="200">
+          <el-table-column
+          label="是否有效"
+          width="130">
+          <template slot-scope="scope">
+              <span>{{ getLabelById(scope.row.menuStatus) }}</span>
+          </template>
+          </el-table-column>
+          <el-table-column label="操作"  width="80">
           <template slot-scope="scope">
               <el-button
               size="mini"
@@ -134,30 +148,47 @@
       </el-dialog>
       <div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="菜单名称" prop="name">
-                  <el-input v-model="ruleForm.name"></el-input>
+              <el-form-item label="菜单名称" prop="menuName">
+                  <el-input v-model="ruleForm.menuName"></el-input>
               </el-form-item>
-              <el-form-item label="父级菜单" prop="fatherMenu">
-                  <el-select v-model="ruleForm.fatherMenu" placeholder="请选择父级菜单">
-                  <el-option label="首页" value="indexPage"></el-option>
-                  <el-option label="集中巡检" value="secondSelect"></el-option>
-                  <el-option label="分析评估" value="analyze"></el-option>
-                  </el-select>
+              <el-form-item label="父级菜单" prop="parentMenuCode">
+                  <el-input v-model="ruleForm.parentMenuCode" disabled=""></el-input>
               </el-form-item>
-              <el-form-item label="菜单顺序" prop="order">
-                  <div style="width:100%;height:30px;border:1px solid #ddd;" @click="orderVisible = true"></div>
+              <el-form-item label="租户" prop="tenantCode">
+                <el-select v-model="ruleForm.tenantCode" placeholder="请选择租户">
+                    <el-option v-for="(item,index) in tenantData" 
+                        :key="index" :label="item.tenantName" :value="item.tenantId">
+                    </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item label="菜单样式" prop="style">
+              <el-form-item label="菜单顺序" prop="menuOrder">
+                  <el-input v-model="ruleForm.menuOrder"></el-input>
+              </el-form-item>
+              <!-- <el-form-item label="菜单样式" prop="style">
                   <el-input v-model="ruleForm.style"></el-input>
               </el-form-item>
               <el-form-item label="菜单图标" prop="icon">
                   <el-input v-model="ruleForm.icon"></el-input>
+              </el-form-item> -->
+              <el-form-item label="菜单首地址" prop="menuUrl">
+                  <el-input v-model="ruleForm.menuUrl"></el-input>
               </el-form-item>
-              <el-form-item label="菜单首地址" prop="mainMenu">
-                  <el-input v-model="ruleForm.mainMenu"></el-input>
+              <el-form-item label="菜单是否可见" prop="menuVisibility">
+                <el-select v-model="ruleForm.menuVisibility" placeholder="请选择菜单可见性">
+                    <el-option v-for="(item,index) in visibilityData" 
+                        :key="index" :label="item.name" :value="item.id">
+                    </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="菜单是否有效" prop="menuStatus">
+                <el-select v-model="ruleForm.menuStatus" placeholder="请选择菜单有效性">
+                    <el-option v-for="(item,index) in statusData" 
+                        :key="index" :label="item.name" :value="item.id">
+                    </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item>
-                  <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+                  <el-button type="primary" @click="submitMenuForm('ruleForm')">保存</el-button>
                   <el-button @click="addNewVisible=false">取消</el-button>
               </el-form-item>
           </el-form>
@@ -188,7 +219,7 @@
                   <el-input v-model="formInline.resourceService"></el-input>
               </el-form-item>
               <el-form-item>
-                  <el-button type="primary" @click="submitForm('formInline')">保存</el-button>
+                  <el-button type="primary" @click="submitSourceForm('formInline')">保存</el-button>
                   <el-button @click="resourceNewVisible=false">取消</el-button>
               </el-form-item>
           </el-form>
@@ -197,6 +228,7 @@
   </div>
 </template>
 <script>
+import axios from "axios"
 export default {
     data(){
       return{
@@ -208,6 +240,15 @@ export default {
         orderVisible:false,
         resourceNewVisible:false,
         tableLoading:false,
+        tenantData:[],//所有租户
+        visibilityData:[
+            {name:'是',id:1},
+            {name:'否',id:0},
+        ],
+        statusData:[
+            {name:'是',id:1},
+            {name:'否',id:0},
+        ],
         rulesLine:{
             resourceName:[{ required: true, message: '请输入资源号名称', trigger: 'blur' }],
             resourceService:[{ required: true, message: '请输入资源号服务', trigger: 'blur' }],
@@ -215,38 +256,128 @@ export default {
         formInline: {
             resourceName: '',
             resourceOrder: '',
-            resourceStyle:'',
-            resourceIcon:'',
+            // resourceStyle:'',
+            // resourceIcon:'',
             resourceService:'',
         },
         ruleForm: {
-          name: '',
-          fatherMenu: '',
-          order: '',
-          style: '',
-          icon: '',
-          mainMenu: ''
+          menuName: '',
+          parentMenu: '',
+          parentMenuCode:'',
+          tenantCode:'',
+          menuOrder: '',
+        //   style: '',
+        //   icon: '',
+          menuUrl: '',
+          menuVisibility:'',//可见
+          menuStatus:''//有效
         },
+        isMenuCreated:false,//是否新建
         multipleSelection:[],
         rules: {
-          name: [
-            { required: true, message: '请输入资源号名称', trigger: 'blur' },
+          menuOrder:[
+              { required: true, message: '请输入菜单顺序', trigger: 'blur' },
+              {pattern: /^[1-9]\d*$/,message: '只能输入数字'},
           ],
-         
-          mainMenu: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+          menuName: [
+            { required: true, message: '请输入菜单名称', trigger: 'blur' },
+          ],
+         tenantCode:[
+             {required: true, message: '请选择租户', trigger: 'blur' }
+         ],
+          menuUrl: [
+            { required: true, message: '请填写菜单首地址', trigger: 'blur' }
           ]
         },
       }
     },
+    created(){
+        this.getTenantManageData();
+        this.getmenuManageData();
+    },
     methods:{
+        //查询所有租户
+        getTenantManageData(){
+            let _this=this;
+            axios
+            .get("/auth/all_tenants")
+             .then(function(response){
+                 
+                 _this.tenantData = response.data.data;
+             })
+        },
+        getLabelById(id){
+            let ret = "";
+            if(id=="1"||id==1){
+                ret ="是"
+            }
+            if(id=="0"||id==0){
+                ret ="否"
+            }
+            return ret;
+        },
+        //查询所有菜单
+        getmenuManageData(){
+            let _this=this;
+            this.tableLoading = true;
+            this.tableLoading = false;
+            axios
+            .get("/auth/all_tenants")
+             .then(function(response){
+                 _this.tableLoading = false;
+                 _this.menuData = response.data.data;
+             })
+        },
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        submitForm(formName){
+        submitMenuForm(formName){
+            let postData=this.ruleForm;
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('submit!');
+                if(this.isMenuCreated){
+                    axios
+                    .post("/auth/menu/menu",postData)
+                    .then(function(response){
+                        if(response.data.success){
+                            
+                            _this.addNewVisible=false;
+                            _this.isMenuCreated=false
+                            // _this.getTenantManageData();
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+
+                        }else{
+                            _this.$notify.error({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                        }
+                    })
+                }else{
+                     axios
+                    .put("/auth/menu/menu",postData)
+                    .then(function(response){
+                        if(response.data.success){
+                            _this.addNewVisible=false;
+                            _this.isMenuCreated=false
+                            // _this.getTenantManageData();
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+
+                        }else{
+                            _this.$notify.error({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                        }
+                    })
+                }
+
             } else {
                 console.log('error submit!!');
                 return false;
@@ -254,6 +385,29 @@ export default {
         });
         },
         addNewClick(){
+            let selectedMenu = this.multipleSelection.slice(0);
+            this.ruleForm= {
+                menuName: '',
+                parentMenu: '',
+                parentMenuCode:'',
+                tenantCode:'',
+                menuOrder: '',
+                // style: '',
+                // icon: '',
+                menuUrl: ''
+            };
+            if(selectedMenu.length>1){
+                this.$notify({
+                    message: '请选择单个菜单进行新建',
+                    type: 'warning'
+                });
+            }else if(selectedMenu.length==1){
+                this.ruleForm.parentMenu=selectedMenu[0];
+            }else{
+                this.ruleForm.parentMenu="Root";
+                this.ruleForm.parentMenuCode="Root";
+            }
+            this.isMenuCreated = true;
             this.addNewVisible= true;
         },
         handleClose(done) {
