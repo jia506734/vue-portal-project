@@ -47,7 +47,7 @@
                 <span>{{ scope.row.tenantAdminId }}</span>
             </template>
             </el-table-column>
-            <el-table-column label="操作"  width="200">
+            <el-table-column label="操作"  width="80">
             <template slot-scope="scope">
                 <el-button
                 size="mini"
@@ -157,6 +157,7 @@ export default {
         },
       //新增按钮点击事件
       addNewClick(){
+        this.createOrEdit='租户管理>新建';
         this.tenantNewVisible=true;
         this.isTenantCreated=true;
         this.tenantForm={//

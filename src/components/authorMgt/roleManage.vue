@@ -320,7 +320,8 @@ export default {
 <style scope>
   .top-class{
     height: 35px;
-    margin-top: 5px;
+    margin-top: 15px;
+    background: #ddd; 
     border: 1px solid #ddd;
     line-height: 35px;
   }

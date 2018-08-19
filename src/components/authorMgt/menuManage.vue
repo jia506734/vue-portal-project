@@ -546,8 +546,8 @@ export default {
   .top-class{
     height: 35px;
     margin-top: 15px;
+    background: #ddd; 
     border: 1px solid #ddd;
-    background: #ddd;
     line-height: 35px;
   }
 </style>

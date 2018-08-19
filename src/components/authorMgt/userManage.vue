@@ -94,7 +94,7 @@
         </el-table>
     </div>
     <el-dialog
-        title="用户管理>新增"
+        :title="createOrEdit"
         :visible.sync="userNewVisible"
         width="35%">
         <div>
@@ -158,7 +158,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onUserSubmit('userInline')">立即创建</el-button>
-                    <el-button @click="resetForm('userInline')">重置</el-button>
+                    <el-button @click="userNewVisible = false">取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -185,6 +185,7 @@ export default {
             }
         };
       return{
+        createOrEdit:'用户管理>新增',
         tenantData:[],//所有租户
         userInline:{//用户form
             userId:'',
@@ -196,6 +197,7 @@ export default {
             userEmail:'',
             validDate:'',
             userStatus:'',
+            sysAdmin:'',
         },
         roleData:[],//角色列表
         tableLoading:false,
@@ -232,6 +234,7 @@ export default {
     created(){
       this.getUserManageData();
       this.getAllRoleDate();
+      this.getTenantManageData();
     },
     methods:{
         //查询所有租户
@@ -283,19 +286,62 @@ export default {
              })
         },
         userNewClick(){
+            this.userInline={//用户form
+                userId:'',
+                userName:'',
+                userSex:'',
+                userPwd:'',//密码
+                userMobile:'',
+                userTenantCode:'',//用户所属租户code
+                userEmail:'',
+                validDate:'',
+                userStatus:'',
+                sysAdmin:'',
+            };
             this.userNewVisible= true;
             this.isUserCreated = true;
+        },
+        handleUserEdit(index, row){
+            debugger
+            this.userNewVisible=true;
+            this.isUserCreated=false;
+            this.userInline.userId = row.userId;
+            this.userInline.userName = row.userName;
+            this.userInline.userSex = row.userSex==0?"保密":(row.userSex==1?"帅哥":'靓女');
+            this.userInline.userPwd = row.userPwd;
+            this.userInline.userMobile = row.userMobile;
+            this.userInline.userTenantCode = row.userTenantCode;
+            this.userInline.userEmail = row.userEmail;
+            this.userInline.validDate = row.validDate;
+            this.userInline.userStatus = row.userStatus==0?'无效':'有效';
+            this.userInline.sysAdmin = row.userStatus==0?'系统管理员':'设备管理员';
+            this.createOrEdit='用户管理>编辑';
         },
       /*
         用户新增
         */
         onUserSubmit(formName){
-            
+            if(this.userInline.userMobile.length<11){
+                 _this.$notify.error({
+                    message: '手机号码格式不正确',
+                    type: 'warning'
+                });
+            }
             let postData= this.userInline;
             let _this= this;
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 
+                if(postData.sysAdmin =="系统管理员"){
+                    postData.sysAdmin =1;
+                }else{
+                    postData.sysAdmin =0;
+                }
+                if(postData.userStatus =="有效"){
+                    postData.userStatus =1;
+                }else{
+                    postData.userStatus =0;
+                }
                 if(postData.userSex =="保密"){
                     postData.userSex=0;
                 }
@@ -342,7 +388,7 @@ export default {
                             }else{
                                 _this.$notify.error({
                                     message: response.data.message,
-                                    type: 'success'
+                                    type: 'warning'
                                 });
                             }
                         })
