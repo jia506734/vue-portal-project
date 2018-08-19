@@ -207,6 +207,7 @@ export default {
             this.roleInline.authTenant = row.authTenant;
             this.roleInline.roleName = row.roleName;
             this.roleInline.roleDesc = row.roleDesc;
+            this.roleInline.roleId = row.roleId;
             this.createOrEdit = "角色管理>编辑"
         },
       //角色新增
