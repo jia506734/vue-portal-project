@@ -15,7 +15,7 @@
                 <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
             </el-col>
             <el-col  :span="3">
-                <span style="cursor: pointer;" @click="roleNewVisible = true"><i class="el-icon-circle-plus"></i>角色授权</span>
+                <span style="cursor: pointer;" @click="roleAuth"><i class="el-icon-circle-plus"></i>角色授权</span>
             </el-col>
         </el-row>
         <el-table
@@ -98,14 +98,6 @@
         :visible.sync="roleNewVisible"
         width="40%">
         <div class="role-div">
-            <!-- <el-tree
-            :props="props"
-            :load="loadNode"
-            lazy
-            show-checkbox
-            @check-change="handleCheckChange">
-
-            </el-tree> -->
             <el-tree
             :props="props"
             :load="loadNode"
@@ -115,6 +107,10 @@
             :default-expanded-keys="[1, 2]"
             show-checkbox>
             </el-tree>
+            <div style="margin-top:20px;text-align: center;">
+                <el-button type="primary">保存</el-button>
+                <el-button @click="roleNewVisible = false">取消</el-button>
+            </div>
         </div>
     </el-dialog>
   </div>
@@ -129,6 +125,7 @@ export default {
         multipleSelection:'',
         roleNewAddVisible:false,
         roleNewVisible:false,
+        selectedRole:'',
         isCreate:false,//是否新建
         roleData:[],//
         tenantData:[],//所有租户
@@ -165,6 +162,7 @@ export default {
             console.log(data, checked, indeterminate);
         },
         handleNodeClick(data) {
+            debugger
             console.log(data);
         },
         loadNode(node, resolve) {
@@ -194,6 +192,18 @@ export default {
 
                 resolve(data);
             }, 500);
+            
+        },
+        roleAuth(){
+            if(this.multipleSelection.length==1){
+                this.roleNewVisible = true;
+                this.selectedRole = this.multipleSelection[0].roleId;
+            }else{
+                this.$notify.error({
+                    message: '请选择一个且最多一个角色',
+                    type: 'waining'
+                });
+            }
             
         },
       //多选选择项
@@ -232,7 +242,7 @@ export default {
                             }else{
                                 _this.$notify.error({
                                     message: response.data.message,
-                                    type: 'success'
+                                    type: 'waining'
                                 });
                             }
                         })

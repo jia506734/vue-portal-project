@@ -28,8 +28,7 @@
 </template>
 
 <script>
-	// import {mapActions, mapState} from 'vuex'
-
+	import {mapActions, mapState} from 'vuex'
 	export default {
 	    data(){
 			return {
@@ -48,6 +47,9 @@
 				showLogin: false,
 			}
 		},
+		computed:{
+			...mapState(["tenantId"]),
+		},
 		mounted(){
 			this.showLogin = true;
 			// if (!this.adminInfo.id) {
@@ -56,6 +58,7 @@
 		},
 		methods: {
 			async submitForm(formName) {
+				this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
                 this.$router.push('mainPage')
 			},
 		},

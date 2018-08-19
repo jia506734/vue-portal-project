@@ -8,6 +8,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 const state={
+	tenantId:'',//等路人的租户Id
   //全局变量
 }
 

@@ -17,7 +17,7 @@
                 <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
             </el-col>
             <el-col  :span="3">
-                <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>角色绑定</span>
+                <span style="cursor: pointer;" @click="roleBindClick"><i class="el-icon-circle-plus"></i>角色绑定</span>
             </el-col>
             <el-col  :span="2">
                 <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>导入</span>
@@ -163,6 +163,15 @@
             </el-form>
         </div>
     </el-dialog>
+        <el-dialog
+        title="角色管理->角色绑定"
+        :visible.sync="roleBindShow"
+        width="45%">
+        <div class="borderdiv">
+            <el-input placeholder="请输入角色名"></el-input>
+            <el-button type="primary">添加</el-button>
+        </div>
+    </el-dialog>
    </div>
 </template>
 <script>
@@ -186,6 +195,7 @@ export default {
         };
       return{
         createOrEdit:'用户管理>新增',
+        roleBindShow:false,
         tenantData:[],//所有租户
         userInline:{//用户form
             userId:'',
@@ -228,7 +238,8 @@ export default {
         userMobile:'',
         userData:[],
         userNewVisible:false,
-        multipleSelection: []
+        multipleSelection: [],
+        bindId:'',
       }
     },
     created(){
@@ -237,6 +248,17 @@ export default {
       this.getTenantManageData();
     },
     methods:{
+        roleBindClick(){
+            if(this.multipleSelection.length==1){
+                this.bindId= this.multipleSelection[0].userId;
+                this.roleBindShow = true;
+            }else{
+                this.$notify({
+                    message:'请选择一个用户',
+                    type: 'warning'
+                });
+            }
+        },
         //查询所有租户
         getTenantManageData(){
             let _this=this;
@@ -416,5 +438,10 @@ export default {
     background: #ddd; 
     border: 1px solid #ddd;
     line-height: 35px;
+  }
+  .borderdiv{
+    border: 1px solid #ddd;
+    height: 250px;
+    margin-top: -20px;
   }
 </style>

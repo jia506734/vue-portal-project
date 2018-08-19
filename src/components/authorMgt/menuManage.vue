@@ -52,7 +52,7 @@
           label="租户"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.tenantCode }}</span>
+              <span>{{ scope.row.tenantName }}</span>
           </template>
           </el-table-column>
           <el-table-column
@@ -108,7 +108,7 @@
       </el-table>
   </div>
   <el-dialog
-      title="菜单管理>新增"
+      :title="createOrEdit"
       :visible.sync="addNewVisible"
       width="30%">
       <div>
@@ -253,11 +253,13 @@
   </div>
 </template>
 <script>
+import {mapActions, mapState} from 'vuex'
 import axios from "axios"
 export default {
     data(){
       return{
         menuCode:'',//菜单编码
+        isMenuCreate:false,
         menuName:'',
         menuFather:'',
         menuData:[],//菜单管理表格
@@ -302,6 +304,7 @@ export default {
           menuVisibility:'',//可见
           menuStatus:''//有效
         },
+        createOrEdit:'菜单管理>新增',
         isMenuCreated:false,//是否新建
         multipleSelection:[],
         multipleSource:[],//资源选择
@@ -322,11 +325,32 @@ export default {
         },
       }
     },
+    computed:{
+        ...mapState(["tenantId"]),
+    },
     created(){
+        this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
         this.getTenantManageData();
         this.getmenuManageData();
     },
     methods:{
+        //菜单编辑
+        handleMenuEdit(index, row) {
+            this.addNewVisible=true;
+            this.isMenuCreate=false;
+            this.ruleForm =  {
+                menuId: row.menuId,
+                menuName: row.menuName,
+                parentMenu: row.parentMenu,
+                parentMenuCode:row.parentMenuCode,
+                tenantCode:row.tenantCode,
+                menuOrder: row.menuOrder,
+                menuUrl: row.menuUrl,
+                menuVisibility:row.menuVisibility==1?'是':'否',//可见
+                menuStatus:row.menuStatus==1?'是':'否'//有效
+            },
+            this.createOrEdit = "菜单管理>编辑"
+        },
         //资源新增
         addsourceClick(){
             this.resourceNewVisible = true;
@@ -364,69 +388,66 @@ export default {
         },
         //z资源号新增保存
         submitSourceForm(formName){
-            let postData=this.formInline;
-            this.$refs[formName].validate((valid) => {
-            if (valid) {
-                if(this.createResource){
-                    axios
-                    .post("/auth/menu/menu",postData)
-                    .then(function(response){
-                        if(response.data.success){
+            // let postData=this.formInline;
+            // this.$refs[formName].validate((valid) => {
+            // if (valid) {
+            //     if(this.createResource){
+            //         axios
+            //         .post("/auth/menu",postData)
+            //         .then(function(response){
+            //             if(response.data.success){
                             
-                            _this.resourceNewVisible=false;
-                            _this.createResource=false
-                            // _this.getmenuManageData();
-                            _this.$notify({
-                                message: response.data.message,
-                                type: 'success'
-                            });
+            //                 _this.resourceNewVisible=false;
+            //                 _this.createResource=false
+            //                 _this.$notify({
+            //                     message: response.data.message,
+            //                     type: 'success'
+            //                 });
 
-                        }else{
-                            _this.$notify.error({
-                                message: response.data.message,
-                                type: 'success'
-                            });
-                        }
-                    })
-                }else{
-                     axios
-                    .put("/auth/menu/menu",postData)
-                    .then(function(response){
-                        if(response.data.success){
-                            _this.resourceNewVisible=false;
-                            _this.createResource=false
-                            // _this.getmenuManageData();
-                            _this.$notify({
-                                message: response.data.message,
-                                type: 'success'
-                            });
+            //             }else{
+            //                 _this.$notify.error({
+            //                     message: response.data.message,
+            //                     type: 'success'
+            //                 });
+            //             }
+            //         })
+            //     }else{
+            //          axios
+            //             .put("/auth/menu",postData)
+            //             .then(function(response){
+            //                 if(response.data.success){
+            //                     _this.resourceNewVisible=false;
+            //                     _this.createResource=false
+            //                     _this.$notify({
+            //                         message: response.data.message,
+            //                         type: 'success'
+            //                     });
 
-                        }else{
-                            _this.$notify.error({
-                                message: response.data.message,
-                                type: 'success'
-                            });
-                        }
-                    })
-                }
+            //                 }else{
+            //                     _this.$notify.error({
+            //                         message: response.data.message,
+            //                         type: 'success'
+            //                     });
+            //                 }
+            //             })
+            //         }
 
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
+            //     } else {
+            //         console.log('error submit!!');
+            //         return false;
+            //     }
+            // });
         },
         //查询所有菜单
         getmenuManageData(){
             let _this=this;
             this.tableLoading = true;
-            this.tableLoading = false;
-            // axios
-            // .get("/auth/all_tenants")
-            //  .then(function(response){
-            //      _this.tableLoading = false;
-            //      _this.menuData = response.data.data;
-            //  })
+            axios
+            .get("/auth/menu/"+this.$store.state.tenantId)
+             .then(function(response){
+                 _this.tableLoading = false;
+                 _this.menuData = response.data.data;
+             })
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -435,12 +456,15 @@ export default {
             this.multipleSource = val;
         },
         submitMenuForm(formName){
+            let _this = this;
             let postData=this.ruleForm;
+            postData.menuStatus=postData.menuStatus=="是"?1:0;
+            postData.menuVisibility=postData.menuVisibility=="是"?1:0;
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 if(this.isMenuCreated){
                     axios
-                        .post("/auth/menu/menu",postData)
+                        .post("/auth/menu",postData)
                         .then(function(response){
                             if(response.data.success){
                                 
@@ -461,7 +485,7 @@ export default {
                         })
                     }else{
                         axios
-                        .put("/auth/menu/menu",postData)
+                        .put("/auth/menu",postData)
                         .then(function(response){
                             if(response.data.success){
                                 _this.addNewVisible=false;
@@ -475,7 +499,7 @@ export default {
                             }else{
                                 _this.$notify.error({
                                     message: response.data.message,
-                                    type: 'success'
+                                    type: 'warning'
                                 });
                             }
                         })
@@ -504,8 +528,10 @@ export default {
                     message: '请选择单个菜单进行新建',
                     type: 'warning'
                 });
+                return false;
             }else if(selectedMenu.length==1){
-                this.ruleForm.parentMenu=selectedMenu[0];
+                this.ruleForm.parentMenu=selectedMenu[0].menuId;
+                this.ruleForm.parentMenuCode=selectedMenu[0].menuName;
             }else{
                 this.ruleForm.parentMenu="Root";
                 this.ruleForm.parentMenuCode="Root";
@@ -522,16 +548,47 @@ export default {
         },
         //删除多项
         moreDeleteClick(){
-
+            if(this.multipleSelection.length==0){
+                this.$notify.error({
+                    message: '请至少选择一项',
+                    type: 'warning'
+                });
+            }else{
+                let ret =this.multipleSelection;
+                let data = [];let postData={};
+                ret.forEach(element => {
+                    let postData = {menuId:element.menuId,tenantCode:element.tenantCode};
+                    data.push(postData);            
+                });
+                axios
+                    .delete("/auth/menu",data)
+                    .then(function(response){
+                        if(response.data.success){
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                        }else{
+                            _this.$notify.error({
+                                message: response.data.message,
+                                type: 'warning'
+                            });
+                        }
+                    })
+                
+            }
         },
         resourceNewClick(){
             if(this.multipleSelection.length==1){
                 this.resourceVisible = true;
+            }else{
+                 this.$notify({
+                    message: '请先选择一个菜单',
+                    type: 'warning'
+                });
             }
         },
-        handleMenuEdit(index, row) {
-            console.log(index, row);
-        },
+        
         handleSourceEdit(index, row) {
             console.log(index, row);
         },
