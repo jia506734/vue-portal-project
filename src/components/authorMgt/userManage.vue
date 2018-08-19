@@ -19,12 +19,12 @@
             <el-col  :span="3">
                 <span style="cursor: pointer;" @click="roleBindClick"><i class="el-icon-circle-plus"></i>角色绑定</span>
             </el-col>
-            <el-col  :span="2">
+            <!-- <el-col  :span="2">
                 <span style="cursor: pointer;" ><i class="el-icon-circle-plus"></i>导入</span>
             </el-col>
             <el-col  :span="3">
                 <span style="cursor: pointer;"><i class="el-icon-circle-plus"></i>导出</span>
-            </el-col>
+            </el-col> -->
         </el-row>
         <el-table
             border
@@ -112,7 +112,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="用户密码" prop="userPwd">
+                <el-form-item label="用户密码" prop="userPwd" v-if="isUserCreated">
                     <el-input v-model="userInline.userPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="用户所属租户" prop="userTenantCode">
@@ -168,8 +168,12 @@
         :visible.sync="roleBindShow"
         width="45%">
         <div class="borderdiv">
-            <el-input placeholder="请输入角色名"></el-input>
-            <el-button type="primary">添加</el-button>
+            <el-row>
+                <el-col :span="10" style="margin-right:10px;"><el-input placeholder="请输入角色名"></el-input></el-col>
+                 <el-col :span="3"><el-button type="primary">添加</el-button></el-col>
+            </el-row>
+            
+            
         </div>
     </el-dialog>
    </div>
@@ -195,6 +199,7 @@ export default {
         };
       return{
         createOrEdit:'用户管理>新增',
+        isUserCreated:false,
         roleBindShow:false,
         tenantData:[],//所有租户
         userInline:{//用户form
@@ -210,6 +215,7 @@ export default {
             sysAdmin:'',
         },
         roleData:[],//角色列表
+        roleDataTemp:[],
         tableLoading:false,
         rulesInline:{//用户规则
             userName: [
@@ -252,6 +258,7 @@ export default {
             if(this.multipleSelection.length==1){
                 this.bindId= this.multipleSelection[0].userId;
                 this.roleBindShow = true;
+                 this.getRoleData();
             }else{
                 this.$notify({
                     message:'请选择一个用户',
@@ -273,7 +280,31 @@ export default {
         },
         //批量删除
         moreDeleteClick(){
-
+          let _this = this;
+          if(this.multipleSelection.length==0){
+              this.$notify({
+                message: '请选择至少一个用户',
+                type: 'warning'
+            });
+          }else{
+            let param =[];
+            let user={};
+            this.multipleSelection.forEach(element => {
+                user.userId = element.userId;
+                param.push(user);
+            });
+            axios
+            .delete("/auth/user",{data: param})
+             .then(function(response){
+                  if(response.data.success){
+                    _this.$notify({
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                    _this.getUserManageData()
+                }
+             })
+          }
         },
       /*
         获取用户管理数据
@@ -291,12 +322,12 @@ export default {
         //查询所有角色
       getAllRoleDate(){
         let _this=this;
-            axios
-            .get("/auth/all_roles")
-             .then(function(response){
-                 
-                 _this.roleData = response.data.data;
-             })
+        axios
+        .get("/auth/all_roles")
+            .then(function(response){
+                _this.roleData = response.data.data;
+                _this.roleDataTemp = response.data.data.slice(0);
+            })
       },
         //查询指定用户
         searchUserData(){

@@ -168,7 +168,29 @@ export default {
       },
         //批量删除
         moreDeleteClick(){
-
+          let _this = this;
+          if(this.multipleSelection.length==0){
+              this.$notify({
+                message: '请选择至少一个租户',
+                type: 'warning'
+            });
+          }else{
+            let param =[];
+            this.multipleSelection.forEach(element => {
+                param.push({tenantId:element.tenantId});
+            });
+            axios
+            .delete("/auth/tenant",{data: param})
+             .then(function(response){
+                  if(response.data.success){
+                    _this.$notify({
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                    _this.getTenantManageData();
+                }
+             })
+          }
         },
       //查询所有租户
         getTenantManageData(){

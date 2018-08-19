@@ -67,8 +67,8 @@
         width="35%">
         <div class="role-div">
             <el-form :model="roleInline" :rules="rulesInline" ref="roleInline" label-width="120px" class="demo-roleInline">
-                <el-form-item label="租户" prop="authTenant">
-                    <el-select v-model="roleInline.authTenant" placeholder="请选择">
+                <el-form-item label="租户" prop="tenantCode">
+                    <el-select v-model="roleInline.tenantCode" placeholder="请选择">
                         <el-option
                         v-for="item in tenantData"
                         :key="item.tenantId"
@@ -131,7 +131,7 @@ export default {
         tenantData:[],//所有租户
         tableLoading:false,
         roleInline:{//用户form
-            authTenant:'',
+            tenantCode:'',
             roleName:'',
             roleDesc:'',
         },
@@ -142,7 +142,7 @@ export default {
         },
         count: 1,
         rulesInline:{
-          authTenant:[
+          tenantCode:[
                 { required: true, message: '请输入租户', trigger: 'blur' },
             ],
             roleName:[
@@ -166,16 +166,16 @@ export default {
             console.log(data);
         },
         loadNode(node, resolve) {
-            if(node.label==="新建"||node.label==="编辑"||node.label==="删除"||node.level > 3){
+            if(node.label==="新建"||node.label==="编辑"||node.label==="删除"||node.level > 2){
                 return resolve([]);
             }
+            // if (node.level === 0) {
+            //     return resolve([{ name: 'Root' }]);
+            // }
             if (node.level === 0) {
-                return resolve([{ name: 'Root' }]);
-            }
-            if (node.level === 1) {
                 return resolve([{ name: '线路管理' },{ name: '门票管理' },{ name: '权限管理' }]);
             }
-            if (node.level === 2&&node.label === "权限管理") {
+            if (node.level === 1&&node.label === "权限管理") {
                 return resolve([{ name: '菜单管理' },{ name: '角色管理' },{ name: '用户管理' },{ name: ' 租户管理' }]);
             }
             setTimeout(() => {
@@ -214,7 +214,7 @@ export default {
         handleRoleEdit(index, row){
             this.roleNewAddVisible=true;
             this.isCreate=false;
-            this.roleInline.authTenant = row.authTenant;
+            this.roleInline.tenantCode = row.tenantCode;
             this.roleInline.roleName = row.roleName;
             this.roleInline.roleDesc = row.roleDesc;
             this.roleInline.roleId = row.roleId;
@@ -258,11 +258,10 @@ export default {
                                     message: response.data.message,
                                     type: 'success'
                                 });
-
                             }else{
                                 _this.$notify.error({
                                     message: response.data.message,
-                                    type: 'success'
+                                    type: 'warning'
                                 });
                             }
                         })
@@ -276,18 +275,40 @@ export default {
         },
       //批量删除
       moreDeleteClick(){
-          
+          let _this = this;
+          if(this.multipleSelection.length==0){
+              this.$notify({
+                message: '请选择至少一个角色',
+                type: 'warning'
+            });
+          }else{
+            let param =[];
+            this.multipleSelection.forEach(element => {
+                param.push({roleId:element.roleId});
+            });
+            axios
+            .delete("/auth/role",{data: param})
+             .then(function(response){
+                  if(response.data.success){
+                    _this.$notify({
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                    _this.getAllDate();
+                }
+             })
+          }
       },
       //查询所有角色
       getAllDate(){
         let _this=this;
+        _this.tableLoading= false;
+        axios
+        .get("/auth/all_roles")
+        .then(function(response){
             _this.tableLoading= false;
-            axios
-            .get("/auth/all_roles")
-             .then(function(response){
-                 _this.tableLoading= false;
-                 _this.roleData = response.data.data;
-             })
+            _this.roleData = response.data.data;
+        })
       },
       //查询所有 租户
       getAllTenant(){
@@ -311,7 +332,7 @@ export default {
         },
         roleNewClick(){
           this.roleInline={//用户form
-              authTenant:'',
+              tenantCode:'',
               roleName:'',
               roleDesc:'',
           },

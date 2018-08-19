@@ -548,26 +548,41 @@ export default {
         },
         //删除多项
         moreDeleteClick(){
+            let _this = this
             if(this.multipleSelection.length==0){
                 this.$notify.error({
                     message: '请至少选择一项',
                     type: 'warning'
                 });
             }else{
+                let toDel = false;
                 let ret =this.multipleSelection;
-                let data = [];let postData={};
+                let param = [];let postData={};
+                debugger
                 ret.forEach(element => {
+                    if(!element.leaf){
+                        toDel = true;
+                        return;
+                    }
                     let postData = {menuId:element.menuId,tenantCode:element.tenantCode};
-                    data.push(postData);            
+                    param.push(postData);            
                 });
+                if(toDel){
+                    this.$notify.error({
+                        message: '请先删除子菜单',
+                        type: 'warning'
+                    });
+                    return false;
+                }
                 axios
-                    .delete("/auth/menu",data)
+                    .delete("/auth/menu",{data: param})
                     .then(function(response){
                         if(response.data.success){
                             _this.$notify({
                                 message: response.data.message,
                                 type: 'success'
                             });
+                            _this.getmenuManageData();
                         }else{
                             _this.$notify.error({
                                 message: response.data.message,
