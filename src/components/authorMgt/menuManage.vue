@@ -36,14 +36,14 @@
           label="名称"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.menuName }}</span>
+              <span :title="scope.row.menuName">{{ subStr(scope.row.menuName) }}</span>
           </template>
           </el-table-column>
           <el-table-column
           label="父级菜单"
           width="130">
           <template slot-scope="scope">
-              <span>{{ scope.row.parentMenuCode }}</span>
+              <span :title="scope.row.parentMenuCode">{{ subStr(scope.row.parentMenuCode) }}</span>
           </template>
           </el-table-column>
           <el-table-column
@@ -78,7 +78,7 @@
           label="首地址"
           width="210">
           <template slot-scope="scope">
-              <span>{{ scope.row.menuUrl }}</span>
+              <span :title="scope.row.menuUrl">{{ subStrLong(scope.row.menuUrl) }}</span>
           </template>
           </el-table-column>
           <el-table-column
@@ -324,6 +324,22 @@ export default {
         this.getmenuManageData();
     },
     methods:{
+        //截取字符串长度
+        subStr(name){
+            if(name.length > 10){
+                return name.substring(0,10)+"...";
+            }else{
+                 return name;
+            }
+        },
+         //截取字符串长度
+        subStrLong(name){
+            if(name.length > 30){
+                return name.substring(0,30)+"...";
+            }else{
+                 return name;
+            }
+        },
         //校验用户名重复性
          mapName(name){
             // if(name){
@@ -331,7 +347,7 @@ export default {
             //     axios
             //     .get("/auth/users?userName="+name)
             //     .then(function(response){
-            //         if(response.data.success&&response.data.data){
+            //         if(response.data.success&&response.data.data.length>0){
             //             _this.$message({
             //                 message: '该名称已存在',
             //                 type: 'warning'
@@ -367,7 +383,7 @@ export default {
         },
         //资源新增
         addsourceClick(){
-            debugger
+            
             this.resourceNewVisible = true;
             let dd = this.multipleSelection[0];
             this.formInline= {
@@ -432,7 +448,7 @@ export default {
         submitSourceForm(formName){
             let _this = this;
             let postData=this.formInline;
-            debugger
+            
             if(postData.resourceStatus=="是"){
                 postData.resourceStatus=1;
             }else if(postData.resourceStatus=="否"){
@@ -648,7 +664,7 @@ export default {
         handleResourceEdit(index, row){
             this.resourceNewVisible = true;
             this.isResourceCreate=false;
-            debugger
+            
             this.formInline={
                 resourceName: row.resourceName,
                 resourceId: row.resourceId,

@@ -35,9 +35,9 @@
             </el-table-column>
             <el-table-column
             label="租户描述"
-            width="280">
+            width="650">
             <template slot-scope="scope">
-                <span>{{ scope.row.tenantDesc }}</span>
+                <span :title="scope.row.tenantDesc">{{ subStr(scope.row.tenantDesc) }}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -69,7 +69,7 @@
                 <el-form-item label="租户描述" prop="tenantDesc">
                     <el-input type="textarea" v-model="tenantForm.tenantDesc"></el-input>
                 </el-form-item>
-                <el-form-item label="租户管理员" prop="tenantAdminId">
+                <el-form-item label="租户管理员" prop="tenantAdminId" style="width: 100%;">
                     <el-select
                         v-model="tenantForm.tenantAdminId"
                         filterable
@@ -130,12 +130,15 @@ export default {
         this.getUserManageData();
         this.getTenantManageData();
     },
-    // mounted() {
-    //   this.userList = this.userData.map(item => {
-    //     return { value: item, label: item };
-    //   });
-    // },
     methods:{
+        //截取字符串长度
+        subStr(name){
+            if(name.length > 50){
+                return name.substring(0,50)+"...";
+            }else{
+                 return name;
+            }
+        },
         //新建租户校验是否重名
         mapName(name){
             if(name){
@@ -143,7 +146,7 @@ export default {
                 axios
                 .get("/auth/tenants?tenantName="+name)
                 .then(function(response){
-                    if(response.data.success&&response.data.data){
+                    if(response.data.success&&response.data.data.length>0){
                         _this.$message({
                             message: '该名称已存在',
                             type: 'warning'
@@ -316,6 +319,11 @@ export default {
     },
 }
 </script>
+<style>
+    .el-select {
+        width: 100%;
+    }
+</style>
 
 <style scope>
   .top-class{

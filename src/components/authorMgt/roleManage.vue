@@ -39,9 +39,9 @@
             </el-table-column>
             <el-table-column
             label="角色描述"
-            width="130">
+            width="650">
             <template slot-scope="scope">
-                <span>{{ scope.row.roleDesc }}</span>
+                <span :title="scope.row.roleDesc">{{  subStr(scope.row.roleDesc) }}</span>
             </template>
             </el-table-column>
             <!-- <el-table-column
@@ -156,13 +156,22 @@ export default {
       this.getAllTenant();
     },
     methods:{
+        //截取字符串长度
+        subStr(name){
+            if(name.length > 50){
+                return name.substring(0,50)+"...";
+            }else{
+                 return name;
+            }
+        },
+        //校验重复性
         mapName(name){
             if(name){
                 let _this=this;
                 axios
                 .get("/auth/roles?roleName="+name)
                 .then(function(response){
-                    if(response.data.success&&response.data.data){
+                    if(response.data.success&&response.data.data.length>0){
                         _this.$message({
                             message: '该名称已存在',
                             type: 'warning'
@@ -177,7 +186,7 @@ export default {
             console.log(data, checked, indeterminate);
         },
         handleNodeClick(data) {
-            debugger
+            
             console.log(data);
         },
         loadNode(node, resolve) {
