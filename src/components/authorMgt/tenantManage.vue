@@ -78,7 +78,7 @@
                         :remote-method="remoteMethod"
                         :loading="loading">
                         <el-option
-                        v-for="item in options4"
+                        v-for="item in userOptions"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -123,34 +123,18 @@ export default {
         multipleSelection:[],
         tenantData:[],//租户表格
         loading:false,//远程搜索的
-        options4: [],
-        states: ["Alabama", "Alaska", "Arizona",
-        "Arkansas", "California", "Colorado",
-        "Connecticut", "Delaware", "Florida",
-        "Georgia", "Hawaii", "Idaho", "Illinois",
-        "Indiana", "Iowa", "Kansas", "Kentucky",
-        "Louisiana", "Maine", "Maryland",
-        "Massachusetts", "Michigan", "Minnesota",
-        "Mississippi", "Missouri", "Montana",
-        "Nebraska", "Nevada", "New Hampshire",
-        "New Jersey", "New Mexico", "New York",
-        "North Carolina", "North Dakota", "Ohio",
-        "Oklahoma", "Oregon", "Pennsylvania",
-        "Rhode Island", "South Carolina",
-        "South Dakota", "Tennessee", "Texas",
-        "Utah", "Vermont", "Virginia",
-        "Washington", "武龙斌", "贾鹏飞",
-        "张佩博"],
+        userOptions: [],
       }
     },
     created(){
-      this.getTenantManageData();
+        this.getUserManageData();
+        this.getTenantManageData();
     },
-    mounted() {
-      this.tenantList = this.states.map(item => {
-        return { value: item, label: item };
-      });
-    },
+    // mounted() {
+    //   this.userList = this.userData.map(item => {
+    //     return { value: item, label: item };
+    //   });
+    // },
     methods:{
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -175,21 +159,24 @@ export default {
                 type: 'warning'
             });
           }else{
-            let param =[];
-            this.multipleSelection.forEach(element => {
-                param.push({tenantId:element.tenantId});
-            });
-            axios
-            .delete("/auth/tenant",{data: param})
-             .then(function(response){
-                  if(response.data.success){
-                    _this.$notify({
-                        message: response.data.message,
-                        type: 'success'
-                    });
-                    _this.getTenantManageData();
-                }
-             })
+            this.$confirm('确认删除？')
+            .then(_ => {
+                let param =[];
+                this.multipleSelection.forEach(element => {
+                    param.push({tenantId:element.tenantId});
+                });
+                axios
+                .delete("/auth/tenant",{data: param})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        _this.getTenantManageData();
+                    }
+                })
+             },() => {}) 
           }
         },
       //查询所有租户
@@ -280,19 +267,33 @@ export default {
         handleDelete(index, row) {
             console.log(index, row);
         },
+        /*
+        获取用户管理数据
+        */
+        getUserManageData(){
+            let _this=this;
+            axios
+            .get("/auth/all_users")
+             .then(function(response){
+                 _this.userData = response.data.data;
+                 _this.userList = _this.userData.map(item => {
+                    return { value: item.userId, label: item.userName };
+                });
+             })
+        },
         //远程搜索租户管理员
         remoteMethod(query) {
             if (query !== '') {
             this.loading = true;
             setTimeout(() => {
                 this.loading = false;
-                this.options4 = this.tenantList.filter(item => {
+                this.userOptions = this.userList.filter(item => {
                 return item.label.toLowerCase()
                     .indexOf(query.toLowerCase()) > -1;
                 });
             }, 200);
             } else {
-            this.options4 = [];
+                this.userOptions = [];
             }
         },
     },

@@ -373,20 +373,24 @@ export default {
                     type: 'warning'
                 });
             }else{
-                let param =[];
-                this.multipleSource.forEach(element => {
-                    param.push({resourceId:element.resourceId});
-                });
-                axios
-                .delete("/auth/resource",{data: param})
-                .then(function(response){
-                    if(response.data.success){
-                        _this.$notify({
-                            message: response.data.message,
-                            type: 'success'
-                        });
-                        _this.getResourceData();
-                    }
+                this.$confirm('确认删除？')
+                .then(_ => {
+                    let param =[];
+                    this.multipleSource.forEach(element => {
+                        param.push({resourceId:element.resourceId});
+                    });
+                    axios
+                    .delete("/auth/resource",{data: param})
+                    .then(function(response){
+                        if(response.data.success){
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                            _this.getResourceData();
+                        }
+                    })
+                  },() => {
                 })
             }
         },
@@ -571,11 +575,11 @@ export default {
             this.addNewVisible= true;
         },
         handleClose(done) {
-        this.$confirm('确认关闭？')
-            .then(_ => {
-            done();
-            })
-            .catch(_ => {});
+        // this.$confirm('确认关闭？')
+        //     .then(_ => {
+        //     done();
+        //     })
+        //     .catch(_ => {});
         },
         //删除多项菜单
         moreDeleteClick(){
@@ -586,39 +590,43 @@ export default {
                     type: 'warning'
                 });
             }else{
-                let toDel = false;
-                let ret =this.multipleSelection;
-                let param = [];let postData={};
-                ret.forEach(element => {
-                    if(!element.leaf){
-                        toDel = true;
-                        return;
-                    }
-                    let postData = {menuId:element.menuId,tenantCode:element.tenantCode};
-                    param.push(postData);            
-                });
-                if(toDel){
-                    this.$notify.error({
-                        message: '请先删除子菜单',
-                        type: 'warning'
+                this.$confirm('确认删除？')
+                .then(_ => {
+                    let toDel = false;
+                    let ret =this.multipleSelection;
+                    let param = [];let postData={};
+                    ret.forEach(element => {
+                        if(!element.leaf){
+                            toDel = true;
+                            return;
+                        }
+                        let postData = {menuId:element.menuId,tenantCode:element.tenantCode};
+                        param.push(postData);            
                     });
-                    return false;
-                }
-                axios
-                .delete("/auth/menu",{data: param})
-                .then(function(response){
-                    if(response.data.success){
-                        _this.$notify({
-                            message: response.data.message,
-                            type: 'success'
-                        });
-                        _this.getmenuManageData();
-                    }else{
-                        _this.$notify.error({
-                            message: response.data.message,
+                    if(toDel){
+                        this.$notify.error({
+                            message: '请先删除子菜单',
                             type: 'warning'
                         });
+                        return false;
                     }
+                    axios
+                    .delete("/auth/menu",{data: param})
+                    .then(function(response){
+                        if(response.data.success){
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                            _this.getmenuManageData();
+                        }else{
+                            _this.$notify.error({
+                                message: response.data.message,
+                                type: 'warning'
+                            });
+                        }
+                    })
+                },() => {
                 })
             }
         },

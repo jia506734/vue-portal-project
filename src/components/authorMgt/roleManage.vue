@@ -282,21 +282,24 @@ export default {
                 type: 'warning'
             });
           }else{
-            let param =[];
-            this.multipleSelection.forEach(element => {
-                param.push({roleId:element.roleId});
-            });
-            axios
-            .delete("/auth/role",{data: param})
-             .then(function(response){
-                  if(response.data.success){
-                    _this.$notify({
-                        message: response.data.message,
-                        type: 'success'
-                    });
-                    _this.getAllDate();
-                }
-             })
+              this.$confirm('确认删除？')
+                .then(_ => {
+                let param =[];
+                this.multipleSelection.forEach(element => {
+                    param.push({roleId:element.roleId});
+                });
+                axios
+                .delete("/auth/role",{data: param})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        _this.getAllDate();
+                    }
+                })
+            },() => {})
           }
       },
       //查询所有角色

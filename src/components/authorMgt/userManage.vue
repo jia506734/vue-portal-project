@@ -287,24 +287,27 @@ export default {
                 type: 'warning'
             });
           }else{
-            let param =[];
-            let user={};
-            this.multipleSelection.forEach(element => {
-                user.userId = element.userId;
-                param.push(user);
-            });
-            axios
-            .delete("/auth/user",{data: param})
-             .then(function(response){
-                  if(response.data.success){
-                    _this.$notify({
-                        message: response.data.message,
-                        type: 'success'
-                    });
-                    _this.getUserManageData()
-                }
-             })
-          }
+            this.$confirm('确认删除？')
+                .then(_ => {
+                let param =[];
+                let user={};
+                this.multipleSelection.forEach(element => {
+                    user.userId = element.userId;
+                    param.push(user);
+                });
+                axios
+                .delete("/auth/user",{data: param})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        _this.getUserManageData()
+                    }
+                })
+              },() => {}
+            )}
         },
       /*
         获取用户管理数据
