@@ -169,11 +169,40 @@
         width="45%">
         <div class="borderdiv">
             <el-row>
-                <el-col :span="10" style="margin-right:10px;"><el-input placeholder="请输入角色名"></el-input></el-col>
-                 <el-col :span="3"><el-button type="primary">添加</el-button></el-col>
+                <el-col :span="10" style="margin-right:10px;">
+                    <el-select v-model="choosedRole" filterable placeholder="请输入角色名">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                 <el-col :span="3">
+                    <el-button type="primary" 
+                    @click="addRole"
+                    :disabled="choosedRole.length==0">添加</el-button>
+                </el-col>
             </el-row>
-            
-            
+            <el-table
+                :data="roleTableData"
+                class="tableRole"
+                border
+                style="width: 100%">
+                <el-table-column
+                  prop="roleName"
+                  label="角色"
+                  width="283">
+                </el-table-column>
+                <el-table-column
+                  label="操作"
+                  width="283">
+                  <template slot-scope="scope">
+                    <el-button @click="deleteRole(scope.row)" type="text" size="small">删除</el-button>
+                  </template>
+                </el-table-column>
+            </el-table>
         </div>
     </el-dialog>
    </div>
@@ -246,6 +275,10 @@ export default {
         userNewVisible:false,
         multipleSelection: [],
         bindId:'',
+        options: [],
+        choosedRole: '',
+        roleTableData: [],
+        roleHaveExist: []
       }
     },
     created(){
@@ -282,6 +315,71 @@ export default {
                     type: 'warning'
                 });
             }
+        },
+        //获取用户角色
+        getRoleData(){
+            let _this=this;
+            axios.get("/auth/all_roles")
+                .then(function(response){
+                let arr = response.data.data;
+                for(let key in arr){
+                 _this.options.push({
+                    'value':arr[key].roleId,
+                    'label':arr[key].roleName
+                 });
+                }
+            })
+            axios.get("/auth/roles",{ params:{ userId : _this.bindId}})
+            .then(function(response){
+                _this.roleTableData = response.data.data
+                _this.roleHaveExist = []
+                for(let key in _this.roleTableData){
+                    _this.roleHaveExist.push(_this.roleTableData[key].roleId)
+                }
+            })
+        },
+        //删除用户已有角色
+        deleteRole(row){
+            let _this=this;
+            let param = {
+                userId:_this.bindId,
+                roleId:row.roleId
+            }
+            axios
+            .delete("/auth/role",{data: param})
+            .then(function(response){
+                if(response.data.success){
+                    _this.$notify({
+                      message: '删除成功',
+                      type: 'success'
+                    });
+                }
+            })
+        },
+        //为用户添加角色
+        addRole(){
+            if(this.roleHaveExist.indexOf(this.choosedRole)!=-1){
+                this.$notify.error({
+                  message: '所选角色已存在，请重新选择！',
+                });
+                return
+            }
+            let _this=this;
+            let param = {
+                userId:_this.bindId,
+                roleId:_this.choosedRole
+            }
+            axios
+            .put("/auth/role",param)
+            .then(function(response){
+                if(response.data.success){
+                    _this.$notify({
+                      message: '添加成功',
+                      type: 'success'
+                    });
+                    _this.getRoleData()
+                }
+            })
         },
         //查询所有租户
         getTenantManageData(){
@@ -399,7 +497,17 @@ export default {
                     type: 'warning'
                 });
             }
-            let postData= this.userInline;
+            let postData={};
+            postData.userId= this.userInline.userId;
+            postData.userName= this.userInline.userName;
+            postData.userSex= this.userInline.userSex;
+            postData.userPwd= this.userInline.userPwd;
+            postData.userMobile= this.userInline.userMobile;
+            postData.userTenantCode= this.userInline.userTenantCode;
+            postData.userEmail= this.userInline.userEmail;
+            postData.validDate= this.userInline.validDate;
+            postData.userStatus= this.userInline.userStatus;
+            postData.sysAdmin= this.userInline.sysAdmin;
             let _this= this;
             this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -495,8 +603,13 @@ export default {
     line-height: 35px;
   }
   .borderdiv{
-    border: 1px solid #ddd;
     height: 250px;
     margin-top: -20px;
+  }
+  .tableRole{
+    margin-top: 10px;
+  }
+  .tableRole th,.tableRole td{
+    text-align: center;
   }
 </style>
