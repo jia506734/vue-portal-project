@@ -261,7 +261,7 @@ export default {
                 axios
                 .get("/auth/users?userName="+name)
                 .then(function(response){
-                    if(response.data.success&&response.data.data){
+                    if(response.data.success&&response.data.data.length>0){
                         _this.$message({
                             message: '该名称已存在',
                             type: 'warning'
@@ -480,6 +480,11 @@ export default {
     }
 }
 </script>
+<style>
+    .el-date-editor.el-input, .el-date-editor.el-input__inner{
+        width: 100% !important;
+    }
+</style>
 
 <style scope>
   .top-class{
