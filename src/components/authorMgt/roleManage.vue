@@ -81,7 +81,7 @@
                     <el-input v-model="roleInline.roleId"></el-input>
                 </el-form-item> -->
                 <el-form-item label="角色名称" prop="roleName">
-                    <el-input v-model="roleInline.roleName"></el-input>
+                    <el-input v-model="roleInline.roleName" @blur="mapName(roleInline.roleName)"></el-input>
                 </el-form-item>
                 <el-form-item label="角色描述" prop="roleDesc">
                     <el-input type="textarea" v-model="roleInline.roleDesc"></el-input>
@@ -156,7 +156,22 @@ export default {
       this.getAllTenant();
     },
     methods:{
-        
+        mapName(name){
+            if(name){
+                let _this=this;
+                axios
+                .get("/auth/roles?roleName="+name)
+                .then(function(response){
+                    if(response.data.success&&response.data.data){
+                        _this.$message({
+                            message: '该名称已存在',
+                            type: 'warning'
+                        });
+                        _this.roleInline.roleName="";
+                    }
+                })
+            }
+        },
         //树形控件
         handleCheckChange(data, checked, indeterminate) {
             console.log(data, checked, indeterminate);

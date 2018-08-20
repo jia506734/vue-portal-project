@@ -100,7 +100,7 @@
         <div>
             <el-form :model="userInline" :rules="rulesInline" ref="userInline" label-width="120px" class="demo-userInline">
                 <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="userInline.userName"></el-input>
+                    <el-input v-model="userInline.userName" @blur="mapName(userInline.userName)"></el-input>
                 </el-form-item>
                 <el-form-item label="用户性别" prop="userSex">
                     <el-select v-model="userInline.userSex" placeholder="请选择用户性别">
@@ -254,6 +254,23 @@ export default {
       this.getTenantManageData();
     },
     methods:{
+        //校验用户名重复性
+         mapName(name){
+            if(name){
+                let _this=this;
+                axios
+                .get("/auth/users?userName="+name)
+                .then(function(response){
+                    if(response.data.success&&response.data.data){
+                        _this.$message({
+                            message: '该名称已存在',
+                            type: 'warning'
+                        });
+                        _this.userInline.userName="";
+                    }
+                })
+            }
+        },
         roleBindClick(){
             if(this.multipleSelection.length==1){
                 this.bindId= this.multipleSelection[0].userId;

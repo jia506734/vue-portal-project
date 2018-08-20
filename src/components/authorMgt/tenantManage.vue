@@ -64,7 +64,7 @@
         <div class="tenant-div">
             <el-form :model="tenantForm" :rules="tenantRules" ref="tenantForm" label-width="100px" class="demo-tenantForm">
                 <el-form-item label="租户名称" prop="tenantName">
-                    <el-input v-model="tenantForm.tenantName"></el-input>
+                    <el-input v-model="tenantForm.tenantName" @blur="mapName(tenantForm.tenantName)"></el-input>
                 </el-form-item>
                 <el-form-item label="租户描述" prop="tenantDesc">
                     <el-input type="textarea" v-model="tenantForm.tenantDesc"></el-input>
@@ -136,6 +136,23 @@ export default {
     //   });
     // },
     methods:{
+        //新建租户校验是否重名
+        mapName(name){
+            if(name){
+                let _this=this;
+                axios
+                .get("/auth/tenants?tenantName="+name)
+                .then(function(response){
+                    if(response.data.success&&response.data.data){
+                        _this.$message({
+                            message: '该名称已存在',
+                            type: 'warning'
+                        });
+                        _this.tenantForm.tenantName="";
+                    }
+                })
+            }
+        },
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },

@@ -3,8 +3,6 @@
     <div class="top-class"><span style="margin-left: 10px;">菜单管理</span></div>
     <div style="margin-left:20px;margin-top:20px;">
       <el-row>
-          <el-col :span="2" >菜单Code</el-col>
-          <el-col :span="4" style="margin-right:30px;"><el-input v-model="menuCode" placeholder="输入菜单Code"></el-input></el-col>
           <el-col :span="2">菜单名称</el-col>
           <el-col :span="4" style="margin-right:30px;"><el-input v-model="menuName" placeholder="输入菜单名称"></el-input></el-col>
           <el-col :span="2">父级菜单</el-col>
@@ -114,7 +112,7 @@
       <div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="菜单名称" prop="menuName">
-                  <el-input v-model="ruleForm.menuName"></el-input>
+                  <el-input v-model="ruleForm.menuName" @blur="mapName(ruleForm.menuName)"></el-input>
               </el-form-item>
               <el-form-item label="父级菜单" prop="parentMenuCode">
                   <el-input v-model="ruleForm.parentMenuCode" disabled=""></el-input>
@@ -252,7 +250,6 @@ import axios from "axios"
 export default {
     data(){
       return{
-        menuCode:'',//菜单编码
         isMenuCreate:false,
         menuName:'',
         menuFather:'',
@@ -327,6 +324,23 @@ export default {
         this.getmenuManageData();
     },
     methods:{
+        //校验用户名重复性
+         mapName(name){
+            // if(name){
+            //     let _this=this;
+            //     axios
+            //     .get("/auth/users?userName="+name)
+            //     .then(function(response){
+            //         if(response.data.success&&response.data.data){
+            //             _this.$message({
+            //                 message: '该名称已存在',
+            //                 type: 'warning'
+            //             });
+            //             _this.ruleForm.menuName="";
+            //         }
+            //     })
+            // }
+        },
         getStatus(status){
             if(status==1){
                 return "是"
