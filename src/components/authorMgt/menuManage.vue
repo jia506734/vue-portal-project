@@ -162,7 +162,7 @@
   <el-dialog
       title="菜单管理>资源号管理"
       :visible.sync="resourceVisible"
-      width="60%">
+      width="45%">
         <div>
             <el-row >
                 <el-col  :span="2">
@@ -185,31 +185,24 @@
                     width="55">
                 </el-table-column>
                 <el-table-column
-                label="名称"
+                label="资源号名称"
                 width="150">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.menuName }}</span>
+                    <span>{{ scope.row.resourceName }}</span>
                 </template>
                 </el-table-column>
                 <el-table-column
                 label="父级菜单"
                 width="150">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.parentMenuCode }}</span>
+                    <span>{{ scope.row.ownerCode }}</span>
                 </template>
                 </el-table-column>
                 <el-table-column
-                label="顺序"
-                width="130">
+                label="资源号状态"
+                width="120">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.menuOrder }}</span>
-                </template>
-                </el-table-column>
-                <el-table-column
-                label="资源号服务"
-                width="210">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.menuUrl }}</span>
+                    <span>{{getStatus(scope.row.resourceStatus)}}</span>
                 </template>
                 </el-table-column>
                 <el-table-column label="操作"  width="83">
@@ -217,7 +210,7 @@
                     <el-button
                     size="mini"
                     type="primary"
-                    @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                    @click="handleResourceEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -231,18 +224,19 @@
                         <el-form-item label="资源号名称" prop="resourceName">
                             <el-input v-model="formInline.resourceName"></el-input>
                         </el-form-item>
-                        <el-form-item label="父级菜单">
-                           <el-input v-model="formInline.parentMenuCode" disabled></el-input>
+                        <el-form-item label="父级菜单" prop="ownerName">
+                           <el-input v-model="formInline.ownerName" disabled></el-input>
                         </el-form-item>
-                        <el-form-item label="资源号顺序" prop="resourceOrder">
-                            <el-input v-model="formInline.resourceOrder" placeholder="资源号名称"></el-input>
-                        </el-form-item>
-                        <el-form-item label="资源号服务" prop="resourceService" >
-                            <el-input v-model="formInline.resourceService"></el-input>
+                        <el-form-item label="资源状态" prop="resourceStatus">
+                            <el-select v-model="formInline.resourceStatus" placeholder="请选择资源号状态">
+                                <el-option v-for="(item,index) in statusData" 
+                                    :key="index" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="submitSourceForm('formInline')">保存</el-button>
-                            <el-button @click="resourceVisible=false">取消</el-button>
+                            <el-button @click="resourceNewVisible=false">取消</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -272,6 +266,7 @@ export default {
         sourceLoading:false,
         createResource:false,
         tenantData:[],//所有租户
+        isResourceCreate:false,//资源号新建/编辑
         visibilityData:[
             {name:'是',id:1},
             {name:'否',id:0},
@@ -282,15 +277,13 @@ export default {
         ],
         rulesLine:{
             resourceName:[{ required: true, message: '请输入资源号名称', trigger: 'blur' }],
-            resourceService:[{ required: true, message: '请输入资源号服务', trigger: 'blur' }],
+            ownerCode:[{ required: true, message: '请输入父级菜单', trigger: 'blur' }],
         },
         formInline: {
             resourceName: '',
-            resourceOrder: '',
-            // resourceStyle:'',
-            // resourceIcon:'',
-            resourceService:'',
-            parentMenuCode:'',
+            ownerCode: '',
+            ownerName: '',
+            resourceStatus:'',
         },
         ruleForm: {
           menuName: '',
@@ -334,6 +327,13 @@ export default {
         this.getmenuManageData();
     },
     methods:{
+        getStatus(status){
+            if(status==1){
+                return "是"
+            }else{
+                return "否"
+            }
+        },
         //菜单编辑
         handleMenuEdit(index, row) {
             this.addNewVisible=true;
@@ -353,18 +353,42 @@ export default {
         },
         //资源新增
         addsourceClick(){
+            debugger
             this.resourceNewVisible = true;
+            let dd = this.multipleSelection[0];
             this.formInline= {
                 resourceName: '',
-                resourceOrder: '',
-                resourceService:'',
-                parentMenuCode:this.multipleSelection[0].name?this.multipleSelection[0].name:'',
+                ownerCode:this.multipleSelection[0].menuId,
+                ownerName:this.multipleSelection[0].menuName,
+                resourceStatus:'',
             };
             this.createResource = true;//资源新建
         },
-        //资源删除
+        //资源号删除
         sourceDeleteClick(){
-
+            let _this = this;
+            if(this.multipleSource.length==0){
+                this.$notify({
+                    message:'请至少选择一个资源号',
+                    type: 'warning'
+                });
+            }else{
+                let param =[];
+                this.multipleSource.forEach(element => {
+                    param.push({resourceId:element.resourceId});
+                });
+                axios
+                .delete("/auth/resource",{data: param})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        _this.getResourceData();
+                    }
+                })
+            }
         },
         //查询所有租户
         getTenantManageData(){
@@ -388,55 +412,61 @@ export default {
         },
         //z资源号新增保存
         submitSourceForm(formName){
-            // let postData=this.formInline;
-            // this.$refs[formName].validate((valid) => {
-            // if (valid) {
-            //     if(this.createResource){
-            //         axios
-            //         .post("/auth/menu",postData)
-            //         .then(function(response){
-            //             if(response.data.success){
-                            
-            //                 _this.resourceNewVisible=false;
-            //                 _this.createResource=false
-            //                 _this.$notify({
-            //                     message: response.data.message,
-            //                     type: 'success'
-            //                 });
+            let _this = this;
+            let postData=this.formInline;
+            debugger
+            if(postData.resourceStatus=="是"){
+                postData.resourceStatus=1;
+            }else if(postData.resourceStatus=="否"){
+                postData.resourceStatus=0;
+            }
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                if(this.isResourceCreate){
+                    axios
+                    .post("/auth/resource",postData)
+                    .then(function(response){
+                        if(response.data.success){
+                            _this.resourceNewVisible=false;
+                            _this.isResourceCreate=false
+                            _this.$notify({
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                            _this.getResourceData();
+                        }else{
+                            _this.$notify.error({
+                                message: response.data.message,
+                                type: 'warning'
+                            });
+                        }
+                    })
+                }else{
+                     axios
+                        .put("/auth/resource",postData)
+                        .then(function(response){
+                            if(response.data.success){
+                                _this.resourceNewVisible=false;
+                                _this.createResource=false
+                                _this.$notify({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                                _this.getResourceData();
+                            }else{
+                                _this.$notify.error({
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                    }
 
-            //             }else{
-            //                 _this.$notify.error({
-            //                     message: response.data.message,
-            //                     type: 'success'
-            //                 });
-            //             }
-            //         })
-            //     }else{
-            //          axios
-            //             .put("/auth/menu",postData)
-            //             .then(function(response){
-            //                 if(response.data.success){
-            //                     _this.resourceNewVisible=false;
-            //                     _this.createResource=false
-            //                     _this.$notify({
-            //                         message: response.data.message,
-            //                         type: 'success'
-            //                     });
-
-            //                 }else{
-            //                     _this.$notify.error({
-            //                         message: response.data.message,
-            //                         type: 'success'
-            //                     });
-            //                 }
-            //             })
-            //         }
-
-            //     } else {
-            //         console.log('error submit!!');
-            //         return false;
-            //     }
-            // });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         },
         //查询所有菜单
         getmenuManageData(){
@@ -452,7 +482,7 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        resourceSelectionChange(){
+        resourceSelectionChange(val){
             this.multipleSource = val;
         },
         submitMenuForm(formName){
@@ -511,6 +541,7 @@ export default {
                 }
             });
         },
+        //新增菜单
         addNewClick(){
             let selectedMenu = this.multipleSelection.slice(0);
             this.ruleForm= {
@@ -546,7 +577,7 @@ export default {
             })
             .catch(_ => {});
         },
-        //删除多项
+        //删除多项菜单
         moreDeleteClick(){
             let _this = this
             if(this.multipleSelection.length==0){
@@ -558,7 +589,6 @@ export default {
                 let toDel = false;
                 let ret =this.multipleSelection;
                 let param = [];let postData={};
-                debugger
                 ret.forEach(element => {
                     if(!element.leaf){
                         toDel = true;
@@ -575,40 +605,65 @@ export default {
                     return false;
                 }
                 axios
-                    .delete("/auth/menu",{data: param})
-                    .then(function(response){
-                        if(response.data.success){
-                            _this.$notify({
-                                message: response.data.message,
-                                type: 'success'
-                            });
-                            _this.getmenuManageData();
-                        }else{
-                            _this.$notify.error({
-                                message: response.data.message,
-                                type: 'warning'
-                            });
-                        }
-                    })
-                
+                .delete("/auth/menu",{data: param})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({
+                            message: response.data.message,
+                            type: 'success'
+                        });
+                        _this.getmenuManageData();
+                    }else{
+                        _this.$notify.error({
+                            message: response.data.message,
+                            type: 'warning'
+                        });
+                    }
+                })
             }
+        },
+        //编辑资源号
+        handleResourceEdit(index, row){
+            this.resourceNewVisible = true;
+            this.isResourceCreate=false;
+            debugger
+            this.formInline={
+                resourceName: row.resourceName,
+                resourceId: row.resourceId,
+                ownerCode: row.ownerCode,
+                ownerName:  row.ownerCode,//row.ownerName,
+                resourceStatus:row.resourceStatus==1?'是':'否',
+            }
+        },
+        //查询所有资源号
+        getResourceData(){
+            this.sourceLoading = true;
+            let _this= this;
+            axios
+            .get("/auth/resource/"+this.multipleSelection[0].menuId)
+            .then(function(response){
+                if(response.data.data){
+                    _this.sourceData = response.data.data;
+                    _this.sourceLoading = false;
+                }else{
+                    _this.$notify.error({
+                        message: response.data.message,
+                        type: 'warning'
+                    });
+                }
+            })
         },
         resourceNewClick(){
             if(this.multipleSelection.length==1){
                 this.resourceVisible = true;
+                this.isResourceCreate=true;
+                this.getResourceData();
             }else{
                  this.$notify({
                     message: '请先选择一个菜单',
                     type: 'warning'
                 });
             }
-        },
-        
-        handleSourceEdit(index, row) {
-            console.log(index, row);
-        },
-        handleDelete(index, row) {
-            console.log(index, row);
         },
     },
 }

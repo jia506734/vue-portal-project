@@ -156,9 +156,9 @@ export default {
       this.getAllTenant();
     },
     methods:{
+        
         //树形控件
         handleCheckChange(data, checked, indeterminate) {
-            
             console.log(data, checked, indeterminate);
         },
         handleNodeClick(data) {

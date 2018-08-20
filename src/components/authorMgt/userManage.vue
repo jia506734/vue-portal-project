@@ -355,7 +355,6 @@ export default {
             this.isUserCreated = true;
         },
         handleUserEdit(index, row){
-            debugger
             this.userNewVisible=true;
             this.isUserCreated=false;
             this.userInline.userId = row.userId;
