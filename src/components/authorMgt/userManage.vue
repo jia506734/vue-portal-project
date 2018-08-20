@@ -394,7 +394,7 @@ export default {
         */
         onUserSubmit(formName){
             if(this.userInline.userMobile.length<11){
-                 _this.$notify.error({
+                 this.$notify.error({
                     message: '手机号码格式不正确',
                     type: 'warning'
                 });
