@@ -496,12 +496,14 @@ export default {
         用户新增
         */
         onUserSubmit(formName){
-            if(this.userInline.userMobile.length<11){
+            if(this.userInline.userMobile.toString().length<11){
                  this.$notify.error({
                     message: '手机号码格式不正确',
                     type: 'warning'
                 });
             }
+            debugger
+
             let postData={};
             postData.userId= this.userInline.userId;
             postData.userName= this.userInline.userName;

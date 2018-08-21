@@ -229,7 +229,7 @@
                 <div>
                     <el-form :model="formInline" :rules="rulesLine" ref="formInline" label-width="100px" class="demo-formInline">
                         <el-form-item label="资源号名称" prop="resourceName">
-                            <el-input v-model="formInline.resourceName"></el-input>
+                            <el-input v-model="formInline.resourceName"  @blur="mapSourceName(formInline.resourceName)"></el-input>
                         </el-form-item>
                         <el-form-item label="父级菜单" prop="ownerName">
                            <el-input v-model="formInline.ownerName" disabled></el-input>
@@ -348,6 +348,38 @@ export default {
             }else{
                  return name;
             }
+        },
+        mapSourceName(name){
+            if(name){
+                let _this=this;
+                axios
+                .get("/auth/resource?ownerCode="+this.multipleSelection[0].menuId+"&resourceName="+name)
+                .then(function(response){
+                    if(response.data.success&&response.data.data.length>0){
+                        _this.$message({
+                            message: '该名称已存在',
+                            type: 'warning'
+                        });
+                        _this.ruleForm.menuName="";
+                    }
+                })
+            }
+
+            // this.sourceLoading = true;
+            // let _this= this;
+            // axios
+            // .get("/auth/resource/"+this.multipleSelection[0].menuId)
+            // .then(function(response){
+            //     if(response.data.data){
+            //         _this.sourceData = response.data.data;
+            //         _this.sourceLoading = false;
+            //     }else{
+            //         _this.$notify.error({
+            //             message: response.data.message,
+            //             type: 'warning'
+            //         });
+            //     }
+            // })
         },
         //校验用户名重复性
          mapName(name){
