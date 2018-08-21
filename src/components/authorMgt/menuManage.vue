@@ -29,11 +29,13 @@
           :data="menuData"
           style="width: 100%;margin-top:20px">
           <el-table-column
+          fixed
             type="selection"
             width="55">
           </el-table-column>
           <el-table-column
           label="名称"
+          fixed
           width="130">
           <template slot-scope="scope">
               <span :title="scope.row.menuName">{{ subStr(scope.row.menuName) }}</span>

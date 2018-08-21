@@ -36,10 +36,12 @@
             style="width: 100%;margin-top:20px">
             <el-table-column
             type="selection"
+            fixed
             width="55">
             </el-table-column>
             <el-table-column
             label="用户名"
+            fixed
             width="130">
             <template slot-scope="scope">
                 <span>{{ scope.row.userName }}</span>
