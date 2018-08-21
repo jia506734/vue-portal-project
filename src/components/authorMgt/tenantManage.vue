@@ -23,8 +23,17 @@
             :data="tenantData"
             style="width: 180%;margin-top:20px">
             <el-table-column
-            type="selection"
-            width="55">
+                type="selection"
+                fixed
+                width="55">
+            </el-table-column>
+            <el-table-column label="操作"  width="80" fixed>
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    type="primary"
+                    @click="handleTenantEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                </template>
             </el-table-column>
             <el-table-column
             label="租户名称"
@@ -54,14 +63,6 @@
                     <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
              </el-table-column>
-            <el-table-column label="操作"  width="80" fixed="right">
-            <template slot-scope="scope">
-                <el-button
-                size="mini"
-                type="primary"
-                @click="handleTenantEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
-            </template>
-            </el-table-column>
         </el-table>
     </div>
     <el-dialog

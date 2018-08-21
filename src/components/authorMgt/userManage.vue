@@ -39,9 +39,16 @@
             fixed
             width="55">
             </el-table-column>
+            <el-table-column label="操作"  width="80" fixed>
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    type="primary"
+                    @click="handleUserEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                </template>
+            </el-table-column>
             <el-table-column
             label="用户名"
-            fixed
             width="130">
             <template slot-scope="scope">
                 <span>{{ scope.row.userName }}</span>
@@ -97,14 +104,6 @@
                 width="180">
                 <template slot-scope="scope">
                     <span>{{ subTime(scope.row.createdDate) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作"  width="80" fixed="right">
-                <template slot-scope="scope">
-                    <el-button
-                    size="mini"
-                    type="primary"
-                    @click="handleUserEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
                 </template>
             </el-table-column>
         </el-table>
