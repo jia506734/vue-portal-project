@@ -95,6 +95,13 @@
               <span>{{ getLabelById(scope.row.menuStatus) }}</span>
           </template>
           </el-table-column>
+          <el-table-column
+                label="创建时间"
+                width="180">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.createdDate }}</span>
+                </template>
+          </el-table-column>
           <el-table-column label="操作"  width="80">
           <template slot-scope="scope">
               <el-button

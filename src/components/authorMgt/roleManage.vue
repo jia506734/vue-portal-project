@@ -32,7 +32,7 @@
             </el-table-column>
             <el-table-column
             label="角色"
-            width="130">
+            width="140">
             <template slot-scope="scope">
                 <span>{{ scope.row.roleName }}</span>
             </template>
@@ -43,6 +43,13 @@
             <template slot-scope="scope">
                 <span :title="scope.row.roleDesc">{{  subStr(scope.row.roleDesc) }}</span>
             </template>
+            </el-table-column>
+            <el-table-column
+                label="创建时间"
+                width="180">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.createdDate }}</span>
+                </template>
             </el-table-column>
             <!-- <el-table-column
             label="是否有效"

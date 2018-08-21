@@ -83,6 +83,13 @@
                 <span v-if="scope.row.userStatus==0">否</span>
             </template>
             </el-table-column>
+            <el-table-column
+                label="创建时间"
+                width="180">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.createdDate }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作"  width="80">
                 <template slot-scope="scope">
                     <el-button
@@ -146,18 +153,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="系统管理员" prop="sysAdmin">
-                    <el-select v-model="userInline.sysAdmin" placeholder="请选择系统管理员">
-                        <el-option
-                            v-for="item in forRoles"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onUserSubmit('userInline')">立即创建</el-button>
+                    <el-button type="primary" @click="onUserSubmit('userInline')">确定</el-button>
                     <el-button @click="userNewVisible = false">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -241,7 +238,6 @@ export default {
             userEmail:'',
             validDate:'',
             userStatus:'',
-            sysAdmin:'',
         },
         roleData:[],//角色列表
         roleDataTemp:[],
@@ -467,7 +463,6 @@ export default {
                 userEmail:'',
                 validDate:'',
                 userStatus:'',
-                sysAdmin:'',
             };
             this.userNewVisible= true;
             this.isUserCreated = true;
@@ -484,7 +479,6 @@ export default {
             this.userInline.userEmail = row.userEmail;
             this.userInline.validDate = row.validDate;
             this.userInline.userStatus = row.userStatus==0?'无效':'有效';
-            this.userInline.sysAdmin = row.userStatus==0?'系统管理员':'设备管理员';
             this.createOrEdit='用户管理>编辑';
         },
       /*
@@ -507,16 +501,9 @@ export default {
             postData.userEmail= this.userInline.userEmail;
             postData.validDate= this.userInline.validDate;
             postData.userStatus= this.userInline.userStatus;
-            postData.sysAdmin= this.userInline.sysAdmin;
             let _this= this;
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                
-                if(postData.sysAdmin =="系统管理员"){
-                    postData.sysAdmin =1;
-                }else{
-                    postData.sysAdmin =0;
-                }
                 if(postData.userStatus =="有效"){
                     postData.userStatus =1;
                 }else{

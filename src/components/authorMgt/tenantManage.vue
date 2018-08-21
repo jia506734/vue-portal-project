@@ -35,7 +35,7 @@
             </el-table-column>
             <el-table-column
             label="租户描述"
-            width="650">
+            width="500">
             <template slot-scope="scope">
                 <span :title="scope.row.tenantDesc">{{ subStr(scope.row.tenantDesc) }}</span>
             </template>
@@ -47,6 +47,13 @@
                 <span>{{ scope.row.tenantAdminId }}</span>
             </template>
             </el-table-column>
+            <el-table-column
+                label="创建时间"
+                width="160">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.createdDate }}</span>
+                </template>
+             </el-table-column>
             <el-table-column label="操作"  width="80">
             <template slot-scope="scope">
                 <el-button
@@ -133,8 +140,8 @@ export default {
     methods:{
         //截取字符串长度
         subStr(name){
-            if(name.length > 50){
-                return name.substring(0,50)+"...";
+            if(name.length > 40){
+                return name.substring(0,40)+"...";
             }else{
                  return name;
             }
