@@ -500,9 +500,8 @@ export default {
                     message: '手机号码格式不正确',
                     type: 'warning'
                 });
+                return false;
             }
-            debugger
-
             let postData={};
             postData.userId= this.userInline.userId;
             postData.userName= this.userInline.userName;
