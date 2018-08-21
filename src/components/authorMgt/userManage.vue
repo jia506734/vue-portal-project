@@ -313,7 +313,8 @@ export default {
             if(this.multipleSelection.length==1){
                 this.bindId= this.multipleSelection[0].userId;
                 this.roleBindShow = true;
-                 this.getRoleData();
+                this.getAllRoleDate();
+                this.getRoleData();
             }else{
                 this.$notify({
                     message:'请选择一个用户',
@@ -324,17 +325,7 @@ export default {
         //获取用户角色
         getRoleData(){
             let _this=this;
-            axios.get("/auth/all_roles")
-                .then(function(response){
-                let arr = response.data.data;
-                for(let key in arr){
-                 _this.options.push({
-                    'value':arr[key].roleId,
-                    'label':arr[key].roleName
-                 });
-                }
-            })
-            axios.get("/auth/roles",{ params:{ userId : _this.bindId}})
+            axios.get("/auth/roles/"+_this.bindId)
             .then(function(response){
                 _this.roleTableData = response.data.data
                 _this.roleHaveExist = []
@@ -349,18 +340,19 @@ export default {
         //删除用户已有角色
         deleteRole(row){
             let _this=this;
-            let param = {
-                userId:_this.bindId,
+            let arr = [{
                 roleId:row.roleId
-            }
+            }]
             axios
-            .delete("/auth/role",{data: param})
+            .delete("/auth/role/"+_this.bindId,{data:arr})
             .then(function(response){
                 if(response.data.success){
                     _this.$notify({
                       message: '删除成功',
                       type: 'success'
                     });
+                    _this.getRoleData()
+                    _this.choosedRole=''
                 }
             })
         },
@@ -378,7 +370,7 @@ export default {
                 roleId:_this.choosedRole
             }
             axios
-            .put("/auth/role",param)
+            .post("/auth/role/link",param)
             .then(function(response){
                 if(response.data.success){
                     _this.$notify({
@@ -452,6 +444,13 @@ export default {
         .get("/auth/all_roles")
             .then(function(response){
                 _this.roleData = response.data.data;
+                _this.options = [];
+                for(let key in _this.roleData){
+                 _this.options.push({
+                    'value':_this.roleData[key].roleId,
+                    'label':_this.roleData[key].roleName
+                 });
+                }
                 _this.roleDataTemp = response.data.data.slice(0);
             })
       },
