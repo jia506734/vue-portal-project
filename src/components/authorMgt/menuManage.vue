@@ -7,7 +7,7 @@
           <el-col :span="4" style="margin-right:30px;"><el-input v-model="menuName" placeholder="输入菜单名称"></el-input></el-col>
           <el-col :span="2">父级菜单</el-col>
           <el-col :span="4" style="margin-right:30px;"><el-input v-model="menuFather" placeholder="输入父级菜单"></el-input></el-col>
-          <el-col :span="4"><el-button type="primary">查询</el-button></el-col>
+          <el-col :span="4"><el-button type="primary" @click="search">查询</el-button></el-col>
       </el-row>
       <el-row style="margin-top:20px">
           <el-col  :span="2">
@@ -353,7 +353,25 @@ export default {
             if(name){
                 let _this=this;
                 axios
-                .get("/auth/resource?ownerCode="+this.multipleSelection[0].menuId+"&resourceName="+name)
+                .get("/auth/resource/"+this.multipleSelection[0].menuId+"?resourceName="+name)
+                .then(function(response){
+                    if(response.data.success&&response.data.data.length>0){
+                        _this.$message({
+                            message: '该名称已存在',
+                            type: 'warning'
+                        });
+                        _this.formInline.resourceName="";
+                    }
+                })
+            }
+        },
+        //校验用户名重复性
+         mapName(name){
+            if(name){
+                let _this=this;
+                axios
+                .get("/auth/menu/"+this.$store.state.tenantId+"?menuName="
+                    +name+"&parentMenuCode="+this.ruleForm.parentMenuCode)
                 .then(function(response){
                     if(response.data.success&&response.data.data.length>0){
                         _this.$message({
@@ -364,39 +382,6 @@ export default {
                     }
                 })
             }
-
-            // this.sourceLoading = true;
-            // let _this= this;
-            // axios
-            // .get("/auth/resource/"+this.multipleSelection[0].menuId)
-            // .then(function(response){
-            //     if(response.data.data){
-            //         _this.sourceData = response.data.data;
-            //         _this.sourceLoading = false;
-            //     }else{
-            //         _this.$notify.error({
-            //             message: response.data.message,
-            //             type: 'warning'
-            //         });
-            //     }
-            // })
-        },
-        //校验用户名重复性
-         mapName(name){
-            // if(name){
-            //     let _this=this;
-            //     axios
-            //     .get("/auth/users?userName="+name)
-            //     .then(function(response){
-            //         if(response.data.success&&response.data.data.length>0){
-            //             _this.$message({
-            //                 message: '该名称已存在',
-            //                 type: 'warning'
-            //             });
-            //             _this.ruleForm.menuName="";
-            //         }
-            //     })
-            // }
         },
         subTime(time){
             return time.substring(0,19);
@@ -467,6 +452,17 @@ export default {
                   },() => {
                 })
             }
+        },
+        search(){
+            let _this=this;
+            this.tableLoading = true;
+            axios
+            .get("/auth/menu/"+this.$store.state.tenantId+"?menuName="
+                +this.menuName+"&parentMenuCode="+this.menuFather)
+            .then(function(response){
+                _this.tableLoading = false;
+                _this.menuData = response.data.data;
+            })
         },
         //查询所有租户
         getTenantManageData(){
