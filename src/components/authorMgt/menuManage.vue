@@ -99,10 +99,10 @@
                 label="创建时间"
                 width="180">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.createdDate }}</span>
+                    <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
           </el-table-column>
-          <el-table-column label="操作"  width="80">
+          <el-table-column label="操作"  width="80" fixed="right">
           <template slot-scope="scope">
               <el-button
               size="mini"
@@ -363,6 +363,9 @@ export default {
             //         }
             //     })
             // }
+        },
+        subTime(time){
+            return time.substring(0,19);
         },
         getStatus(status){
             if(status==1){

@@ -48,7 +48,7 @@
                 label="创建时间"
                 width="180">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.createdDate }}</span>
+                    <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
             </el-table-column>
             <!-- <el-table-column
@@ -58,13 +58,13 @@
                 <span>{{ scope.row.valid }}</span>
             </template>
             </el-table-column> -->
-            <el-table-column label="操作"  width="80">
-            <template slot-scope="scope">
-                <el-button
-                size="mini"
-                type="primary"
-                @click="handleRoleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
-            </template>
+            <el-table-column label="操作"  width="80" fixed="right">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    type="primary"
+                    @click="handleRoleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -303,6 +303,9 @@ export default {
                 }
             })
             
+        },
+        subTime(time){
+            return time.substring(0,19);
         },
       //批量删除
       moreDeleteClick(){

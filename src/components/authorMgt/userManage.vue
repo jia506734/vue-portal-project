@@ -46,6 +46,13 @@
             </template>
             </el-table-column>
             <el-table-column
+            label="所属租户"
+            width="130">
+            <template slot-scope="scope">
+                <span>{{ scope.row.userTenantName }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
             label="性别"
             width="130">
             <template slot-scope="scope">
@@ -87,10 +94,10 @@
                 label="创建时间"
                 width="180">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.createdDate }}</span>
+                    <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作"  width="80">
+            <el-table-column label="操作"  width="80" fixed="right">
                 <template slot-scope="scope">
                     <el-button
                     size="mini"
@@ -333,6 +340,9 @@ export default {
                     _this.roleHaveExist.push(_this.roleTableData[key].roleId)
                 }
             })
+        },
+        subTime(time){
+            return time.substring(0,19);
         },
         //删除用户已有角色
         deleteRole(row){
