@@ -86,7 +86,7 @@
             </el-table-column>
             <el-table-column
             label="角色"
-            width="130">
+            width="180">
             <template slot-scope="scope">
                 <span>{{ scope.row.roleName}}</span>
             </template>
@@ -130,13 +130,12 @@
                 <el-form-item label="用户密码" prop="userPwd" v-if="isUserCreated">
                     <el-input v-model="userInline.userPwd" type="password"></el-input>
                 </el-form-item>
-                <el-form-item label="用户所属租户" prop="userTenantCode">
-                    <el-select v-model="userInline.userTenantCode" placeholder="请选择租户">
+                <el-form-item label="用户所属租户" prop="tenantCode">
+                    <el-select v-model="userInline.tenantCode" placeholder="请选择租户">
                         <el-option v-for="(item,index) in tenantData" 
                             :key="index" :label="item.tenantName" :value="item.tenantId">
                         </el-option>
                     </el-select>
-                    <!-- <el-input v-model="userInline.userTenantCode"></el-input> -->
                 </el-form-item>
                 <el-form-item label="用户手机" prop="userMobile">
                     <el-input :maxlength=11 v-model.number="userInline.userMobile"></el-input>
@@ -242,7 +241,7 @@ export default {
             userSex:'',
             userPwd:'',//密码
             userMobile:'',
-            userTenantCode:'',//用户所属租户code
+            tenantCode:'',//用户所属租户code
             userEmail:'',
             validDate:'',
             userStatus:'',
@@ -259,7 +258,7 @@ export default {
                 { min: 8, max: 15, message: '长度在 8 到 15 个字符', trigger: 'blur' },
                 {pattern: /^(\w){6,20}$/,message: '只能输入6-20个字母、数字、下划线'}
             ],
-            userTenantCode:[
+            tenantCode:[
                 { required: true, message: '请输入所属租户', trigger: 'blur' },
             ],
             userMobile:[
@@ -486,7 +485,7 @@ export default {
                 userSex:'',
                 userPwd:'',//密码
                 userMobile:'',
-                userTenantCode:'',//用户所属租户code
+                tenantCode:'',//用户所属租户code
                 userEmail:'',
                 validDate:'',
                 userStatus:'',
@@ -502,7 +501,7 @@ export default {
             this.userInline.userSex = row.userSex==0?"保密":(row.userSex==1?"帅哥":'靓女');
             this.userInline.userPwd = row.userPwd;
             this.userInline.userMobile = row.userMobile;
-            this.userInline.userTenantCode = row.userTenantCode;
+            this.userInline.tenantCode = row.tenantCode;
             this.userInline.userEmail = row.userEmail;
             this.userInline.validDate = row.validDate;
             this.userInline.userStatus = row.userStatus==0?'无效':'有效';
@@ -525,7 +524,7 @@ export default {
             postData.userSex= this.userInline.userSex;
             postData.userPwd= this.userInline.userPwd;
             postData.userMobile= this.userInline.userMobile;
-            postData.userTenantCode= this.userInline.userTenantCode;
+            postData.tenantCode= this.userInline.tenantCode;
             postData.userEmail= this.userInline.userEmail;
             postData.validDate= this.userInline.validDate;
             postData.userStatus= this.userInline.userStatus;

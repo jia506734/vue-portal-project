@@ -290,12 +290,14 @@ export default {
                                _this.roleNewAddVisible=false;
                                 _this.isCreate=false
                                 _this.getAllDate();
-                                _this.$notify({                     duration:2000,
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'warning'
                                 });
@@ -316,7 +318,8 @@ export default {
       moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({                     duration:2000,
+              this.$notify({                     
+                  duration:2000,
                 message: '请选择至少一个角色',
                 type: 'warning'
             });
@@ -331,7 +334,8 @@ export default {
                 .delete("/auth/role",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({                     duration:2000,
+                        _this.$notify({                     
+                            duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });
