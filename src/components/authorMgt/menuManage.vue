@@ -489,7 +489,6 @@ export default {
         submitSourceForm(formName){
             let _this = this;
             let postData=this.formInline;
-            
             if(postData.resourceStatus=="是"){
                 postData.resourceStatus=1;
             }else if(postData.resourceStatus=="否"){
@@ -562,11 +561,20 @@ export default {
         resourceSelectionChange(val){
             this.multipleSource = val;
         },
+        //菜单新增
         submitMenuForm(formName){
             let _this = this;
             let postData=this.ruleForm;
-            postData.menuStatus=postData.menuStatus=="是"?1:0;
-            postData.menuVisibility=postData.menuVisibility=="是"?1:0;
+            if(postData.menuStatus=="是"){
+                postData.menuStatus=1;
+            }else if(postData.menuStatus=="否"){
+                postData.menuStatus=0;
+            }
+            if(postData.menuVisibility=="是"){
+                postData.menuVisibility=1;
+            }else if(postData.menuVisibility=="否"){
+                postData.menuVisibility=0;
+            }
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 if(this.isMenuCreated){
