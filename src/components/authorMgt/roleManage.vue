@@ -232,7 +232,8 @@ export default {
                 this.roleNewVisible = true;
                 this.selectedRole = this.multipleSelection[0].roleId;
             }else{
-                this.$notify.error({
+                this.$notify({
+                    duration:2000,
                     message: '请选择一个且最多一个角色',
                     type: 'waining'
                 });
@@ -267,13 +268,15 @@ export default {
                                 _this.roleNewAddVisible=false;
                                 _this.isCreate=false
                                 _this.getAllDate();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
 
                             }else{
-                                _this.$notify.error({
+                                _this.$notify({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'waining'
                                 });
@@ -287,7 +290,7 @@ export default {
                                _this.roleNewAddVisible=false;
                                 _this.isCreate=false
                                 _this.getAllDate();
-                                _this.$notify({
+                                _this.$notify({                     duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -313,7 +316,7 @@ export default {
       moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({
+              this.$notify({                     duration:2000,
                 message: '请选择至少一个角色',
                 type: 'warning'
             });
@@ -328,7 +331,7 @@ export default {
                 .delete("/auth/role",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({
+                        _this.$notify({                     duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });

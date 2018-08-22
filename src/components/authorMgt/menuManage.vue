@@ -426,7 +426,8 @@ export default {
         sourceDeleteClick(){
             let _this = this;
             if(this.multipleSource.length==0){
-                this.$notify({
+                this.$notify({ 
+                    duration:2000,
                     message:'请至少选择一个资源号',
                     type: 'warning'
                 });
@@ -441,7 +442,8 @@ export default {
                     .delete("/auth/resource",{data: param})
                     .then(function(response){
                         if(response.data.success){
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -502,7 +504,8 @@ export default {
                         if(response.data.success){
                             _this.resourceNewVisible=false;
                             _this.isResourceCreate=false
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -521,7 +524,8 @@ export default {
                             if(response.data.success){
                                 _this.resourceNewVisible=false;
                                 _this.createResource=false
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -574,7 +578,8 @@ export default {
                                 _this.addNewVisible=false;
                                 _this.isMenuCreated=false
                                 _this.getmenuManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -594,7 +599,8 @@ export default {
                                 _this.addNewVisible=false;
                                 _this.isMenuCreated=false
                                 _this.getmenuManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -628,7 +634,8 @@ export default {
                 menuUrl: ''
             };
             if(selectedMenu.length>1){
-                this.$notify({
+                this.$notify({                     
+                    duration:2000,
                     message: '请选择单个菜单进行新建',
                     type: 'warning'
                 });
@@ -683,7 +690,8 @@ export default {
                     .delete("/auth/menu",{data: param})
                     .then(function(response){
                         if(response.data.success){
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -736,7 +744,8 @@ export default {
                 this.isResourceCreate=true;
                 this.getResourceData();
             }else{
-                 this.$notify({
+                 this.$notify({                     
+                     duration:2000,
                     message: '请先选择一个菜单',
                     type: 'warning'
                 });

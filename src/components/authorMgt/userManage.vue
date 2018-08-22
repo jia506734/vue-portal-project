@@ -88,7 +88,7 @@
             label="角色"
             width="130">
             <template slot-scope="scope">
-                <span>{{ scope.row.role }}</span>
+                <span>{{ scope.row.roleName}}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -315,12 +315,14 @@ export default {
                 this.getAllRoleDate();
                 this.getRoleData();
             }else{
-                this.$notify({
+                this.$notify({                     
+                    duration:2000,
                     message:'请选择一个用户',
                     type: 'warning'
                 });
             }
         },
+
         //获取用户角色
         getRoleData(){
             let _this=this;
@@ -346,7 +348,8 @@ export default {
             .delete("/auth/role/"+_this.bindId,{data:arr})
             .then(function(response){
                 if(response.data.success){
-                    _this.$notify({
+                    _this.$notify({                     
+                        duration:2000,
                       message: '删除成功',
                       type: 'success'
                     });
@@ -372,7 +375,8 @@ export default {
             .post("/auth/role/link",param)
             .then(function(response){
                 if(response.data.success){
-                    _this.$notify({
+                    _this.$notify({                     
+                        duration:2000,
                       message: '添加成功',
                       type: 'success'
                     });
@@ -396,7 +400,8 @@ export default {
         moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({
+              this.$notify({                     
+                  duration:2000,
                 message: '请选择至少一个用户',
                 type: 'warning'
             });
@@ -413,7 +418,8 @@ export default {
                 .delete("/auth/user",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({
+                        _this.$notify({                     
+                            duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });
@@ -434,6 +440,17 @@ export default {
              .then(function(response){
                  _this.tableLoading= false;
                  _this.userData = response.data.data;
+                 _this.userData.forEach(el=>{
+                     let roleName=[];
+                     let roleId=[];
+                     el.userRoleList.forEach(element=>{
+                        roleId.push(element.roleId);
+                        roleName.push(element.roleName);
+                    })
+                    el.roleName = roleName.join(';')
+                    el.roleId = roleId.join(';')
+                 })
+
              })
         },
         //查询所有角色
@@ -539,7 +556,8 @@ export default {
                             if(response.data.success){
                                 _this.userNewVisible = false;
                                 _this.getUserManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -559,7 +577,8 @@ export default {
                             if(response.data.success){
                                 _this.userNewVisible = false;
                                 _this.getUserManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
