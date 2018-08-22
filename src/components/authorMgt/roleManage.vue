@@ -126,6 +126,7 @@
 </template>
 <script>
 import axios from "axios"
+import {mapActions, mapState} from 'vuex'
 export default {
     data(){
       return{
@@ -160,7 +161,11 @@ export default {
         },
       }
     },
+    computed:{
+        ...mapState(["tenantId"]),
+    },
     created(){
+      this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getAllDate();
       this.getAllTenant();
     },
@@ -350,7 +355,7 @@ export default {
         let _this=this;
         _this.tableLoading= false;
         axios
-        .get("/auth/all_roles")
+        .get("/auth/roles?tenantCode="+this.$store.state.tenantId)
         .then(function(response){
             _this.tableLoading= false;
             _this.roleData = response.data.data;

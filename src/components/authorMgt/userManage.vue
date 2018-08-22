@@ -212,6 +212,7 @@
    </div>
 </template>
 <script>
+import {mapActions, mapState} from 'vuex'
 import axios from "axios"
 export default {
     data(){
@@ -284,7 +285,11 @@ export default {
         roleHaveExist: []
       }
     },
+    computed:{
+        ...mapState(["tenantId"]),
+    },
     created(){
+      this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getUserManageData();
       this.getAllRoleDate();
       this.getTenantManageData();
@@ -435,28 +440,29 @@ export default {
             let _this=this;
             _this.tableLoading= true;
             axios
-            .get("/auth/all_users")
+            .get("/auth/users?tenantCode="+this.$store.state.tenantId)
              .then(function(response){
                  _this.tableLoading= false;
-                 _this.userData = response.data.data;
-                 _this.userData.forEach(el=>{
-                     let roleName=[];
-                     let roleId=[];
-                     el.userRoleList.forEach(element=>{
-                        roleId.push(element.roleId);
-                        roleName.push(element.roleName);
+                 if(response.data.success){
+                    _this.userData = response.data.data;
+                    _this.userData.forEach(el=>{
+                        let roleName=[];
+                        let roleId=[];
+                        el.userRoleList.forEach(element=>{
+                            roleId.push(element.roleId);
+                            roleName.push(element.roleName);
+                        })
+                        el.roleName = roleName.join(';')
+                        el.roleId = roleId.join(';')
                     })
-                    el.roleName = roleName.join(';')
-                    el.roleId = roleId.join(';')
-                 })
-
+                 }
              })
         },
         //查询所有角色
       getAllRoleDate(){
         let _this=this;
         axios
-        .get("/auth/all_roles")
+         .get("/auth/roles?tenantCode="+this.$store.state.tenantId)
             .then(function(response){
                 _this.roleData = response.data.data;
                 _this.options = [];
