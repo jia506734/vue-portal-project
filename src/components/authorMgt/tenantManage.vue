@@ -182,7 +182,8 @@ export default {
         moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({
+              this.$notify({                     
+                duration:2000,
                 message: '请选择至少一个租户',
                 type: 'warning'
             });
@@ -197,7 +198,8 @@ export default {
                 .delete("/auth/tenant",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({
+                        _this.$notify({                     
+                            duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });
@@ -232,13 +234,15 @@ export default {
                                 _this.tenantNewVisible=false;
                                 _this.isTenantCreated=false
                                 _this.getTenantManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
 
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -252,13 +256,15 @@ export default {
                                 _this.tenantNewVisible=false;
                                 _this.isTenantCreated=false
                                 _this.getTenantManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
 
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });

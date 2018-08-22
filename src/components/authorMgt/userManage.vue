@@ -86,9 +86,9 @@
             </el-table-column>
             <el-table-column
             label="角色"
-            width="130">
+            width="180">
             <template slot-scope="scope">
-                <span>{{ scope.row.role }}</span>
+                <span>{{ scope.row.roleName}}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -130,13 +130,12 @@
                 <el-form-item label="用户密码" prop="userPwd" v-if="isUserCreated">
                     <el-input v-model="userInline.userPwd" type="password"></el-input>
                 </el-form-item>
-                <el-form-item label="用户所属租户" prop="userTenantCode">
-                    <el-select v-model="userInline.userTenantCode" placeholder="请选择租户">
+                <el-form-item label="用户所属租户" prop="tenantCode">
+                    <el-select v-model="userInline.tenantCode" placeholder="请选择租户">
                         <el-option v-for="(item,index) in tenantData" 
                             :key="index" :label="item.tenantName" :value="item.tenantId">
                         </el-option>
                     </el-select>
-                    <!-- <el-input v-model="userInline.userTenantCode"></el-input> -->
                 </el-form-item>
                 <el-form-item label="用户手机" prop="userMobile">
                     <el-input :maxlength=11 v-model.number="userInline.userMobile"></el-input>
@@ -213,6 +212,7 @@
    </div>
 </template>
 <script>
+import {mapActions, mapState} from 'vuex'
 import axios from "axios"
 export default {
     data(){
@@ -242,7 +242,7 @@ export default {
             userSex:'',
             userPwd:'',//密码
             userMobile:'',
-            userTenantCode:'',//用户所属租户code
+            tenantCode:'',//用户所属租户code
             userEmail:'',
             validDate:'',
             userStatus:'',
@@ -259,7 +259,7 @@ export default {
                 { min: 8, max: 15, message: '长度在 8 到 15 个字符', trigger: 'blur' },
                 {pattern: /^(\w){6,20}$/,message: '只能输入6-20个字母、数字、下划线'}
             ],
-            userTenantCode:[
+            tenantCode:[
                 { required: true, message: '请输入所属租户', trigger: 'blur' },
             ],
             userMobile:[
@@ -285,7 +285,11 @@ export default {
         roleHaveExist: []
       }
     },
+    computed:{
+        ...mapState(["tenantId"]),
+    },
     created(){
+      this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getUserManageData();
       this.getAllRoleDate();
       this.getTenantManageData();
@@ -315,12 +319,14 @@ export default {
                 this.getAllRoleDate();
                 this.getRoleData();
             }else{
-                this.$notify({
+                this.$notify({                     
+                    duration:2000,
                     message:'请选择一个用户',
                     type: 'warning'
                 });
             }
         },
+
         //获取用户角色
         getRoleData(){
             let _this=this;
@@ -346,7 +352,8 @@ export default {
             .delete("/auth/role/"+_this.bindId,{data:arr})
             .then(function(response){
                 if(response.data.success){
-                    _this.$notify({
+                    _this.$notify({                     
+                        duration:2000,
                       message: '删除成功',
                       type: 'success'
                     });
@@ -372,7 +379,8 @@ export default {
             .post("/auth/role/link",param)
             .then(function(response){
                 if(response.data.success){
-                    _this.$notify({
+                    _this.$notify({                     
+                        duration:2000,
                       message: '添加成功',
                       type: 'success'
                     });
@@ -396,7 +404,8 @@ export default {
         moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({
+              this.$notify({                     
+                  duration:2000,
                 message: '请选择至少一个用户',
                 type: 'warning'
             });
@@ -413,7 +422,8 @@ export default {
                 .delete("/auth/user",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({
+                        _this.$notify({                     
+                            duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });
@@ -430,17 +440,29 @@ export default {
             let _this=this;
             _this.tableLoading= true;
             axios
-            .get("/auth/all_users")
+            .get("/auth/users?tenantCode="+this.$store.state.tenantId)
              .then(function(response){
                  _this.tableLoading= false;
-                 _this.userData = response.data.data;
+                 if(response.data.success){
+                    _this.userData = response.data.data;
+                    _this.userData.forEach(el=>{
+                        let roleName=[];
+                        let roleId=[];
+                        el.userRoleList.forEach(element=>{
+                            roleId.push(element.roleId);
+                            roleName.push(element.roleName);
+                        })
+                        el.roleName = roleName.join(';')
+                        el.roleId = roleId.join(';')
+                    })
+                 }
              })
         },
         //查询所有角色
       getAllRoleDate(){
         let _this=this;
         axios
-        .get("/auth/all_roles")
+         .get("/auth/roles?tenantCode="+this.$store.state.tenantId)
             .then(function(response){
                 _this.roleData = response.data.data;
                 _this.options = [];
@@ -469,7 +491,7 @@ export default {
                 userSex:'',
                 userPwd:'',//密码
                 userMobile:'',
-                userTenantCode:'',//用户所属租户code
+                tenantCode:'',//用户所属租户code
                 userEmail:'',
                 validDate:'',
                 userStatus:'',
@@ -485,7 +507,7 @@ export default {
             this.userInline.userSex = row.userSex==0?"保密":(row.userSex==1?"帅哥":'靓女');
             this.userInline.userPwd = row.userPwd;
             this.userInline.userMobile = row.userMobile;
-            this.userInline.userTenantCode = row.userTenantCode;
+            this.userInline.tenantCode = row.tenantCode;
             this.userInline.userEmail = row.userEmail;
             this.userInline.validDate = row.validDate;
             this.userInline.userStatus = row.userStatus==0?'无效':'有效';
@@ -508,7 +530,7 @@ export default {
             postData.userSex= this.userInline.userSex;
             postData.userPwd= this.userInline.userPwd;
             postData.userMobile= this.userInline.userMobile;
-            postData.userTenantCode= this.userInline.userTenantCode;
+            postData.tenantCode= this.userInline.tenantCode;
             postData.userEmail= this.userInline.userEmail;
             postData.validDate= this.userInline.validDate;
             postData.userStatus= this.userInline.userStatus;
@@ -539,7 +561,8 @@ export default {
                             if(response.data.success){
                                 _this.userNewVisible = false;
                                 _this.getUserManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -559,7 +582,8 @@ export default {
                             if(response.data.success){
                                 _this.userNewVisible = false;
                                 _this.getUserManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });

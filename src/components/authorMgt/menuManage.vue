@@ -426,7 +426,8 @@ export default {
         sourceDeleteClick(){
             let _this = this;
             if(this.multipleSource.length==0){
-                this.$notify({
+                this.$notify({ 
+                    duration:2000,
                     message:'请至少选择一个资源号',
                     type: 'warning'
                 });
@@ -441,7 +442,8 @@ export default {
                     .delete("/auth/resource",{data: param})
                     .then(function(response){
                         if(response.data.success){
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -487,7 +489,6 @@ export default {
         submitSourceForm(formName){
             let _this = this;
             let postData=this.formInline;
-            
             if(postData.resourceStatus=="是"){
                 postData.resourceStatus=1;
             }else if(postData.resourceStatus=="否"){
@@ -502,7 +503,8 @@ export default {
                         if(response.data.success){
                             _this.resourceNewVisible=false;
                             _this.isResourceCreate=false
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -521,7 +523,8 @@ export default {
                             if(response.data.success){
                                 _this.resourceNewVisible=false;
                                 _this.createResource=false
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -558,11 +561,20 @@ export default {
         resourceSelectionChange(val){
             this.multipleSource = val;
         },
+        //菜单新增
         submitMenuForm(formName){
             let _this = this;
             let postData=this.ruleForm;
-            postData.menuStatus=postData.menuStatus=="是"?1:0;
-            postData.menuVisibility=postData.menuVisibility=="是"?1:0;
+            if(postData.menuStatus=="是"){
+                postData.menuStatus=1;
+            }else if(postData.menuStatus=="否"){
+                postData.menuStatus=0;
+            }
+            if(postData.menuVisibility=="是"){
+                postData.menuVisibility=1;
+            }else if(postData.menuVisibility=="否"){
+                postData.menuVisibility=0;
+            }
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 if(this.isMenuCreated){
@@ -574,7 +586,8 @@ export default {
                                 _this.addNewVisible=false;
                                 _this.isMenuCreated=false
                                 _this.getmenuManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -594,7 +607,8 @@ export default {
                                 _this.addNewVisible=false;
                                 _this.isMenuCreated=false
                                 _this.getmenuManageData();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -628,7 +642,8 @@ export default {
                 menuUrl: ''
             };
             if(selectedMenu.length>1){
-                this.$notify({
+                this.$notify({                     
+                    duration:2000,
                     message: '请选择单个菜单进行新建',
                     type: 'warning'
                 });
@@ -683,7 +698,8 @@ export default {
                     .delete("/auth/menu",{data: param})
                     .then(function(response){
                         if(response.data.success){
-                            _this.$notify({
+                            _this.$notify({                     
+                                duration:2000,
                                 message: response.data.message,
                                 type: 'success'
                             });
@@ -736,7 +752,8 @@ export default {
                 this.isResourceCreate=true;
                 this.getResourceData();
             }else{
-                 this.$notify({
+                 this.$notify({                     
+                     duration:2000,
                     message: '请先选择一个菜单',
                     type: 'warning'
                 });
