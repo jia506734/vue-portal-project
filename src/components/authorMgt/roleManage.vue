@@ -108,16 +108,17 @@
         width="40%">
         <div class="role-div">
             <el-tree
-            :props="props"
-            :load="loadNode"
-            lazy
-            @check-change="handleCheckChange"
-            node-key="id"
-            :default-expanded-keys="[1, 2]"
-            show-checkbox>
+                ref="tree"
+                :props="props"
+                :data="treeDataCur"
+                show-checkbox
+                node-key="id"
+                :default-expanded-keys="[]"
+                :default-checked-keys="defaultCheckedKeys"
+                @check-change="saveTree">
             </el-tree>
             <div style="margin-top:20px;text-align: center;">
-                <el-button type="primary">保存</el-button>
+                <el-button @click="saveTree" type="primary">保存</el-button>
                 <el-button @click="roleNewVisible = false">取消</el-button>
             </div>
         </div>
@@ -126,6 +127,7 @@
 </template>
 <script>
 import axios from "axios"
+import {mapActions, mapState} from 'vuex'
 export default {
     data(){
       return{
@@ -144,11 +146,13 @@ export default {
             roleName:'',
             roleDesc:'',
         },
-         props: {
-          label: 'name',
-          children: 'zones',
-        //   isLeaf: 'leaf'
+        props: {
+            label: 'label',
+            children: 'children'
         },
+        treeData:[],
+        treeDataCur: [],
+        defaultCheckedKeys: [],
         count: 1,
         rulesInline:{
           tenantCode:[
@@ -160,7 +164,11 @@ export default {
         },
       }
     },
+    computed:{
+        ...mapState(["tenantId"]),
+    },
     created(){
+      this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getAllDate();
       this.getAllTenant();
     },
@@ -194,52 +202,57 @@ export default {
         handleCheckChange(data, checked, indeterminate) {
             console.log(data, checked, indeterminate);
         },
-        handleNodeClick(data) {
-            
+        handleNodeClick(data) {   
             console.log(data);
-        },
-        loadNode(node, resolve) {
-            if(node.label==="新建"||node.label==="编辑"||node.label==="删除"||node.level > 2){
-                return resolve([]);
-            }
-            // if (node.level === 0) {
-            //     return resolve([{ name: 'Root' }]);
-            // }
-            if (node.level === 0) {
-                return resolve([{ name: '线路管理' },{ name: '门票管理' },{ name: '权限管理' }]);
-            }
-            if (node.level === 1&&node.label === "权限管理") {
-                return resolve([{ name: '菜单管理' },{ name: '角色管理' },{ name: '用户管理' },{ name: ' 租户管理' }]);
-            }
-            setTimeout(() => {
-                const data = [{
-                    name: '新建',
-                    // leaf: true
-                }, {
-                    name: '编辑',
-                    // leaf: true
-                }, {
-                    name: '删除',
-                    // leaf: true
-                }];
-
-                resolve(data);
-            }, 500);
-            
         },
         roleAuth(){
             if(this.multipleSelection.length==1){
                 this.roleNewVisible = true;
                 this.selectedRole = this.multipleSelection[0].roleId;
+                this.getRoleRight(this.multipleSelection[0].tenantCode);
             }else{
-                this.$notify.error({
+                this.$notify({
+                    duration:2000,
                     message: '请选择一个且最多一个角色',
                     type: 'waining'
                 });
             }
             
         },
-      //多选选择项
+        getRoleRight(tenantCode){
+            var _this = this;
+            axios
+            .get("/auth/menu/tree/"+tenantCode+"/"+this.selectedRole)
+            .then(function(response){
+                _this.treeData = response.data.data;
+                _this.defaultCheckedKeys = []
+                _this.stepRunTree(_this.treeData,_this.treeDataCur)
+            })
+        },
+        //递归遍历树结构方法
+        stepRunTree(tree,treeNow){
+            for(var key in tree){
+                treeNow.push({
+                    id:"",
+                    label:"",
+                    children:[]
+                });
+                treeNow[key].id = tree[key].menuId;
+                treeNow[key].label = tree[key].menuName
+                if(tree[key].checked){
+                    this.defaultCheckedKeys.push(tree[key].menuId)
+                }
+                if(tree[key].childrenMenuList&&tree[key].childrenMenuList.length>0){
+                    this.stepRunTree(tree[key].childrenMenuList,treeNow[key].children)
+                }
+            }
+        },
+        //保存树
+        saveTree(){
+            var a = this.$refs.tree.getCheckedKeys(true);
+            console.log(a)
+        },
+        //多选选择项
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
@@ -267,13 +280,15 @@ export default {
                                 _this.roleNewAddVisible=false;
                                 _this.isCreate=false
                                 _this.getAllDate();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
 
                             }else{
-                                _this.$notify.error({
+                                _this.$notify({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'waining'
                                 });
@@ -287,12 +302,14 @@ export default {
                                _this.roleNewAddVisible=false;
                                 _this.isCreate=false
                                 _this.getAllDate();
-                                _this.$notify({
+                                _this.$notify({                     
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'warning'
                                 });
@@ -313,7 +330,8 @@ export default {
       moreDeleteClick(){
           let _this = this;
           if(this.multipleSelection.length==0){
-              this.$notify({
+              this.$notify({                     
+                  duration:2000,
                 message: '请选择至少一个角色',
                 type: 'warning'
             });
@@ -328,7 +346,8 @@ export default {
                 .delete("/auth/role",{data: param})
                 .then(function(response){
                     if(response.data.success){
-                        _this.$notify({
+                        _this.$notify({                     
+                            duration:2000,
                             message: response.data.message,
                             type: 'success'
                         });
@@ -343,7 +362,7 @@ export default {
         let _this=this;
         _this.tableLoading= false;
         axios
-        .get("/auth/all_roles")
+        .get("/auth/roles?tenantCode="+this.$store.state.tenantId)
         .then(function(response){
             _this.tableLoading= false;
             _this.roleData = response.data.data;
