@@ -114,8 +114,7 @@
                 show-checkbox
                 node-key="id"
                 :default-expanded-keys="[]"
-                :default-checked-keys="defaultCheckedKeys"
-                @check-change="saveTree">
+                :default-checked-keys="defaultCheckedKeys">
             </el-tree>
             <div style="margin-top:20px;text-align: center;">
                 <el-button @click="saveTree" type="primary">保存</el-button>
@@ -221,11 +220,12 @@ export default {
         },
         getRoleRight(tenantCode){
             var _this = this;
+            this.treeDataCur = [];
+            this.defaultCheckedKeys = [];
             axios
             .get("/auth/menu/tree/"+tenantCode+"/"+this.selectedRole)
             .then(function(response){
                 _this.treeData = response.data.data;
-                _this.defaultCheckedKeys = []
                 _this.stepRunTree(_this.treeData,_this.treeDataCur)
             })
         },
@@ -249,8 +249,12 @@ export default {
         },
         //保存树
         saveTree(){
-            var a = this.$refs.tree.getCheckedKeys(true);
-            console.log(a)
+            var arr = this.$refs.tree.getCheckedKeys(true);
+            axios
+            .post("/auth/role/resource?roleId="+this.selectedRole,arr) 
+            .then(function(response){
+                debugger
+            })
         },
         //多选选择项
         handleSelectionChange(val) {
