@@ -259,11 +259,12 @@ export default {
         },
         //保存树
         saveTree(){
-            var arr = this.$refs.tree.getCheckedKeys(true);
+            var _this = this;
+            var arr = this.$refs.tree.getCheckedKeys();
             axios
             .post("/auth/role/resource?roleId="+this.selectedRole,arr) 
             .then(function(response){
-                debugger
+                _this.roleNewVisible = false;
             })
         },
         //多选选择项
