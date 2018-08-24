@@ -68,11 +68,21 @@
     <el-dialog
         :title="createOrEdit"
         :visible.sync="tenantNewVisible"
+        :close-on-click-modal="notClose"
         width="40%">
         <div class="tenant-div">
             <el-form :model="tenantForm" :rules="tenantRules" ref="tenantForm" label-width="100px" class="demo-tenantForm">
                 <el-form-item label="租户名称" prop="tenantName">
                     <el-input v-model="tenantForm.tenantName" @blur="mapName(tenantForm.tenantName)"></el-input>
+                </el-form-item>
+                <el-form-item label="租户期限" >
+                    <el-col :span="11">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.dateFrom" style="width: 100%;"></el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="1">-</el-col>
+                    <el-col :span="12">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.dateTo" style="width: 100%;"></el-date-picker>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="租户描述" prop="tenantDesc">
                     <el-input type="textarea" v-model="tenantForm.tenantDesc"></el-input>
@@ -108,10 +118,13 @@ export default {
     data(){
       return{
         tenantName:'',
+        notClose:false,
         createOrEdit:'租户管理>新建',
         tenantForm:{//租户form
             tenantName:'',
             tenantDesc:'',
+            dateFrom:'',
+            dateTo:'',
             tenantAdminId:'',
         },
         tenantRules:{//租户规则

@@ -116,14 +116,15 @@
   <el-dialog
       :title="createOrEdit"
       :visible.sync="addNewVisible"
+      :close-on-click-modal="notClose"
       width="30%">
       <div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="菜单名称" prop="menuName">
                   <el-input v-model="ruleForm.menuName" @blur="mapName(ruleForm.menuName)"></el-input>
               </el-form-item>
-              <el-form-item label="父级菜单" prop="parentMenuCode">
-                  <el-input v-model="ruleForm.parentMenuCode" disabled=""></el-input>
+              <el-form-item label="父级菜单" prop="parentMenu">
+                  <el-input v-model="ruleForm.parentMenu" disabled=""></el-input>
               </el-form-item>
               <el-form-item label="租户" prop="tenantCode">
                 <el-select v-model="ruleForm.tenantCode" placeholder="请选择租户">
@@ -168,6 +169,7 @@
   <el-dialog
       title="菜单管理>资源号管理"
       :visible.sync="resourceVisible"
+      :close-on-click-modal="notClose"
       width="45%">
         <div>
             <el-row >
@@ -222,6 +224,7 @@
             </el-table>
             <el-dialog
                 title="资源号新增"
+                :close-on-click-modal="notClose"
                 :visible.sync="resourceNewVisible"
                 width="35%"
                 append-to-body>
@@ -259,6 +262,7 @@ export default {
     data(){
       return{
         isMenuCreate:false,
+        notClose:false,
         menuName:'',
         menuFather:'',
         menuData:[],//菜单管理表格
@@ -635,7 +639,7 @@ export default {
                 menuName: '',
                 parentMenu: '',
                 parentMenuCode:'',
-                tenantCode:'',
+                tenantCode:this.$store.state.tenantId,
                 menuOrder: '',
                 // style: '',
                 // icon: '',
@@ -649,8 +653,8 @@ export default {
                 });
                 return false;
             }else if(selectedMenu.length==1){
-                this.ruleForm.parentMenu=selectedMenu[0].menuId;
-                this.ruleForm.parentMenuCode=selectedMenu[0].menuName;
+                this.ruleForm.parentMenu=selectedMenu[0].menuName;
+                this.ruleForm.parentMenuCode=selectedMenu[0].menuId;
             }else{
                 this.ruleForm.parentMenu="Root";
                 this.ruleForm.parentMenuCode="Root";

@@ -47,6 +47,13 @@
             </template>
             </el-table-column>
             <el-table-column
+            label="所属租户"
+            width="200">
+            <template slot-scope="scope">
+                <span>{{ scope.row.tenantCode }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
             label="角色描述"
             width="650">
             <template slot-scope="scope">
@@ -72,6 +79,7 @@
     </div>
     <el-dialog
         :title="createOrEdit"
+        :close-on-click-modal="notClose"
         :visible.sync="roleNewAddVisible"
         width="35%">
         <div class="role-div">
@@ -104,6 +112,7 @@
     </el-dialog>
     <el-dialog
         title="角色管理>角色授权"
+        :close-on-click-modal="notClose"
         :visible.sync="roleNewVisible"
         width="40%">
         <div class="role-div">
@@ -139,6 +148,7 @@ export default {
         isCreate:false,//是否新建
         roleData:[],//
         tenantData:[],//所有租户
+        notClose:false,
         tableLoading:false,
         roleInline:{//用户form
             tenantCode:'',
@@ -411,6 +421,11 @@ export default {
 }
 </script>
 
+<style>
+  .el-select{
+      width:100%;
+  }
+</style>
 <style scope>
   .top-class{
     height: 35px;
@@ -419,4 +434,5 @@ export default {
     border: 1px solid #ddd;
     line-height: 35px;
   }
+
 </style>

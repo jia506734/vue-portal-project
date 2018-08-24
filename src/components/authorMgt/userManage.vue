@@ -3,10 +3,12 @@
       <div class="top-class"><span style="margin-left: 10px;">用户管理</span></div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
-            <el-col :span="2" >用户名</el-col>
+            <el-col :span="1" >用户名</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model="userName" placeholder="输入用户名"></el-input></el-col>
             <el-col :span="1">手机</el-col>
             <el-col :span="5" style="margin-right:30px;"><el-input v-model.number="userMobile" placeholder="输入手机"></el-input></el-col>
+            <!--<el-col :span="1">所属租户</el-col>
+            <el-col :span="5" style="margin-right:30px;"><el-input v-model="userTenant" placeholder="输入所属租户"></el-input></el-col>-->
             <el-col :span="4"><el-button type="primary" @click="searchUserData">查询</el-button></el-col>
         </el-row>
         <el-row style="margin-top:20px">
@@ -111,6 +113,7 @@
     <el-dialog
         :title="createOrEdit"
         :visible.sync="userNewVisible"
+        :close-on-click-modal="notClose"
         width="35%">
         <div>
             <el-form :model="userInline" :rules="rulesInline" ref="userInline" label-width="120px" class="demo-userInline">
@@ -169,6 +172,7 @@
     </el-dialog>
         <el-dialog
         title="角色管理->角色绑定"
+        :close-on-click-modal="notClose"
         :visible.sync="roleBindShow"
         width="45%">
         <div class="borderdiv">
@@ -233,8 +237,10 @@ export default {
         };
       return{
         createOrEdit:'用户管理>新增',
+        userTenant:'',//所属租户
         isUserCreated:false,
         roleBindShow:false,
+        notClose:false,
         tenantData:[],//所有租户
         userInline:{//用户form
             userId:'',
@@ -384,7 +390,8 @@ export default {
                       message: '添加成功',
                       type: 'success'
                     });
-                    _this.getRoleData()
+                    _this.roleBindShow = false;
+                    _this.getUserManageData();
                 }
             })
         },
@@ -479,7 +486,7 @@ export default {
         searchUserData(){
             let _this=this;
             axios
-            .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile)
+            .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile+"&tenantCode="+this.$store.state.tenantId)
              .then(function(response){
                  _this.userData = response.data.data;
              })
@@ -611,6 +618,9 @@ export default {
 }
 </script>
 <style>
+    .el-select{
+        width: 100%;
+    }
     .el-date-editor.el-input, .el-date-editor.el-input__inner{
         width: 100% !important;
     }
