@@ -83,7 +83,7 @@
                     <el-input v-model="tenantForm.tenantName" @blur="mapName(tenantForm.tenantName)"></el-input>
                 </el-form-item>
                 <el-form-item label="租户期限" >
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.validDate" style="width: 100%;"></el-date-picker>
                     </el-col>
                 </el-form-item>
@@ -235,9 +235,16 @@ export default {
                  _this.tenantData = response.data.data;
              })
         },
+        getTime(time){
+            let year = time.getFullYear();
+            let month = time.getMonth()+1;
+            let day = time.getDate();
+            return (year+'-'+month+'-'+day)
+        },
         //租户新增
         submitTenantForm(formName){
-            let postData = this.tenantForm
+            let postData = this.tenantForm;
+            this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
             let _this = this;
             this.$refs[formName].validate((valid) => {
                 if (valid){
@@ -310,6 +317,7 @@ export default {
             this.tenantNewVisible=true;
             this.isTenantCreated=false;
             this.tenantForm.tenantId = row.tenantId;
+            this.tenantForm.validDate = row.validDate;
             this.tenantForm.tenantName = row.tenantName;
             this.tenantForm.tenantDesc = row.tenantDesc;
             this.tenantForm.tenantAdminId = row.tenantAdminId;
