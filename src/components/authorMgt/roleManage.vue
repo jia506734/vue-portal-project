@@ -162,6 +162,7 @@ export default {
         treeData:[],
         treeDataCur: [],
         defaultCheckedKeys: [],
+        checkedKeys:[],
         count: 1,
         rulesInline:{
           tenantCode:[
@@ -231,12 +232,15 @@ export default {
         getRoleRight(tenantCode){
             var _this = this;
             this.treeDataCur = [];
-            this.defaultCheckedKeys = [];
+            this.checkedKeys = [];
             axios
             .get("/auth/menu/tree/"+tenantCode+"/"+this.selectedRole)
             .then(function(response){
                 _this.treeData = response.data.data;
                 _this.stepRunTree(_this.treeData,_this.treeDataCur)
+                setTimeout(function(){
+                    _this.$refs.tree.setCheckedKeys(_this.checkedKeys)
+                },50)
             })
         },
         //递归遍历树结构方法
@@ -250,7 +254,7 @@ export default {
                 treeNow[key].id = tree[key].menuId;
                 treeNow[key].label = tree[key].menuName
                 if(tree[key].checked){
-                    this.defaultCheckedKeys.push(tree[key].menuId)
+                    this.checkedKeys.push(tree[key].menuId)
                 }
                 if(tree[key].childrenMenuList&&tree[key].childrenMenuList.length>0){
                     this.stepRunTree(tree[key].childrenMenuList,treeNow[key].children)
@@ -265,7 +269,7 @@ export default {
             .post("/auth/role/resource?roleId="+this.selectedRole,arr) 
             .then(function(response){
                 if(response.data.success){
-                    this.$notify({
+                    _this.$notify({
                         duration: 2000,
                         message: '保存成功',
                         type: 'success'
