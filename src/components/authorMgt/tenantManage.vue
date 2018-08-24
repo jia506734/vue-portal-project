@@ -43,6 +43,13 @@
             </template>
             </el-table-column>
             <el-table-column
+            label="租户期限"
+            width="200">
+            <template slot-scope="scope">
+                <span>{{ scope.row.validDate }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
             label="租户描述"
             width="500">
             <template slot-scope="scope">
@@ -76,12 +83,8 @@
                     <el-input v-model="tenantForm.tenantName" @blur="mapName(tenantForm.tenantName)"></el-input>
                 </el-form-item>
                 <el-form-item label="租户期限" >
-                    <el-col :span="11">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.dateFrom" style="width: 100%;"></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="1">-</el-col>
                     <el-col :span="12">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.dateTo" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择日期" v-model="tenantForm.validDate" style="width: 100%;"></el-date-picker>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="租户描述" prop="tenantDesc">
@@ -123,8 +126,7 @@ export default {
         tenantForm:{//租户form
             tenantName:'',
             tenantDesc:'',
-            dateFrom:'',
-            dateTo:'',
+            validDate:'',
             tenantAdminId:'',
         },
         tenantRules:{//租户规则
