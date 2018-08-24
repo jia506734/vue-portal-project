@@ -372,7 +372,9 @@ export default {
         addRole(){
             if(this.roleHaveExist.indexOf(this.choosedRole)!=-1){
                 this.$notify.error({
+                    duration:2000,
                   message: '所选角色已存在，请重新选择！',
+                  type: 'warning'
                 });
                 return
             }
@@ -526,6 +528,7 @@ export default {
         onUserSubmit(formName){
             if(this.userInline.userMobile.toString().length<11){
                  this.$notify.error({
+                    duration:2000,
                     message: '手机号码格式不正确',
                     type: 'warning'
                 });
@@ -576,6 +579,7 @@ export default {
 
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'success'
                                 });
@@ -596,6 +600,7 @@ export default {
                                 });
                             }else{
                                 _this.$notify.error({
+                                    duration:2000,
                                     message: response.data.message,
                                     type: 'warning'
                                 });

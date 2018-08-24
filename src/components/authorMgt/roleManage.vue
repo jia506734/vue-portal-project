@@ -264,7 +264,14 @@ export default {
             axios
             .post("/auth/role/resource?roleId="+this.selectedRole,arr) 
             .then(function(response){
-                _this.roleNewVisible = false;
+                if(response.data.success){
+                    this.$notify({
+                        duration: 2000,
+                        message: '保存成功',
+                        type: 'success'
+                    });
+                    _this.roleNewVisible = false;
+                }
             })
         },
         //多选选择项
