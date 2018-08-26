@@ -238,9 +238,9 @@ export default {
             .then(function(response){
                 _this.treeData = response.data.data;
                 _this.stepRunTree(_this.treeData,_this.treeDataCur)
-                setTimeout(function(){
+                _this.$nextTick(function () {
                     _this.$refs.tree.setCheckedKeys(_this.checkedKeys)
-                },50)
+                })
             })
         },
         //递归遍历树结构方法
