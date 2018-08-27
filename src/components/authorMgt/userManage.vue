@@ -446,6 +446,8 @@ export default {
         获取用户管理数据
         */
         getUserManageData(){
+            this.userName="";
+            this.userMobile ="";
             let _this=this;
             _this.tableLoading= true;
             axios
@@ -491,6 +493,16 @@ export default {
             .get("/auth/users?userName="+this.userName+"&userMobile="+this.userMobile+"&tenantCode="+this.$store.state.tenantId)
              .then(function(response){
                  _this.userData = response.data.data;
+                _this.userData.forEach(el=>{
+                    let roleName=[];
+                    let roleId=[];
+                    el.userRoleList.forEach(element=>{
+                        roleId.push(element.roleId);
+                        roleName.push(element.roleName);
+                    })
+                    el.roleName = roleName.join(';')
+                    el.roleId = roleId.join(';')
+                })
              })
         },
         userNewClick(){

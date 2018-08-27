@@ -7,7 +7,7 @@ import ticketManage from '@/components/page/ticketManage'
 import airLineManage from '@/components/page/airLineManage'
 import insuranceManage from '@/components/page/insuranceManage'
 import distributorManage from '@/components/page/distributorManage'
-import configurationManage from '@/components/page/configurationManage'
+import dictionaryMgt from '@/components/configManage/dictionaryMgt'
 //import authorManage from '@/components/page/authorManage'//权限管理
 import menuManage from '@/components/authorMgt/menuManage'
 import roleManage from '@/components/authorMgt/roleManage'
@@ -62,10 +62,11 @@ export default new Router({
         component: distributorManage,
         meta: ['分销商管理'],
       },
+      
       {
-        path: '/configurationManage',
-        component: configurationManage,
-        meta: ['配置管理'],
+        path: '/dictionaryMgt',
+        component: dictionaryMgt,
+        meta: ['字典管理'],
       },
       {
           path: '/menuManage',
@@ -87,33 +88,6 @@ export default new Router({
           component: tenantManage,
           meta: ['租户管理'],
         },
-      // {
-      //   path: '/authorManage',
-      //   component: authorManage,
-      //   meta: ['权限管理'],
-      //   children:[
-      //     {
-      //       path: '/menuManage',
-      //       component: menuManage,
-      //       meta: ['菜单管理'],
-      //     },
-      //     {
-      //       path: '/userManage',
-      //       component: userManage,
-      //       meta: ['用户管理'],
-      //     },
-      //     {
-      //       path: '/roleManage',
-      //       component: roleManage,
-      //       meta: ['角色管理'],
-      //     },
-      //     {
-      //       path: '/tenantManage',
-      //       component: tenantManage,
-      //       meta: ['租户管理'],
-      //     },
-      //   ]
-      // },
       {
         path: '/newRoute',
         component: newRoute,
