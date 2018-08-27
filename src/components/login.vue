@@ -19,7 +19,6 @@
 				    	<el-button  type="primary" @click="submitForm('loginForm')" class="submit_btn">登录></el-button>
 						<div class="else-button">注册账号</div>
 						<div class="else-button">忘记密码?</div>
-						
 				  	</el-form-item>
 				</el-form>
 	  		</section>
@@ -80,7 +79,9 @@
 		background-image: url("../assets/pictrue/7.jpg")
 	}
 	.else-button{
- 		font-size:12px;float:right
+ 		font-size:12px;
+		float:right;
+		cursor: pointer;
 	}
 	.else-button + .else-button {
 		padding-right:10px;
@@ -103,7 +104,7 @@
 		border-radius: 5px;
 		text-align: center;
 		background-color: #fff;
-		width: 25%;
+		width: 20%;
 		transform: translate(-50%,-50%);
 		-webkit-transform:translate(-50%,-50%);
 		-ms-transform: translate(-50%,-50%);

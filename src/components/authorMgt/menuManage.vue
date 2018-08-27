@@ -684,7 +684,7 @@ export default {
                     let ret =this.multipleSelection;
                     let param = [];let postData={};
                     ret.forEach(element => {
-                        if(!element.leaf){
+                        if(element.leaf){
                             toDel = true;
                             return;
                         }
