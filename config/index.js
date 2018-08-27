@@ -18,7 +18,15 @@ module.exports = {
             // pathRewrite: {
             //     '^/auth': ''   
             // }              
-        }
+        },
+        '/setting': {
+            // 测试环境
+            target: 'http://139.199.101.146:10014',  // 接口域名
+            changeOrigin: true,  //是否跨域
+            // pathRewrite: {
+            //     '^/auth': ''   
+            // }              
+        },
     },
 
     // Various Dev Server settings

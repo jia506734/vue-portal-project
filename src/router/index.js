@@ -8,7 +8,7 @@ import airLineManage from '@/components/page/airLineManage'
 import insuranceManage from '@/components/page/insuranceManage'
 import distributorManage from '@/components/page/distributorManage'
 import dictionaryMgt from '@/components/configManage/dictionaryMgt'
-//import authorManage from '@/components/page/authorManage'//权限管理
+import authorManage from '@/components/page/authorManage'//权限管理
 import menuManage from '@/components/authorMgt/menuManage'
 import roleManage from '@/components/authorMgt/roleManage'
 import userManage from '@/components/authorMgt/userManage'

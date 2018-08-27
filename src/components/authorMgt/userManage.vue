@@ -561,7 +561,8 @@ export default {
             if (valid) {
                 if(postData.userStatus =="有效"){
                     postData.userStatus =1;
-                }else{
+                }
+                if(postData.userStatus =="无效"){
                     postData.userStatus =0;
                 }
                 if(postData.userSex =="保密"){
