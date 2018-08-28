@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 const state={
 	tenantId:'',//等路人的租户Id
+	register:1,//1注册 0修改
   //全局变量
 }
 

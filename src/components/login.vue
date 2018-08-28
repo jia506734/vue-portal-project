@@ -18,7 +18,7 @@
 					<el-form-item>
 				    	<el-button  type="primary" @click="submitForm('loginForm')" class="submit_btn">登录></el-button>
 						<div class="else-button" @click="toRegister">注册账号</div>
-						<div class="else-button">忘记密码?</div>
+						<div class="else-button" @click="toChangePass">忘记密码?</div>
 				  	</el-form-item>
 				</el-form>
 	  		</section>
@@ -47,7 +47,7 @@
 			}
 		},
 		computed:{
-			...mapState(["tenantId"]),
+			...mapState(["tenantId","register"]),
 		},
 		mounted(){
 			this.showLogin = true;
@@ -56,7 +56,12 @@
     		// }
 		},
 		methods: {
+			toChangePass(){
+				this.$store.state.register= 0;
+				this.$router.push('register');
+			},
 			toRegister(){
+				this.$store.state.register= 1;
 				this.$router.push('register');
 			},
 			async submitForm(formName) {

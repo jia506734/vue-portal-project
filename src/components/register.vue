@@ -1,11 +1,11 @@
 <template>
   	<div class="login_page fillcontain">
 	  	<transition name="form-fade" mode="in-out">
-	  		<section class="form_contianer" v-show="showLogin">
+	  		<section class="form_contianer">
 		  		<div class="manage_tip">
 		  			<h1>LOGO</h1>
 		  		</div>
-				<div class="text_left" style="margin-bottom:20px;">Register 注册</div>
+				<div class="text_left" style="margin-bottom:20px;">{{formName}}</div>
 		    	<el-form :model="ruleFormAcount" :rules="rulesAcount" ref="ruleFormAcount" label-width="100px">
 					<el-form-item prop="acountName" label="用户名">
 						<el-input v-model="ruleFormAcount.acountName" placeholder="手机号/邮箱登录"></el-input>
@@ -26,7 +26,7 @@
                     <el-form-item  label="手机验证码">
                         <el-col :span="19">
                             <el-form-item prop="phoneValid">
-                                <el-input placeholder="手机验证码" v-model="ruleFormForget.phoneValid"></el-input>
+                                <el-input placeholder="手机验证码" v-model="ruleFormAcount.phoneValid"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="5">
@@ -44,44 +44,6 @@
 				</el-form>
 	  		</section>
 	  	</transition>
-		
-		<!--<el-dialog
-			:title="'忘记密码?修改密码'"
-			:visible.sync="forgetPassShow"
-			:close-on-click-modal="notClose"
-			width="20%">
-			<div>
-				<el-form :model="ruleFormForget" :rules="rulesForget" ref="ruleFormForget" label-width="100px" class="demo-ruleFormForget">
-					<el-form-item prop="acountName" label="用户名">
-						<el-input v-model="ruleFormForget.acountName" placeholder="手机号/邮箱注册"></el-input>
-					</el-form-item>
-					<el-form-item prop="acountPass" label="新密码">						
-						<el-input type="password" placeholder="密码" v-model="ruleFormForget.acountPass"></el-input>
-					</el-form-item>
-					<el-form-item prop="acountAgainPass" label="确认密码">
-						<el-input type="password" placeholder="密码" v-model="ruleFormForget.acountAgainPass"></el-input>
-					</el-form-item>
-					<el-form-item label="所属租户" prop="tenant">
-						<el-select v-model="ruleFormForget.tenant" placeholder="请选择所属租户">
-							<el-option
-							v-for="item in tenantData"
-							:key="item.tenantId"
-							:label="item.tenantName"
-							:value="item.tenantId">
-							</el-option>
-						</el-select>
-					</el-form-item>
-                    <el-form-item prop="phoneValid" label="手机验证码">
-						<el-input placeholder="手机验证码" v-model="ruleFormForget.phoneValid"></el-input>
-                        <el-button type="primary">点击获取</el-button>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="submitForgetForm('ruleFormForget')">确定</el-button>
-						<el-button type="success" @click="forgetPassShow=false">取消</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-		</el-dialog>-->
   	</div>
 </template>
 
@@ -90,38 +52,19 @@
 	import {mapActions, mapState} from 'vuex'
 	export default {
 	    data(){
-			var checkPass = (rule, value, callback) => {
-				if (!value) {
-				return callback(new Error('确认密码不能为空'));
-				}
-				setTimeout(() => {
-					if (value!=this.ruleFormForget.acountPass) {
-						callback(new Error('两次密码不一致'));
-						this.ruleFormForget.acountAgainPass ="";
-					} 
-				}, 1000);
-			};
+			// var checkPass = (rule, value, callback) => {
+			// 	if (!value) {
+			// 	return callback(new Error('确认密码不能为空'));
+			// 	}
+			// 	setTimeout(() => {
+			// 		if (value!=this.ruleFormForget.acountPass) {
+			// 			callback(new Error('两次密码不一致'));
+			// 			this.ruleFormForget.acountAgainPass ="";
+			// 		} 
+			// 	}, 1000);
+			// };
 			return {
-				ruleFormForget:{
-					acountName:'',
-					acountPass:'',
-					acountAgainPass:'',
-					tenant:'',
-				},
-				rulesForget:{
-					acountName: [
-			            { required: true, message: '请输入用户名', trigger: 'blur' },
-			        ],
-					acountPass: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
-					],
-					acountAgainPass:[
-						{ validator: checkPass, trigger: 'blur' }
-					],
-					tenant:[
-						{ required: true, message: '请选择租户', trigger: 'change'}
-					],
-				},
+                formName:'',
 				ruleFormAcount:{
 					acountName:'',
 					acountPass:'',
@@ -142,22 +85,16 @@
 						{ required: true, message: '请输入验证码', trigger: 'blur' }
 					],
 				},
-				forgetPassShow:false,
-				notClose:true,
-				showLogin: false,
 				tenantData:[],
 			}
 		},
 		computed:{
-			...mapState(["tenantId"]),
+			...mapState(["register"]),
 		},
 		mounted(){
-			this.showLogin = true;
-			// if (!this.adminInfo.id) {
-    		// 	this.getAdminData()
-    		// }
 		},
 		created(){
+            this.formName =this.$store.state.register==1?"Register 注册":"修改密码"
 			this.getTenantData();
 		},
 		methods: {
@@ -189,7 +126,7 @@
 				 });
 			},
             toBack(){
-                this.$router.push('login')
+                this.$router.push('HuiChengTianXia')
             },
 		},
 	}
