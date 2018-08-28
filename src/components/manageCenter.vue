@@ -20,14 +20,14 @@
                         <el-menu-item index="ticketManage">
                             <span slot="title">门票管理</span>
                         </el-menu-item>
-                        <!--<el-submenu index="configManage">
+                        <el-submenu index="configManage">
                             <template slot="title">
                             <span>配置管理</span>
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/dictionaryMgt">字典管理</el-menu-item>
                             </el-menu-item-group>
-                        </el-submenu>-->
+                        </el-submenu>
                         <el-submenu index="authorManage">
                             <template slot="title">
                             <span>权限管理</span>

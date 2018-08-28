@@ -5,7 +5,7 @@
                 <el-row>
                     <el-col :span="1">名称</el-col>
                     <el-col :span="4" style="margin-right:30px;"><el-input v-model="dicName" placeholder="输入名称"></el-input></el-col>
-                    <el-col :span="4"><el-button type="primary" @click="getDicData(dicName)">查询</el-button></el-col>
+                    <el-col :span="4"><el-button type="primary" @click="getDicDataByName(dicName)">查询</el-button></el-col>
                 </el-row>
                 <el-row style="margin-top:20px">
                     <el-col  :span="2">
@@ -205,7 +205,7 @@
                 })
             },
             //获取指定数据
-            getDicData(name){
+            getDicDataByName(name){
                 let _this=this;
                 axios
                 .get("/setting/dict?dictItemName="+name)

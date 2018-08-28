@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import manage from '@/components/manage'
 import login from '@/components/login'
+import register from '@/components/register'
+
 import routeManage from '@/components/page/routeManage'
 import ticketManage from '@/components/page/ticketManage'
 import airLineManage from '@/components/page/airLineManage'
@@ -26,7 +28,11 @@ export default new Router({
       path: '/HuiChengTianXia',
       component: login
     },
-    
+    {
+      path: '/register',
+      component: register,
+      meta: ['用户管理'],
+    },
     {
       path: '/manage',
       component: manage,
