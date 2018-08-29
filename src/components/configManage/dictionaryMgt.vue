@@ -11,7 +11,7 @@
                     <el-col  :span="2">
                         <span style="cursor: pointer;" @click="addNewClick"><i class="el-icon-circle-plus"></i>新增</span>
                     </el-col>
-                    <el-col  :span="2">
+                    <el-col :span="2">
                             <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
                         </el-col>
                 </el-row>
@@ -39,66 +39,66 @@
                 <el-table-column
                 label="字典名称"
                 width="130">
-                <template slot-scope="scope">
-                    <span :title="scope.row.dictItemName">{{ subStr(scope.row.dictItemName) }}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span :title="scope.row.dictItemName">{{ judgeNull(scope.row.dictItemName) }}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="字典描述"
                 width="130">
-                <template slot-scope="scope">
-                    <span :title="scope.row.dictItemDesc">{{ subStr(scope.row.dictItemDesc) }}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span :title="scope.row.dictItemDesc">{{ judgeNull(scope.row.dictItemDesc) }}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="字典类别"
                 width="130">
-                <template slot-scope="scope">
-                    <span>{{ dicType(scope.row.dictItemType) }}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span>{{ dicType(judgeNull(scope.row.dictItemType)) }}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="字典数据库"
                 width="130">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.dictTableSchema }}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span>{{ judgeNull(scope.row.dictTableSchema) }}</span>
+                    </template>
                 </el-table-column>            
                 <el-table-column
                 label="字典所在表"
                 width="130">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.dictTableName }}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span>{{ judgeNull(scope.row.dictTableName) }}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 label="字典key别名"
                 width="130">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.dictDisplayName}}</span>
-                </template>
+                    <template slot-scope="scope">
+                        <span>{{ judgeNull(scope.row.dictDisplayName)}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     label="字典value别名"
                     width="180">
                     <template slot-scope="scope">
-                        <span>{{ subTime(scope.row.dictDisplayValue) }}</span>
+                        <span>{{ judgeNull(scope.row.dictDisplayValue) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="字典序号"
                     width="180">
                     <template slot-scope="scope">
-                        <span>{{ subTime(scope.row.dictSortColName) }}</span>
+                        <span>{{ judgeNull(scope.row.dictSortColName) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="字典备注"
                     width="180">
                     <template slot-scope="scope">
-                        <span>{{ subTime(scope.row.remark) }}</span>
+                        <span>{{ judgeNull(scope.row.remark) }}</span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <el-dialog
                 :title="createOrEdit"
@@ -187,6 +187,14 @@
             this.getDicData();
         },
         methods:{
+            //切割时间
+            subTime(time){
+                return time.substring(0,19);
+            },
+            //判null变空字符串
+            judgeNull(obj){
+                return obj==null?"":obj
+            },
             //字典类别
             dicType(type){
                 if(type==1){
@@ -244,10 +252,12 @@
                 this.ruleForm.dictDisplayValue = row.dictDisplayValue;
                 this.ruleForm.dictSortColName = row.dictSortColName;
                 this.ruleForm.remark = row.remark;
+                this.ruleForm['dictItemId'] = row.dictItemId;
                 this.createOrEdit='字典管理>编辑';
             },
             //提交字典数据
             submitMenuForm(formName){
+                let _this = this
                 let postData=this.ruleForm;
                 if(postData.dictItemType=="独立表"){
                     postData.dictItemType =1;
@@ -269,7 +279,18 @@
                                         message: response.data.message,
                                         type: 'success'
                                     });
-                                    _this.getResourceData();
+                                    _this.getDicData();
+                                    _this.ruleForm = {
+                                        dictItemName:'',
+                                        dictItemDesc:'',
+                                        dictItemType:'',
+                                        dictTableSchema:'',
+                                        dictTableName:'',
+                                        dictDisplayName:'',
+                                        dictDisplayValue:'',
+                                        dictSortColName:'',
+                                        remark:'',
+                                    }
                                 }else{
                                     _this.$notify.error({
                                         message: response.data.message,
@@ -289,7 +310,18 @@
                                         message: response.data.message,
                                         type: 'success'
                                     });
-                                    _this.getResourceData();
+                                    _this.getDicData();
+                                    _this.ruleForm = {
+                                        dictItemName:'',
+                                        dictItemDesc:'',
+                                        dictItemType:'',
+                                        dictTableSchema:'',
+                                        dictTableName:'',
+                                        dictDisplayName:'',
+                                        dictDisplayValue:'',
+                                        dictSortColName:'',
+                                        remark:'',
+                                    }
                                 }else{
                                     _this.$notify.error({
                                         message: response.data.message,
@@ -310,7 +342,34 @@
                 this.addNewVisible=true;
             },
             moreDeleteClick(){
-
+                if(this.multipleSelection.length==0){
+                    this.$notify({                     
+                        duration:2000,
+                        message: '请先选择需要删除的字典',
+                        type: 'warning'
+                    });
+                    return
+                }
+                let _this = this
+                let arr = []
+                for (let key in this.multipleSelection) {
+                    arr.push({
+                        dictItemId : this.multipleSelection[key].dictItemId
+                    })
+                }
+                axios
+                .delete("/setting/dict",{data:arr})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({                     
+                            duration:2000,
+                          message: '删除成功',
+                          type: 'success'
+                        });
+                        _this.getDicData()
+                        _this.multipleSelection=[]
+                    }
+                })
             },
         },
     }
