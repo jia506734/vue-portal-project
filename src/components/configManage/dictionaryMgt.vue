@@ -12,8 +12,11 @@
                         <span style="cursor: pointer;" @click="addNewClick"><i class="el-icon-circle-plus"></i>新增</span>
                     </el-col>
                     <el-col :span="2">
-                            <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
-                        </el-col>
+                        <span style="cursor: pointer;" @click="moreDeleteClick"><i class="el-icon-delete"></i>删除</span>
+                    </el-col>
+                    <el-col  :span="2">
+                        <span style="cursor: pointer;" @click="addwordClick"><i class="el-icon-circle-plus"></i>字段</span>
+                    </el-col>
                 </el-row>
                 <el-table
                     tooltip-effect="dark"
@@ -98,7 +101,7 @@
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.remark) }}</span>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <el-dialog
                 :title="createOrEdit"
@@ -146,6 +149,89 @@
                     </el-form>
                 </div>
             </el-dialog>
+            <el-dialog
+                title="字典数据"
+                :visible.sync="dictAllData"
+                :close-on-click-modal="notClose"
+                width="35%">
+                <el-dialog
+                    title="维护字典数据"
+                    :visible.sync="dictDataShow"
+                    :close-on-click-modal="notClose"
+                    append-to-body
+                    width="30%">
+                    <div>
+                        <el-form :model="ruleFormData"  ref="ruleFormData" label-width="180px" class="demo-ruleFormData">
+                            <el-form-item label="字典数据对应的key" prop="dictDataKey">
+                                <el-input v-model="ruleFormData.dictDataKey" @blur="mapDictName(ruleFormData.dictDataKey)"></el-input>
+                            </el-form-item>
+                            <el-form-item label="字典数据对应的value" prop="dictDataValue">
+                                <el-input v-model="ruleFormData.dictDataValue" ></el-input>
+                            </el-form-item>
+                            <el-form-item label="字典数据的顺序" prop="dictDataOrder">
+                                <el-input v-model="ruleFormData.dictDataOrder" ></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitDictData('ruleFormData')">保存</el-button>
+                                <el-button @click="dictDataShow=false">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </el-dialog>
+                <div>
+                    <el-row style="margin-top:-20px">
+                        <el-col  :span="2">
+                            <span style="cursor: pointer;" @click="dictDataShow = true;isDictDataCreate = true"><i class="el-icon-circle-plus"></i>新增</span>
+                        </el-col>
+                        <el-col :span="2">
+                            <span style="cursor: pointer;" @click="deleteDictClick"><i class="el-icon-delete"></i>删除</span>
+                        </el-col>
+                    </el-row>
+                    <el-table
+                        tooltip-effect="dark"
+                        @selection-change="handleDictDataChange"
+                        ref="multipleDictTable"
+                        border
+                        v-loading = "dictDataLoading"
+                        :data="dicdetailData"
+                        style="width: 100%;margin-top:20px">
+                    <el-table-column
+                        fixed
+                        type="selection"
+                        width="55">
+                    </el-table-column>
+                    <el-table-column label="操作"  width="80" fixed>
+                        <template slot-scope="scope">
+                            <el-button
+                            size="mini"
+                            type="primary"
+                            @click="handleDictEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                    label="字典数据对应的key"
+                    width="150">
+                        <template slot-scope="scope">
+                            <span :title="scope.row.dictDataKey">{{ judgeNull(scope.row.dictDataKey) }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                    label="字典数据对应的value"
+                    width="220">
+                        <template slot-scope="scope">
+                            <span :title="scope.row.dictDataValue">{{ judgeNull(scope.row.dictDataValue) }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                    label="字典数据的顺序"
+                    width="120">
+                        <template slot-scope="scope">
+                            <span>{{ judgeNull(scope.row.dictDataOrder) }}</span>
+                        </template>
+                    </el-table-column>            
+                </el-table>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -155,6 +241,16 @@
     export default{
         data(){
             return{
+                dictAllData:false,
+                dictDataLoading:false,
+                dicdetailData:[],
+                ruleFormData:{//字典数据
+                    dictItemId:'',
+                    // dictItem:'',
+                    dictDataKey:'',
+                    dictDataValue:'',
+                    dictDataOrder:''
+                },
                 createOrEdit:"字典管理->新增",
                 addNewVisible:false,
                 tableLoading:false,
@@ -165,6 +261,7 @@
                     {name:'公用表',id:0},
                 ],
                 multipleSelection:[],//表格选中集
+                multipleDictData:[],
                 dicData:[],//字典数据集
                 ruleForm:{
                     dictItemName:'',
@@ -181,12 +278,53 @@
                     dictItemName:[{ required: true, message: '请输入字典名称', trigger: 'blur' }],
                 },
                 isDicCreate:false,
+                dictDataShow:false,
+                isDictDataCreate:false,
+                selectedDictName:'',
             }
         },
         created(){
             this.getDicData();
         },
         methods:{
+            initDitDetailData(){
+                let _this=this;
+                axios
+                .get("/setting/dict/data?dictItemName="+this.selectedDictName)
+                .then(function(response){
+                    if(response.data.data[0]==null){
+                        _this.dicdetailData    
+                    }else{
+                        _this.dicdetailData = response.data.data;
+                    }
+                })
+            },
+            //删除字典数据
+            deleteDictClick(){
+
+            },
+            addwordClick(){
+                if(this.multipleSelection.length==0){
+                    this.$notify({                     
+                        duration:2000,
+                        message: '请先选择字典',
+                        type: 'warning'
+                    });
+                    return
+                }else if(this.multipleSelection.length>1){
+                    this.$notify({                     
+                        duration:2000,
+                        message: '请选择最多一个字典',
+                        type: 'warning'
+                    });
+                    return
+                }else{  
+                    this.ruleFormData.dictItemId = this.multipleSelection[0].dictItemId;  
+                    this.selectedDictName = this.multipleSelection[0].dictItemName;  
+                    this.dictAllData = true; 
+                    this.initDitDetailData();            
+                }
+            },
             //切割时间
             subTime(time){
                 return time.substring(0,19);
@@ -221,6 +359,22 @@
                     _this.dicData = response.data.data;
                 })
             },
+            mapDictName(name){
+                // if(name){
+                //     let _this=this;
+                //     axios
+                //     .get("/setting/dict/data?dictItemName="+name)
+                //     .then(function(response){
+                //       if(response.data.success&&response.data.data.length>0){
+                //             _this.$message({
+                //                 message: '该名称已存在',
+                //                 type: 'warning'
+                //             });
+                //             _this.ruleFormData.dictDataKey="";
+                //         }
+                //     })
+                // }
+            },
             //校验用户名重复性
             mapName(name){
                 if(name){
@@ -254,6 +408,69 @@
                 this.ruleForm.remark = row.remark;
                 this.ruleForm['dictItemId'] = row.dictItemId;
                 this.createOrEdit='字典管理>编辑';
+            },
+            //提交字典字段
+            submitDictData(formName){
+                let _this = this
+                let postData=this.ruleFormData;
+                this.$refs[formName].validate((valid) => {
+                    if(valid){
+                        if(this.isDictDataCreate){
+                             axios
+                            .post("/setting/dict/data",postData)
+                            .then(function(response){
+                                if(response.data.success){
+                                    _this.dictDataShow=false;
+                                    _this.isDictDataCreate=false
+                                    _this.$notify({                     
+                                        duration:2000,
+                                        message: response.data.message,
+                                        type: 'success'
+                                    });
+                                    _this.initDitDetailData();
+                                    _this.ruleFormData = {
+                                        dictItemId:'',
+                                        dictDataKey:'',
+                                        dictDataValue:'',
+                                        dictDataOrder:''
+                                    }
+                                }else{
+                                    _this.$notify.error({
+                                        message: response.data.message,
+                                        type: 'warning'
+                                    });
+                                }
+                            })
+                        }else{
+                            postData.dictDataId = "";
+                            axios
+                            .put("/setting/dict/data",postData)
+                            .then(function(response){
+                                if(response.data.success){
+                                     _this.dictDataShow=false;
+                                    _this.isDictDataCreate=false
+                                    _this.$notify({                     
+                                        duration:2000,
+                                        message: response.data.message,
+                                        type: 'success'
+                                    });
+                                    _this.initDitDetailData();
+                                    _this.ruleFormData = {
+                                        dictItemId:'',
+                                        dictDataKey:'',
+                                        dictDataValue:'',
+                                        dictDataOrder:''
+                                    }
+                                }else{
+                                    _this.$notify.error({
+                                        message: response.data.message,
+                                        type: 'warning'
+                                    });
+                                }
+                            })
+                        }
+                    }
+                })
             },
             //提交字典数据
             submitMenuForm(formName){
@@ -336,6 +553,9 @@
 
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+            },
+            handleDictDataChange(){
+                this.multipleDictData = val;
             },
             addNewClick(){
                 this.isDicCreate = true;
