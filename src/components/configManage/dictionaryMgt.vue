@@ -161,7 +161,7 @@
                     append-to-body
                     width="30%">
                     <div>
-                        <el-form :model="ruleFormData"  ref="ruleFormData" label-width="180px" class="demo-ruleFormData">
+                        <el-form :model="ruleFormData" :rules="rulesData" ref="ruleFormData" label-width="180px" class="demo-ruleFormData">
                             <el-form-item label="字典数据对应的key" prop="dictDataKey">
                                 <el-input v-model="ruleFormData.dictDataKey" @blur="mapDictName(ruleFormData.dictDataKey)"></el-input>
                             </el-form-item>
@@ -205,7 +205,7 @@
                             <el-button
                             size="mini"
                             type="primary"
-                            @click="handleDictEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+                            @click="dictDataEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -251,6 +251,12 @@
                     dictDataValue:'',
                     dictDataOrder:''
                 },
+                rulesData:{
+                    dictDataOrder:[
+                        { required: false, message: '请输入字典名称', trigger: 'blur' },
+                        {pattern: /^[1-9]\d*$/,message: '只能输入数字'},
+                    ],
+                },
                 createOrEdit:"字典管理->新增",
                 addNewVisible:false,
                 tableLoading:false,
@@ -289,14 +295,12 @@
         methods:{
             initDitDetailData(){
                 let _this=this;
+                this.dictDataLoading = true;
                 axios
                 .get("/setting/dict/data?dictItemName="+this.selectedDictName)
                 .then(function(response){
-                    if(response.data.data[0]==null){
-                        _this.dicdetailData    
-                    }else{
-                        _this.dicdetailData = response.data.data;
-                    }
+                    _this.dictDataLoading = false;
+                    _this.dicdetailData = response.data.data;
                 })
             },
             //删除字典数据
@@ -392,6 +396,15 @@
                     })
                 }
             },
+            dictDataEdit(index, row){
+                this.dictDataShow=true;
+                this.isDictDataCreate=false;
+                this.ruleFormData.dictItemId = this.multipleSelection[0].dictItemId;
+                this.ruleFormData.dictDataKey = row.dictDataKey;
+                this.ruleFormData.dictDataValue = row.dictDataValue;
+                this.ruleFormData.dictDataOrder = row.dictDataOrder;
+                this.ruleFormData.dictDataId = row.dictDataId;
+            },
             //编辑字典
             handleDictEdit(index, row){
                 this.addNewVisible=true;
@@ -442,7 +455,6 @@
                                 }
                             })
                         }else{
-                            postData.dictDataId = "";
                             axios
                             .put("/setting/dict/data",postData)
                             .then(function(response){
@@ -554,13 +566,45 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            handleDictDataChange(){
+            handleDictDataChange(val){
                 this.multipleDictData = val;
             },
             addNewClick(){
                 this.isDicCreate = true;
                 this.addNewVisible=true;
             },
+            //删除字典数据
+            deleteDictClick(){
+                if(this.multipleDictData.length==0){
+                    this.$notify({                     
+                        duration:2000,
+                        message: '请先选择需要删除的数据',
+                        type: 'warning'
+                    });
+                    return
+                }
+                let _this = this
+                let arr = []
+                for (let key in this.multipleDictData) {
+                    arr.push({
+                        dictDataId : this.multipleDictData[key].dictDataId
+                    })
+                }
+                axios
+                .delete("/setting/dict/data",{data:arr})
+                .then(function(response){
+                    if(response.data.success){
+                        _this.$notify({                     
+                            duration:2000,
+                          message: '删除成功',
+                          type: 'success'
+                        });
+                        _this.initDitDetailData()
+                        _this.multipleDictData=[]
+                    }
+                })
+            },
+            //删除字典
             moreDeleteClick(){
                 if(this.multipleSelection.length==0){
                     this.$notify({                     
