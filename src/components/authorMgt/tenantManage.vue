@@ -56,7 +56,7 @@
             <el-table-column
             label="租户管理员" width="180">
             <template slot-scope="scope">
-                <span>{{ scope.row.tenantAdminId }}</span>
+                <span>{{getNameByDict(scope.row.tenantAdminId) }}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -142,13 +142,41 @@ export default {
         tenantData:[],//租户表格
         loading:false,//远程搜索的
         userOptions: [],
+        dictData:[],//字典数据
       }
     },
     created(){
         this.getUserManageData();
         this.getTenantManageData();
+        this.getDictData();
     },
     methods:{
+        //获取字典数据
+        getDictData(){
+            let _this=this;
+            axios
+            .get("/setting/dict/map/USER")
+            .then(function(response){
+                if(response.data.success){
+                    let resKeys =Object.keys(response.data.data);
+                    let resValues =Object.values(response.data.data);
+                    resKeys.forEach(function(el,index){
+                        _this.dictData.push({key:el,value:resValues[index]});
+                    })
+                }
+            })
+        },  
+        //翻译租户Code
+        getNameByDict(key){
+            let ret='';
+            this.dictData.forEach(function(element){
+                if(element.key==key){
+                    ret = element.value;
+                    return false;
+                }
+            })
+            return ret;
+        },
         //新建租户校验是否重名
         mapName(name){
             if(name){
@@ -231,7 +259,9 @@ export default {
         //租户新增
         submitTenantForm(formName){
             let postData = this.tenantForm;
-            this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
+            if(this.isTenantCreated){
+                this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
+            }
             let _this = this;
             this.$refs[formName].validate((valid) => {
                 if (valid){
