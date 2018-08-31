@@ -210,7 +210,7 @@
                 </el-table-column>
             </el-table>
             <el-dialog
-                title="资源号新增"
+                :title="creorEdi"
                 :close-on-click-modal="notClose"
                 :visible.sync="resourceNewVisible"
                 width="35%"
@@ -261,6 +261,7 @@ export default {
         resourceNewVisible:false,
         sourceLoading:false,
         createResource:false,
+        creorEdi:'资源号新增',
         tenantData:[],//所有租户
         isResourceCreate:false,//资源号新建/编辑
         visibilityData:[
@@ -559,7 +560,8 @@ export default {
                         .then(function(response){
                             if(response.data.success){
                                 _this.resourceNewVisible=false;
-                                _this.createResource=false
+                                _this.createResource=false;
+                                _this.creorEdi ='资源号新增';
                                 _this.$notify({                     
                                     duration:2000,
                                     message: response.data.message,
@@ -754,14 +756,14 @@ export default {
         },
         //编辑资源号
         handleResourceEdit(index, row){
+            this.creorEdi='资源号编辑';
             this.resourceNewVisible = true;
             this.isResourceCreate=false;
-            
             this.formInline={
                 resourceName: row.resourceName,
                 resourceId: row.resourceId,
                 ownerCode: row.ownerCode,
-                ownerName:  row.ownerCode,//row.ownerName,
+                ownerName: this.getNameByDict(row.ownerCode,'menu'),//row.ownerName,
                 resourceStatus:row.resourceStatus==1?'是':'否',
             }
         },
@@ -800,6 +802,11 @@ export default {
 }
 </script>
 
+<style>
+ .el-select {
+    width:100%
+  }
+</style>
 <style scope>
   .top-class{
     height: 35px;
