@@ -21,13 +21,12 @@
             ref="multipleTable"
             border
             :data="tenantData"
-            style="width: 180%;margin-top:20px">
+            style="margin-top:20px">
             <el-table-column
                 type="selection"
-                fixed
-                width="55">
+                fixed >
             </el-table-column>
-            <el-table-column label="操作"  width="80" fixed>
+            <el-table-column label="操作" width="80" fixed>
                 <template slot-scope="scope">
                     <el-button
                     size="mini"
@@ -35,37 +34,33 @@
                     @click="handleTenantEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
                 </template>
             </el-table-column>
-            <el-table-column
-            label="租户名称"
-            width="200">
-            <template slot-scope="scope">
+            <el-table-column width="180"
+            label="租户名称" >
+            <template slot-scope="scope" >
                 <span>{{ scope.row.tenantName }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="租户期限"
-            width="200">
+            label="租户期限" width="180">
             <template slot-scope="scope">
                 <span>{{ scope.row.validDate }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="租户描述"
-            width="500">
+            label="租户描述" 
+            :show-overflow-tooltip="true">
             <template slot-scope="scope">
-                <span :title="scope.row.tenantDesc">{{ subStr(scope.row.tenantDesc) }}</span>
+                <span :title="scope.row.tenantDesc">{{ scope.row.tenantDesc }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="租户管理员"
-            width="130">
+            label="租户管理员" width="180">
             <template slot-scope="scope">
                 <span>{{ scope.row.tenantAdminId }}</span>
             </template>
             </el-table-column>
             <el-table-column
-                label="创建时间"
-                width="160">
+                label="创建时间" width="180">
                 <template slot-scope="scope">
                     <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
@@ -154,14 +149,6 @@ export default {
         this.getTenantManageData();
     },
     methods:{
-        //截取字符串长度
-        subStr(name){
-            if(name.length > 40){
-                return name.substring(0,40)+"...";
-            }else{
-                 return name;
-            }
-        },
         //新建租户校验是否重名
         mapName(name){
             if(name){

@@ -25,7 +25,7 @@
             border
             v-loading = "tableLoading"
             :data="roleData"
-            style="width: 100%;margin-top:20px">
+            style="margin-top:20px">
             <el-table-column
                 type="selection"
                 fixed
@@ -50,14 +50,14 @@
             label="所属租户"
             width="200">
             <template slot-scope="scope">
-                <span>{{ scope.row.tenantCode }}</span>
+                <span>{{getNameByDict(scope.row.tenantCode) }}</span>
             </template>
             </el-table-column>
             <el-table-column
             label="角色描述"
-            width="650">
+            :show-overflow-tooltip="true">
             <template slot-scope="scope">
-                <span :title="scope.row.roleDesc">{{  subStr(scope.row.roleDesc) }}</span>
+                <span :title="scope.row.roleDesc">{{ scope.row.roleDesc }}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -162,6 +162,7 @@ export default {
         treeData:[],
         treeDataCur: [],
         defaultCheckedKeys: [],
+        dictData:[],//字典集合
         checkedKeys:[],
         count: 1,
         rulesInline:{
@@ -181,16 +182,35 @@ export default {
       this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getAllDate();
       this.getAllTenant();
+      this.getDictData();
     },
     methods:{
-        //截取字符串长度
-        subStr(name){
-            if(name.length > 50){
-                return name.substring(0,50)+"...";
-            }else{
-                 return name;
-            }
-        },
+        //获取字典数据
+        getDictData(){
+            let _this=this;
+            axios
+            .get("/setting/dict/map/TENANT")
+            .then(function(response){
+                if(response.data.success){
+                    let resKeys =Object.keys(response.data.data);
+                    let resValues =Object.values(response.data.data);
+                    resKeys.forEach(function(el,index){
+                        _this.dictData.push({key:el,value:resValues[index]});
+                    })
+                }
+            })
+        },  
+        //翻译租户Code
+        getNameByDict(key){
+            let ret='';
+            this.dictData.forEach(function(element){
+                if(element.key==key){
+                    ret = element.value;
+                    return false;
+                }
+            })
+            return ret;
+        },
         //校验重复性
         mapName(name){
             if(name){

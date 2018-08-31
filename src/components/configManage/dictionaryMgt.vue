@@ -25,7 +25,7 @@
                     border
                     v-loading = "tableLoading"
                     :data="dicData"
-                    style="width: 100%;margin-top:20px">
+                    style="margin-top:20px">
                 <el-table-column
                     fixed
                     type="selection"
@@ -40,64 +40,55 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="字典名称"
-                width="130">
+                label="字典名称" >
                     <template slot-scope="scope">
                         <span :title="scope.row.dictItemName">{{ judgeNull(scope.row.dictItemName) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="字典描述"
-                width="130">
+                label="字典描述" >
                     <template slot-scope="scope">
                         <span :title="scope.row.dictItemDesc">{{ judgeNull(scope.row.dictItemDesc) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="字典类别"
-                width="130">
+                label="字典类别" >
                     <template slot-scope="scope">
                         <span>{{ dicType(judgeNull(scope.row.dictItemType)) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="字典数据库"
-                width="130">
+                label="字典数据库" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.dictTableSchema) }}</span>
                     </template>
                 </el-table-column>            
                 <el-table-column
-                label="字典所在表"
-                width="130">
+                label="字典所在表" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.dictTableName) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                label="字典key别名"
-                width="130">
+                label="字典key别名" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.dictDisplayName)}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="字典value别名"
-                    width="180">
+                    label="字典value别名" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.dictDisplayValue) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="字典序号"
-                    width="180">
+                    label="字典序号" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.dictSortColName) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="字典备注"
-                    width="180">
+                    label="字典备注" >
                     <template slot-scope="scope">
                         <span>{{ judgeNull(scope.row.remark) }}</span>
                     </template>

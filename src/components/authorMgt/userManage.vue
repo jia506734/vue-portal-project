@@ -35,7 +35,7 @@
             tooltip-effect="dark"
              @selection-change="handleSelectionChange"
              v-loading = "tableLoading"
-            style="width: 100%;margin-top:20px">
+            style="margin-top:20px">
             <el-table-column
             type="selection"
             fixed
@@ -50,22 +50,19 @@
                 </template>
             </el-table-column>
             <el-table-column
-            label="用户名"
-            width="130">
+            label="用户名" >
             <template slot-scope="scope">
                 <span>{{ scope.row.userName }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="所属租户"
-            width="130">
+            label="所属租户" >
             <template slot-scope="scope">
-                <span>{{ scope.row.userTenantName }}</span>
+                <span>{{getNameByDict(scope.row.tenantCode) }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="性别"
-            width="130">
+            label="性别" >
             <template slot-scope="scope">
                 <span v-if="scope.row.userSex==0">保密</span>
                 <span v-if="scope.row.userSex==1">帅哥</span>
@@ -73,37 +70,32 @@
             </template>
             </el-table-column>
             <el-table-column
-            label="手机"
-            width="130">
+            label="手机" >
             <template slot-scope="scope">
                 <span>{{ scope.row.userMobile }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="有效期"
-            width="130">
+            label="有效期" >
             <template slot-scope="scope">
                 <span>{{ scope.row.validDate }}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="角色"
-            width="180">
+            label="角色" >
             <template slot-scope="scope">
                 <span>{{ scope.row.roleName}}</span>
             </template>
             </el-table-column>
             <el-table-column
-            label="是否有效"
-            width="130">
+            label="是否有效" >
             <template slot-scope="scope">
                 <span v-if="scope.row.userStatus==1">是</span>
                 <span v-if="scope.row.userStatus==0">否</span>
             </template>
             </el-table-column>
             <el-table-column
-                label="创建时间"
-                width="180">
+                label="创建时间" >
                 <template slot-scope="scope">
                     <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
@@ -288,7 +280,8 @@ export default {
         options: [],
         choosedRole: '',
         roleTableData: [],
-        roleHaveExist: []
+        roleHaveExist: [],
+        dictData:[],//字典数据
       }
     },
     computed:{
@@ -299,8 +292,35 @@ export default {
       this.getUserManageData();
       this.getAllRoleDate();
       this.getTenantManageData();
+      this.getDictData();
     },
     methods:{
+        //获取字典数据
+        getDictData(){
+            let _this=this;
+            axios
+            .get("/setting/dict/map/TENANT")
+            .then(function(response){
+                if(response.data.success){
+                    let resKeys =Object.keys(response.data.data);
+                    let resValues =Object.values(response.data.data);
+                    resKeys.forEach(function(el,index){
+                        _this.dictData.push({key:el,value:resValues[index]});
+                    })
+                }
+            })
+        },  
+        //翻译租户Code
+        getNameByDict(key){
+            let ret='';
+            this.dictData.forEach(function(element){
+                if(element.key==key){
+                    ret = element.value;
+                    return false;
+                }
+            })
+            return ret
+        },
         //校验用户名重复性
          mapName(name){
             if(name){

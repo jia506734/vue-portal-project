@@ -27,11 +27,10 @@
           border
           v-loading = "tableLoading"
           :data="menuData"
-          style="width: 100%;margin-top:20px">
+          style="margin-top:20px">
           <el-table-column
           fixed
-            type="selection"
-            width="55">
+            type="selection" >
           </el-table-column>
           <el-table-column label="操作"  width="80" fixed>
             <template slot-scope="scope">
@@ -42,29 +41,25 @@
             </template>
           </el-table-column>
           <el-table-column
-          label="名称"
-          width="130">
+          label="名称" 
+          :show-overflow-tooltip="true">
           <template slot-scope="scope">
-              <span :title="scope.row.menuName">{{ subStr(scope.row.menuName) }}</span>
+              <span :title="scope.row.menuName">{{ scope.row.menuName}}</span>
           </template>
           </el-table-column>
           <el-table-column
-          label="父级菜单"
-          width="130">
+          label="父级菜单" 
+          :show-overflow-tooltip="true">
           <template slot-scope="scope">
-              <span :title="scope.row.parentMenuCode">{{ subStr(scope.row.parentMenuCode) }}</span>
+              <span :title="scope.row.parentMenuCode">{{ getNameByDict(scope.row.parentMenuCode,'menu') }}</span>
           </template>
           </el-table-column>
-          <el-table-column
-          label="租户"
-          width="130">
+          <el-table-column label="租户">
           <template slot-scope="scope">
-              <span>{{ scope.row.tenantName }}</span>
+              <span>{{ getNameByDict(scope.row.tenantCode,'dict') }}</span>
           </template>
           </el-table-column>
-          <el-table-column
-          label="顺序"
-          width="130">
+          <el-table-column label="顺序">
           <template slot-scope="scope">
               <span>{{ scope.row.menuOrder }}</span>
           </template>
@@ -84,29 +79,25 @@
           </template>
           </el-table-column> -->
           <el-table-column
-          label="首地址"
-          width="210">
+          label="首地址" >
           <template slot-scope="scope">
               <span :title="scope.row.menuUrl">{{ subStrLong(scope.row.menuUrl) }}</span>
           </template>
           </el-table-column>
           <el-table-column
-          label="是否可见"
-          width="130">
+          label="是否可见" >
           <template slot-scope="scope">
               <span>{{ getLabelById(scope.row.menuVisibility) }}</span>
           </template>
           </el-table-column>
           <el-table-column
-          label="是否有效"
-          width="130">
+          label="是否有效" >
           <template slot-scope="scope">
               <span>{{ getLabelById(scope.row.menuStatus) }}</span>
           </template>
           </el-table-column>
           <el-table-column
-                label="创建时间"
-                width="180">
+                label="创建时间" >
                 <template slot-scope="scope">
                     <span>{{ subTime(scope.row.createdDate) }}</span>
                 </template>
@@ -187,28 +178,24 @@
                 border
                 v-loading = "sourceLoading"
                 :data="sourceData"
-                style="width: 100%;margin-top:10px">
+                style="margin-top:10px">
                 <el-table-column
-                    type="selection"
-                    width="55">
+                    type="selection">
                 </el-table-column>
                 <el-table-column
-                label="资源号名称"
-                width="150">
+                label="资源号名称">
                 <template slot-scope="scope">
                     <span>{{ scope.row.resourceName }}</span>
                 </template>
                 </el-table-column>
                 <el-table-column
-                label="父级菜单"
-                width="150">
+                label="父级菜单">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.ownerCode }}</span>
+                    <span>{{ getNameByDict(scope.row.ownerCode,'menu') }}</span>
                 </template>
                 </el-table-column>
                 <el-table-column
-                label="资源号状态"
-                width="120">
+                label="资源号状态">
                 <template slot-scope="scope">
                     <span>{{getStatus(scope.row.resourceStatus)}}</span>
                 </template>
@@ -306,9 +293,11 @@ export default {
           menuVisibility:'',//可见
           menuStatus:''//有效
         },
+        dictData:[],//字典数据
         createOrEdit:'菜单管理>新增',
         isMenuCreated:false,//是否新建
         multipleSelection:[],
+        menuDictData:[],
         multipleSource:[],//资源选择
         rules: {
           menuOrder:[
@@ -334,15 +323,59 @@ export default {
         this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
         this.getTenantManageData();
         this.getmenuManageData();
+        this.getDictData();
+        this.getMenuData();
     },
     methods:{
-        //截取字符串长度
-        subStr(name){
-            if(name.length > 10){
-                return name.substring(0,10)+"...";
-            }else{
-                 return name;
+        //获取字典数据
+        getDictData(){
+            let _this=this;
+            axios
+            .get("/setting/dict/map/TENANT")
+            .then(function(response){
+                if(response.data.success){
+                    let resKeys =Object.keys(response.data.data);
+                    let resValues =Object.values(response.data.data);
+                    resKeys.forEach(function(el,index){
+                        _this.dictData.push({key:el,value:resValues[index]});
+                    })
+                }
+            })
+        },  
+        getMenuData(){
+            let _this=this;
+            axios
+            .get("/setting/dict/map/MENU")
+            .then(function(response){
+                if(response.data.success){
+                    let resKeys =Object.keys(response.data.data);
+                    let resValues =Object.values(response.data.data);
+                    resKeys.forEach(function(el,index){
+                        _this.menuDictData.push({key:el,value:resValues[index]});
+                    })
+                }
+            })
+        }, 
+        //翻译租户Code
+        getNameByDict(key,tag){
+            let ret="";
+            if(tag=='dict'){
+                this.dictData.forEach(function(element){
+                    if(element.key==key){
+                        ret = element.value;
+                        return false;
+                    }
+                })
+            }else if(tag=='menu'){
+                this.menuDictData.forEach(function(element){
+                    if(element.key==key){
+                        ret = element.value;
+                        return false;
+                    }
+                })
             }
+            
+            return ret
         },
          //截取字符串长度
         subStrLong(name){
