@@ -338,6 +338,7 @@ export default {
             this.tenantForm.tenantName = row.tenantName;
             this.tenantForm.tenantDesc = row.tenantDesc;
             this.tenantForm.tenantAdminId = row.tenantAdminId;
+            this.userOptions=[{label:this.getNameByDict(row.tenantAdminId),value:row.tenantAdminId}],
             this.createOrEdit='租户管理>编辑';
         },
         //租户删除
