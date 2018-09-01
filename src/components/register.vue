@@ -126,7 +126,7 @@
 				 });
 			},
             toBack(){
-                this.$router.push('HuiChengTianXia')
+                this.$router.push('index.html')
             },
 		},
 	}

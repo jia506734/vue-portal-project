@@ -68,17 +68,12 @@
             },
 
             selectItem(tag){
-                debugger
                 let url=window.location.href.split('#')[0];
                 let a_href = url+ '#/' + tag;
                 window.location.href=a_href;
             }
         },
-		// computed: {
-		// 	defaultActive: function(){
-		// 		return this.$route.path.replace('/', '');
-		// 	}
-        // },
+		
     }
 </script>
 <style>
