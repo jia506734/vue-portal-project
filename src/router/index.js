@@ -25,7 +25,7 @@ export default new Router({
   
   routes: [
     {
-      path: '/HuiChengTianXia',
+      path: '/index.html',
       component: login
     },
     {
