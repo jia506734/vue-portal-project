@@ -285,12 +285,10 @@
         },
         methods:{
             initDitDetailData(){
-                let _this=this;
-                this.dictDataLoading = true;
+                let _this=this;                
                 axios
                 .get("/setting/dict/data?dictItemName="+this.selectedDictName)
                 .then(function(response){
-                    _this.dictDataLoading = false;
                     _this.dicdetailData = response.data.data;
                 })
             },
@@ -339,9 +337,11 @@
             //获取数据
             getDicData(){
                 let _this=this;
+                this.dictDataLoading = true;
                 axios
                 .get("/setting/dict")
                 .then(function(response){
+                    _this.dictDataLoading = true;
                     _this.dicData = response.data.data;
                 })
             },

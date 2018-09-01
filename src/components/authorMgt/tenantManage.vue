@@ -259,10 +259,7 @@ export default {
         //租户新增
         submitTenantForm(formName){
             let postData = this.tenantForm;
-            debugger
-            if(this.isTenantCreated){
-                this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
-            }
+            this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
             let _this = this;
             this.$refs[formName].validate((valid) => {
                 if (valid){
@@ -335,7 +332,7 @@ export default {
             this.tenantNewVisible=true;
             this.isTenantCreated=false;
             this.tenantForm.tenantId = row.tenantId;
-            this.tenantForm.validDate = row.validDate;
+            this.tenantForm.validDate = new Date(row.validDate);
             this.tenantForm.tenantName = row.tenantName;
             this.tenantForm.tenantDesc = row.tenantDesc;
             this.tenantForm.tenantAdminId = row.tenantAdminId;
