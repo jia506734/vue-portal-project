@@ -259,6 +259,7 @@ export default {
         //租户新增
         submitTenantForm(formName){
             let postData = this.tenantForm;
+            debugger
             if(this.isTenantCreated){
                 this.tenantForm.validDate = this.getTime(this.tenantForm.validDate);
             }

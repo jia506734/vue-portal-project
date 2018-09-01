@@ -41,7 +41,7 @@
                         </el-submenu>
                     </el-menu>
                 </el-col>
-                <el-col  style="position:relative;left:200px;width:calc(100% - 200px);height:100%;overflow-y:scroll;">
+                <el-col class="router-style">
                    <keep-alive>
 				     <router-view></router-view>
 				  </keep-alive>
@@ -93,6 +93,13 @@
     }
     .content_container{
         height:100%;
+    }
+    .router-style{
+        position:relative;
+        left:200px;
+        width:calc(100% - 200px);
+        height:100%;
+        overflow-y:scroll;
     }
     .resourceCenter_title{  
         height:30px;
