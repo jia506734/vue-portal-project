@@ -121,7 +121,9 @@
                 :props="props"
                 :data="treeDataCur"
                 show-checkbox
+                check-strictly
                 node-key="id"
+                @check="treeCheck"
                 :default-expanded-keys="[]"
                 :default-checked-keys="defaultCheckedKeys">
             </el-tree>
@@ -185,6 +187,31 @@ export default {
       this.getDictData();
     },
     methods:{
+        //树节点选中
+        treeCheck(treeNode,checked){
+            if(checked.checkedKeys.indexOf(treeNode.id)!=-1){
+                this.stepCheckParent(treeNode.id)
+            }else{
+                this.stepCheckoutChildren(treeNode.children)
+            }            
+        },
+        //递归冒泡选中父节点
+        stepCheckParent(id){
+            if(this.$refs.tree.getNode(id).level>1){
+                let parentId = this.$refs.tree.getNode(id).parent.data.id
+                this.$refs.tree.setChecked(parentId,true)
+                this.stepCheckParent(parentId)
+            }
+        },
+        //递归取消全部字节点
+        stepCheckoutChildren(children){
+            if(children.length>0){
+                for(let key in children){
+                    this.$refs.tree.setChecked(children[key].id,false)
+                    this.stepCheckoutChildren(children[key].children)
+                }
+            }
+        },
         //获取字典数据
         getDictData(){
             let _this=this;
