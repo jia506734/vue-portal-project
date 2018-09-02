@@ -52,7 +52,7 @@
             </el-form-item>
             <el-form-item label="行程天数" required>
                 <el-col :span="3">
-                    <el-select v-model="ruleForm.dayvalue" placeholder="请选择几天">
+                    <el-select v-model="ruleForm.lineDay" placeholder="请选择几天">
                         <el-option
                             v-for="item in days"
                             :key="item.value"
@@ -63,7 +63,7 @@
                 </el-col>
                 <span class="line">-</span>
                 <el-col :span="4">
-                    <el-select v-model="ruleForm.nightvalue" placeholder="请选择几晚">
+                    <el-select v-model="ruleForm.lineNight" placeholder="请选择几晚">
                         <el-option
                             v-for="item in nights"
                             :key="item.value"
@@ -129,12 +129,12 @@
                     lineTravelWay: [],
                     lineTheme:[],
                     lineRange: '',
-                    dayvalue:'',
-                    nightvalue:'',
+                    lineDay:'',
+                    lineNight:'',
                 },
                 rules: {
-                    dayvalue:[{ required: true, message: '请选择几天', trigger: 'change' }],
-                    nightvalue:[{ required: true, message: '请选择几晚', trigger: 'change' }],
+                    lineDay:[{ required: true, message: '请选择几天', trigger: 'change' }],
+                    lineNight:[{ required: true, message: '请选择几晚', trigger: 'change' }],
                     lineName: [
                         { required: true, message: '请输入活动名称', trigger: 'blur' },
                     ],
@@ -189,7 +189,7 @@
             saveBaseInfo(){
                 this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
-                    if(ruleForm.nightvalue==""||ruleForm.dayvalue==""){
+                    if(ruleForm.lineNight==""||ruleForm.lineDay==""){
                         this.$notify({
                             duration: '2000',
                             message: '请填写行程天数',
@@ -197,7 +197,21 @@
                         });
                         return false;
                     }
-
+                    this.ruleForm.lineTenantId = this.$store.state.tenantId;
+                    let postData = this.ruleForm;
+                    let _this = this
+                    debugger
+                    axios
+                    .post("/line/baseinfo",postData)
+                    .then(res=>{
+                        if(res.data.success){
+                             _this.$notify({                     
+                                duration:2000,
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                        }
+                    })
                 } else {
                     this.$notify({
                         duration: '2000',

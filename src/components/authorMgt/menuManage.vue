@@ -496,7 +496,7 @@ export default {
             this.tableLoading = true;
             axios
             .get("/auth/menu/"+this.$store.state.tenantId+"?menuName="
-                +this.menuName+"&parentMenuCode="+this.menuFather)
+                +this.menuName+"&parentMenuName="+this.menuFather)
             .then(function(response){
                 _this.tableLoading = false;
                 _this.menuData = response.data.data;
