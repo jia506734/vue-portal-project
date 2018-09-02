@@ -26,22 +26,12 @@
             </el-form-item>
             <el-form-item label="出行方式" prop="lineTravelWay">
                 <el-checkbox-group v-model="ruleForm.lineTravelWay">
-                <el-checkbox label="自驾游" name="type"></el-checkbox>
-                <el-checkbox label="房车自驾" name="type"></el-checkbox>
-                <el-checkbox label="拼车自驾" name="type"></el-checkbox>
-                <el-checkbox label="海外自驾" name="type"></el-checkbox>
-                <el-checkbox label="海外包车" name="type"></el-checkbox>
-                <el-checkbox label="海外大巴" name="type"></el-checkbox>
+                <el-checkbox :label="item.label" v-for="item in travelWay" :key="item.value" name="type"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="线路主题" prop="lineTheme">
                 <el-checkbox-group v-model="ruleForm.lineTheme">
-                <el-checkbox label="亲子游" name="theme"></el-checkbox>
-                <el-checkbox label="森林探险" name="theme"></el-checkbox>
-                <el-checkbox label="高山滑雪" name="theme"></el-checkbox>
-                <el-checkbox label="活动赛事" name="theme"></el-checkbox>
-                <el-checkbox label="摄影风采" name="theme"></el-checkbox>
-                <el-checkbox label="民族古镇" name="theme"></el-checkbox>
+                <el-checkbox v-for="item in lineTheme" :label="item.label" :key="item.value" name="theme"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="线路状态" prop="lineStatus">
@@ -103,7 +93,23 @@
     import axios from "axios"
     export default{
         data(){
-            return{                
+            return{   
+                travelWay:[
+                    {label:'自驾游',value:0},
+                    {label:'房车自驾',value:1},
+                    {label:'拼车自驾',value:2},
+                    {label:'海外自驾',value:3},
+                    {label:'海外包车',value:4},
+                    {label:'海外大巴',value:5},
+                ],     
+                lineTheme:[
+                    {label:'亲子游',value:0},
+                    {label:'森林探险',value:1},
+                    {label:'高山滑雪',value:2},
+                    {label:'活动赛事',value:3},
+                    {label:'摄影风采',value:4},
+                    {label:'民族古镇',value:5},
+                ],        
                 days:[
                     {label:"一天",value:"1"},
                     {label:"三天",value:"3"},
@@ -189,7 +195,7 @@
             saveBaseInfo(){
                 this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
-                    if(ruleForm.lineNight==""||ruleForm.lineDay==""){
+                    if(this.ruleForm.lineNight==""||this.ruleForm.lineDay==""){
                         this.$notify({
                             duration: '2000',
                             message: '请填写行程天数',
@@ -199,15 +205,54 @@
                     }
                     this.ruleForm.lineTenantId = this.$store.state.tenantId;
                     let postData = this.ruleForm;
+                    let lineTravelWay = [];
+                    let lineTheme = [];
+                    if(postData.lineRange=='国内'){
+                        postData.lineRange = 0;
+                    }
+                    if(postData.lineRange=='海外'){
+                        postData.lineRange = 1;
+                    }
+                    postData.lineTravelWay.forEach(function(el){
+                        if(el=='自驾游'){
+                            lineTravelWay.push('0')
+                        }else if(el=='房车自驾'){
+                            lineTravelWay.push('1')
+                        }else if(el=='拼车自驾'){
+                            lineTravelWay.push('2')
+                        }else if(el=='海外自驾'){
+                            lineTravelWay.push('3')
+                        }else if(el=='海外包车'){
+                            lineTravelWay.push('4')
+                        }else{
+                            lineTravelWay.push('5')
+                        }
+                    })
+                    postData.lineTheme.forEach(function(el){
+                        if(el=='亲子游'){
+                            lineTheme.push('0')
+                        }else if(el=='森林探险'){
+                            lineTheme.push('1')
+                        }else if(el=='高山滑雪'){
+                            lineTheme.push('2')
+                        }else if(el=='活动赛事'){
+                            lineTheme.push('3')
+                        }else if(el=='摄影风采'){
+                            lineTheme.push('4')
+                        }else{
+                            lineTheme.push('5')
+                        }
+                    })
+                    postData.lineTravelWay = lineTravelWay.join(',');
+                    postData.lineTheme = lineTheme.join(',');
                     let _this = this
-                    debugger
                     axios
-                    .post("/line/baseinfo",postData)
+                    .post("http://www.hctx365.cn/line/baseinfo",postData)
                     .then(res=>{
                         if(res.data.success){
                              _this.$notify({                     
                                 duration:2000,
-                                message: response.data.message,
+                                message: res.data.message,
                                 type: 'success'
                             });
                         }
@@ -221,7 +266,7 @@
                     return false;
                 }
                 });
-            },
+            }
         }
     }
 </script>

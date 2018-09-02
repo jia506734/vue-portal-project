@@ -27,14 +27,14 @@ module.exports = {
             //     '^/auth': ''   
             // }              
         },
-        '/line': {
-            // 测试环境
-            target: 'http://139.199.101.146:10015',  // 接口域名
-            changeOrigin: true,  //是否跨域
-            // pathRewrite: {
-            //     '^/auth': ''   
-            // }              
-        },
+        // '/line': {
+        //     // 测试环境
+        //     target: 'http://www.hctx365.cn',  // 接口域名
+        //     changeOrigin: true,  //是否跨域
+        //     // pathRewrite: {
+        //     //     '^/auth': ''   
+        //     // }              
+        // },
     },
 
     // Various Dev Server settings
