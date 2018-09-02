@@ -448,7 +448,7 @@ export default {
         },
         //资源新增
         addsourceClick(){
-            
+            this.isResourceCreate = true;
             this.resourceNewVisible = true;
             let dd = this.multipleSelection[0];
             this.formInline= {

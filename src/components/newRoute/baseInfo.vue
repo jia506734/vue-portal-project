@@ -2,8 +2,8 @@
     <div>
 
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="线路名称" prop="name">
-                <el-input v-model="ruleForm.name" placeholder="请输入线路名称"></el-input>
+            <el-form-item label="线路名称" prop="lineName">
+                <el-input v-model="ruleForm.lineName" placeholder="请输入线路名称"></el-input>
             </el-form-item>
             <el-form-item label="线路美图" prop="routePic">
                 <el-upload
@@ -18,14 +18,14 @@
                     </el-upload>
             </el-form-item>
 
-            <el-form-item label="国内境外" prop="resource">
-                <el-radio-group v-model="ruleForm.resource">
+            <el-form-item label="国内境外" prop="lineRange">
+                <el-radio-group v-model="ruleForm.lineRange">
                 <el-radio label="国内"></el-radio>
                 <el-radio label="海外"></el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="出行方式" prop="type">
-                <el-checkbox-group v-model="ruleForm.type">
+            <el-form-item label="出行方式" prop="lineTravelWay">
+                <el-checkbox-group v-model="ruleForm.lineTravelWay">
                 <el-checkbox label="自驾游" name="type"></el-checkbox>
                 <el-checkbox label="房车自驾" name="type"></el-checkbox>
                 <el-checkbox label="拼车自驾" name="type"></el-checkbox>
@@ -34,8 +34,8 @@
                 <el-checkbox label="海外大巴" name="type"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="线路主题" prop="theme">
-                <el-checkbox-group v-model="ruleForm.theme">
+            <el-form-item label="线路主题" prop="lineTheme">
+                <el-checkbox-group v-model="ruleForm.lineTheme">
                 <el-checkbox label="亲子游" name="theme"></el-checkbox>
                 <el-checkbox label="森林探险" name="theme"></el-checkbox>
                 <el-checkbox label="高山滑雪" name="theme"></el-checkbox>
@@ -43,6 +43,12 @@
                 <el-checkbox label="摄影风采" name="theme"></el-checkbox>
                 <el-checkbox label="民族古镇" name="theme"></el-checkbox>
                 </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="线路状态" prop="lineStatus">
+                <el-select v-model="ruleForm.lineStatus" placeholder="请选择线路状态">
+                    <el-option label="下架" value="0"></el-option>
+                    <el-option label="上架" value="1"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="行程天数" required>
                 <el-col :span="3">
@@ -67,35 +73,26 @@
                     </el-select>
                 </el-col>
             </el-form-item>
-            <el-form-item label="出发地" prop="from">
-                <el-input v-model="ruleForm.from" placeholder="请输入20字以内的描述"></el-input>
+            <el-form-item label="出发地" prop="lineOrigin">
+                <el-input v-model="ruleForm.lineOrigin" placeholder="请输入20字以内的描述"></el-input>
             </el-form-item>
-            <el-form-item label="目的地" prop="to">
-                <el-input v-model="ruleForm.to" placeholder="请输入20字以内的描述"></el-input>
+            <el-form-item label="目的地" prop="lineDestination">
+                <el-input v-model="ruleForm.lineDestination" placeholder="请输入20字以内的描述"></el-input>
             </el-form-item>
-            <el-form-item label="注意事项" prop="atention">
-                <el-input v-model="ruleForm.atention" placeholder="请输入1000字以内的描述"></el-input>
+            <el-form-item label="注意事项" prop="lineNotice">
+                <el-input v-model="ruleForm.lineNotice" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
-            <el-form-item label="报名须知" prop="needKnow">
-                <el-input v-model="ruleForm.needKnow" placeholder="请输入1000字以内的描述"></el-input>
+            <el-form-item label="报名须知" prop="lineSignUpInfo">
+                <el-input v-model="ruleForm.lineSignUpInfo" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
-            <el-form-item label="退订保证" prop="backPromise">
-                <el-input v-model="ruleForm.backPromise" placeholder="请输入1000字以内的描述"></el-input>
+            <el-form-item label="退订保证" prop="lineUnsubscribeEnsure">
+                <el-input v-model="ruleForm.lineUnsubscribeEnsure" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
-            <el-form-item label="线路录入人" prop="owner">
-                <el-input v-model="ruleForm.owner" placeholder="请输入录入人名称"></el-input>
+            <el-form-item label="线路录入人" prop="lineEnter">
+                <el-input v-model="ruleForm.lineEnter" placeholder="请输入录入人名称"></el-input>
             </el-form-item>
-            <el-form-item label="客服电话" prop="hotLine">
-                <el-input v-model="ruleForm.hotLine" placeholder="请输入客服电话"></el-input>
-            </el-form-item>
-            <el-form-item label="俱乐部报价" prop="charge">
-                <el-input v-model="ruleForm.charge" placeholder="请输入俱乐部报价"></el-input>
-            </el-form-item>
-            <el-form-item label="同行报价" prop="otherCharge">
-                <el-input v-model="ruleForm.otherCharge" placeholder="请输入同行报价"></el-input>
-            </el-form-item>
-            <el-form-item label="市场价" prop="macketCharge">
-                <el-input v-model="ruleForm.macketCharge" placeholder="请输入市场价"></el-input>
+            <el-form-item label="客服电话" prop="lineServiceTel">
+                <el-input v-model="ruleForm.lineServiceTel" placeholder="请输入客服电话"></el-input>
             </el-form-item>
         </el-form>
     </div>
@@ -121,62 +118,56 @@
                 ],
                 fileList2:[],
                 ruleForm: {
-                    name: '',
-                    from:'',
-                    to:'',
-                    atention:'',
-                    needKnow:'',
-                    backPromise:'',
-                    owner:'',
-                    charge:'',
-                    otherCharge:'',
-                    macketCharge:'',
-                    hotLine:'',
-                    type: [],
-                    theme:[],
-                    resource: '',
+                    lineName: '',
+                    lineOrigin:'',
+                    lineDestination:'',
+                    lineNotice:'',
+                    lineSignUpInfo:'',
+                    lineUnsubscribeEnsure:'',
+                    lineEnter:'',
+                    lineServiceTel:'',
+                    lineTravelWay: [],
+                    lineTheme:[],
+                    lineRange: '',
                     dayvalue:'',
                     nightvalue:'',
                 },
                 rules: {
                     dayvalue:[{ required: true, message: '请选择几天', trigger: 'change' }],
                     nightvalue:[{ required: true, message: '请选择几晚', trigger: 'change' }],
-                    name: [
+                    lineName: [
                         { required: true, message: '请输入活动名称', trigger: 'blur' },
                     ],
-                    from: [
+                    lineOrigin: [
                         { required: true, message: '请输入出发地', trigger: 'blur' },
                         { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
                     ],
-                    to: [
+                    lineDestination: [
                         { required: true, message: '请输入目的地', trigger: 'blur' },
                         { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
                     ],
-                    atention: [
+                    lineNotice: [
                         { required: true, message: '请输入注意事项', trigger: 'blur' },
                         { min: 1, max: 1000, message: '长度在 1 到 1000 个字符', trigger: 'blur' }
                     ],
-                    needKnow: [
+                    lineSignUpInfo: [
                         { required: true, message: '请输入报名须知', trigger: 'blur' },
                         { min: 1, max: 1000, message: '长度在 1 到 1000 个字符', trigger: 'blur' }
                     ],
-                    backPromise: [
+                    lineUnsubscribeEnsure: [
                         { required: true, message: '请输入退订保证', trigger: 'blur' },
                         { min: 1, max: 1000, message: '长度在 1 到 1000 个字符', trigger: 'blur' }
                     ],
-                    atention: [
-                        { required: true, message: '请输入注意事项', trigger: 'blur' }
-                    ],
-                    hotLine: [
+                    lineServiceTel: [
                         { required: true, message: '请输入客服电话', trigger: 'blur' }
                     ],
-                    type: [
+                    lineTravelWay: [
                         { type: 'array', required: true, message: '请至少选择一个出行方式', trigger: 'change' }
                     ],
-                    theme: [
+                    lineTheme: [
                         { type: 'array', required: true, message: '请至少选择一个线路主题', trigger: 'change' }
                     ],
-                    resource: [
+                    lineRange: [
                         { required: true, message: '请选择活动资源', trigger: 'change' }
                     ]
                 }
