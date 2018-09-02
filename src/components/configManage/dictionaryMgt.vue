@@ -341,7 +341,7 @@
                 axios
                 .get("/setting/dict")
                 .then(function(response){
-                    _this.dictDataLoading = true;
+                    _this.dictDataLoading = false;
                     _this.dicData = response.data.data;
                 })
             },
