@@ -189,7 +189,7 @@
                 </template>
                 </el-table-column>
                 <el-table-column
-                label="父级菜单">
+                label="菜单">
                 <template slot-scope="scope">
                     <span>{{ getNameByDict(scope.row.ownerCode,'menu') }}</span>
                 </template>

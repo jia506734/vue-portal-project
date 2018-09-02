@@ -455,7 +455,7 @@ export default {
             let _this=this;
             _this.tableLoading= true;
             axios
-            .get("/auth/roles?roleName="+this.roleName)
+            .get("/auth/roles?roleName="+this.roleName+'&tenantCode='+this.$store.state.tenantId)
              .then(function(response){
                  _this.tableLoading= false;
                  _this.roleData = response.data.data;

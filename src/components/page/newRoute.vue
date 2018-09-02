@@ -81,10 +81,10 @@
                             <el-form-item label="市场价" prop="macketCharge">
                                 <el-input v-model="ruleForm.macketCharge" placeholder="请输入市场价"></el-input>
                             </el-form-item>
-                            <!-- <el-form-item>
-                                <el-button @click="submitForm('ruleForm')">下一步</el-button>
-                                <el-button type="primary" @click="resetForm('ruleForm')">取消</el-button>
-                            </el-form-item> -->
+                             <el-form-item>
+                                <el-button type="success" @click="submitForm('ruleForm')">保存并下一步</el-button>
+                                <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
+                            </el-form-item> 
                         </el-form>
                     </div>
                 </el-tab-pane>
