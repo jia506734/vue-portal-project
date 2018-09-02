@@ -65,7 +65,6 @@
 				this.$router.push('register');
 			},
 			async submitForm(formName) {
-				this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
                 this.$router.push('mainPage')
 			},
 		},

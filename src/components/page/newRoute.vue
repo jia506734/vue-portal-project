@@ -6,7 +6,7 @@
         <div class="tab-top">
             <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">                
                 <el-tab-pane label="基本信息" name="first">
-                    <base-info></base-info>
+                    <base-info ref="baseInfo"></base-info>
                     <div style="margin-bottom: 20px;text-align: center">
                         <el-button type="success" @click="submitForm('ruleForm')">保存并下一步</el-button>
                         <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
@@ -45,17 +45,10 @@ export default {
     },
     methods: {
         submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-            if (valid) {
-                
-            } else {
-                this.activeName2 = 'second'
-                // return false;
-            }
-            });
+            this.$refs['baseInfo'].saveBaseInfo();
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            this.$refs['baseInfo'].resetFields();            
         },
         handleClick(tab, event) {
             console.log(tab, event);

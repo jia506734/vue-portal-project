@@ -44,9 +44,9 @@
                 <el-checkbox label="民族古镇" name="theme"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="行程天数">
-                <el-col :span="11">
-                    <el-select v-model="dayvalue" placeholder="请选择">
+            <el-form-item label="行程天数" required>
+                <el-col :span="3">
+                    <el-select v-model="ruleForm.dayvalue" placeholder="请选择几天">
                         <el-option
                             v-for="item in days"
                             :key="item.value"
@@ -55,9 +55,9 @@
                         </el-option>
                     </el-select>
                 </el-col>
-                <el-col class="line" :span="1">天</el-col>
-                <el-col :span="11">
-                    <el-select v-model="nightvalue" placeholder="请选择">
+                <span class="line">-</span>
+                <el-col :span="4">
+                    <el-select v-model="ruleForm.nightvalue" placeholder="请选择几晚">
                         <el-option
                             v-for="item in nights"
                             :key="item.value"
@@ -66,7 +66,6 @@
                         </el-option>
                     </el-select>
                 </el-col>
-                <el-col class="line" :span="晚">天</el-col>
             </el-form-item>
             <el-form-item label="出发地" prop="from">
                 <el-input v-model="ruleForm.from" placeholder="请输入20字以内的描述"></el-input>
@@ -103,11 +102,11 @@
 </template>
 
 <script>
+    import {mapActions, mapState} from 'vuex'
+    import axios from "axios"
     export default{
         data(){
-            return{
-                dayvalue:'',
-                nightvalue:'',
+            return{                
                 days:[
                     {label:"一天",value:"1"},
                     {label:"三天",value:"3"},
@@ -136,11 +135,14 @@
                     type: [],
                     theme:[],
                     resource: '',
+                    dayvalue:'',
+                    nightvalue:'',
                 },
                 rules: {
+                    dayvalue:[{ required: true, message: '请选择几天', trigger: 'change' }],
+                    nightvalue:[{ required: true, message: '请选择几晚', trigger: 'change' }],
                     name: [
                         { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        // { min: 1, max: 50, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                     ],
                     from: [
                         { required: true, message: '请输入出发地', trigger: 'blur' },
@@ -180,12 +182,40 @@
                 }
             }
         },
+        computed:{
+            ...mapState(["tenantId"]),
+        },
         methods:{
             handleRemove(file, fileList) {
-                console.log(file, fileList);
             },
             handlePreview(file) {
-                console.log(file);
+            },
+            //重置基本信息表单
+            resetFields(){
+                this.$refs['ruleForm'].resetFields();
+            },
+            //保存基本信息
+            saveBaseInfo(){
+                this.$refs['ruleForm'].validate((valid) => {
+                if (valid) {
+                    if(ruleForm.nightvalue==""||ruleForm.dayvalue==""){
+                        this.$notify({
+                            duration: '2000',
+                            message: '请填写行程天数',
+                            type: 'warning'
+                        });
+                        return false;
+                    }
+
+                } else {
+                    this.$notify({
+                        duration: '2000',
+                        message: '请填写完整基本信息',
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                });
             },
         }
     }
@@ -194,5 +224,8 @@
     .demo-ruleForm{
         height: 811px;
         overflow-y: auto
+    }
+    .line{
+        float: left;
     }
 </style>

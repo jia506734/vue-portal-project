@@ -181,7 +181,6 @@ export default {
         ...mapState(["tenantId"]),
     },
     created(){
-      this.$store.state.tenantId = "ba43dd3f-a2db-11e8-8f98-52540016ed2f";
       this.getAllDate();
       this.getAllTenant();
       this.getDictData();
