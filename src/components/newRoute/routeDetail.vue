@@ -1,30 +1,5 @@
 <template >
-    <div style="margin-left:20px;">
-        <el-row>
-            <el-col :span="3"><span>行程天数</span></el-col>
-            <el-col :span="3">
-                <el-select v-model="dayvalue" placeholder="请选择">
-                    <el-option
-                        v-for="item in days"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="1"><span style="padding-left:15px">天</span></el-col>
-            <el-col :span="3">
-                <el-select v-model="nightvalue" placeholder="请选择">
-                    <el-option
-                        v-for="item in nights"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="1"><span style="padding-left:15px">晚</span></el-col>
-        </el-row>
+    <div style="margin-left:20px;">        
         <el-row style="margin-top: 20px;">
             <el-col :span="3"><span>线路编辑模式</span></el-col>
             <el-col :span="20">
@@ -66,20 +41,6 @@ import 'quill/dist/quill.bubble.css'
                     a_content:'',
                     editorOption: {}
                 },
-                dayvalue:'',
-                nightvalue:'',
-                days:[
-                    {label:"一天",value:"1"},
-                    {label:"三天",value:"3"},
-                    {label:"五天",value:"5"},
-                    {label:"七天",value:"7"},
-                ],
-                nights:[
-                    {label:"一晚",value:"1"},
-                    {label:"二晚",value:"2"},
-                    {label:"四晚",value:"4"},
-                    {label:"六晚",value:"6"},
-                ],
             }
         },
         components: {

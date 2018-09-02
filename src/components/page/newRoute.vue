@@ -7,7 +7,7 @@
             <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">                
                 <el-tab-pane label="基本信息" name="first">
                     <base-info></base-info>
-                    <div>
+                    <div style="margin-bottom: 20px;text-align: center">
                         <el-button type="success" @click="submitForm('ruleForm')">保存并下一步</el-button>
                         <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
                     </div>
@@ -31,23 +31,18 @@ import baseInfo from '../newRoute/baseInfo'
 import timeAndPrice from '../newRoute/timeAndPrice'
 import routeDetail from '../newRoute/routeDetail'
 import destination from '../newRoute/destination'
-// import E from 'wangeditor';
-
 export default {
-    // name: 'editor',
     data(){
         return{
             activeName2: 'first',
         }
     },
-
     components: {
         baseInfo,//基本信息
         timeAndPrice,//团期 价钱
         routeDetail,//线路详情
         destination
     },
-
     methods: {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {

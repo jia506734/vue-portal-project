@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="线路名称" prop="name">
                 <el-input v-model="ruleForm.name" placeholder="请输入线路名称"></el-input>
@@ -43,7 +44,30 @@
                 <el-checkbox label="民族古镇" name="theme"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-
+            <el-form-item label="行程天数">
+                <el-col :span="11">
+                    <el-select v-model="dayvalue" placeholder="请选择">
+                        <el-option
+                            v-for="item in days"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col class="line" :span="1">天</el-col>
+                <el-col :span="11">
+                    <el-select v-model="nightvalue" placeholder="请选择">
+                        <el-option
+                            v-for="item in nights"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col class="line" :span="晚">天</el-col>
+            </el-form-item>
             <el-form-item label="出发地" prop="from">
                 <el-input v-model="ruleForm.from" placeholder="请输入20字以内的描述"></el-input>
             </el-form-item>
@@ -82,6 +106,20 @@
     export default{
         data(){
             return{
+                dayvalue:'',
+                nightvalue:'',
+                days:[
+                    {label:"一天",value:"1"},
+                    {label:"三天",value:"3"},
+                    {label:"五天",value:"5"},
+                    {label:"七天",value:"7"},
+                ],
+                nights:[
+                    {label:"一晚",value:"1"},
+                    {label:"二晚",value:"2"},
+                    {label:"四晚",value:"4"},
+                    {label:"六晚",value:"6"},
+                ],
                 fileList2:[],
                 ruleForm: {
                     name: '',
