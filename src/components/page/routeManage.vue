@@ -32,7 +32,7 @@
 <script>
 import commonRoute from '../common/commonRoute'
 import route from '../../router'
-// import {mapActions, mapState} from 'vuex'
+import { mapState} from 'vuex'
 // import axios from "axios"
 export default {
   data(){
@@ -46,7 +46,9 @@ export default {
     components:{
       commonRoute,
   },
-
+  computed:{
+    ...mapState(["tenantId",'lineId']),
+  },
   methods:{      
       deleteRoute(){
         this.$refs['routemgt'].deleteRoute();

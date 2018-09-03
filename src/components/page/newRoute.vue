@@ -4,7 +4,7 @@
             <span class="route-manage-top">线路管理 > 新建线路</span>
         </div>
         <div class="tab-top">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">                
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick" :before-leave="beforeLeave">                
                 <el-tab-pane label="基本信息" name="first">
                     <base-info ref="baseInfo"></base-info>
                     <div style="margin-bottom: 20px;text-align: center">
@@ -31,6 +31,7 @@ import baseInfo from '../newRoute/baseInfo'
 import timeAndPrice from '../newRoute/timeAndPrice'
 import routeDetail from '../newRoute/routeDetail'
 import destination from '../newRoute/destination'
+import { mapState} from 'vuex'
 export default {
     data(){
         return{
@@ -42,6 +43,9 @@ export default {
         timeAndPrice,//团期 价钱
         routeDetail,//线路详情
         destination
+    },
+    computed:{
+        ...mapState(["tenantId",'lineId']),
     },
     methods: {
         submitForm(formName) {
@@ -58,8 +62,20 @@ export default {
             this.$refs['baseInfo'].resetFields();            
         },
         handleClick(tab, event) {
-            console.log(tab, event);
-        }
+            
+        },
+        beforeLeave(){
+            if(this.$store.state.lineId==""){
+                 this.$notify({
+                    duration:2000,
+                    message: '请先填写基本信息',
+                    type: 'warning'
+                });
+                return false;
+            }else{
+                return true;
+            }
+        },
 
     }
 }

@@ -266,10 +266,10 @@
                     });
                     return false;
                 }
-                });
-            }
+            });
         }
     }
+}
 </script>
 <style scoped>
     .demo-ruleForm{
