@@ -4,7 +4,7 @@
             <span class="route-manage-top">线路管理 > 新建线路</span>
         </div>
         <div class="tab-top">
-            <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">                
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">                
                 <el-tab-pane label="基本信息" name="first">
                     <base-info ref="baseInfo"></base-info>
                     <div style="margin-bottom: 20px;text-align: center">
@@ -34,7 +34,7 @@ import destination from '../newRoute/destination'
 export default {
     data(){
         return{
-            activeName2: 'first',
+            activeName: 'first',
         }
     },
     components: {
@@ -46,6 +46,13 @@ export default {
     methods: {
         submitForm(formName) {
             this.$refs['baseInfo'].saveBaseInfo();
+            if(this.activeName="first"){
+                this.activeName="second"
+            }else if(this.activeName="second"){
+                this.activeName="third"
+            }else if(this.activeName="third"){
+                this.activeName="fourth"
+            }
         },
         resetForm(formName) {
             this.$refs['baseInfo'].resetFields();            
