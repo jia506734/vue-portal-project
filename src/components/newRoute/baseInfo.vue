@@ -180,7 +180,7 @@
             }
         },
         computed:{
-            ...mapState(["tenantId"]),
+            ...mapState(["tenantId",'lineId']),
         },
         methods:{
             handleRemove(file, fileList) {
@@ -255,6 +255,7 @@
                                 message: res.data.message,
                                 type: 'success'
                             });
+                            _this.$store.state.lineId = res.data.data.lineId;
                         }
                     })
                 } else {

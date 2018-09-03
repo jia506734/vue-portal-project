@@ -163,6 +163,17 @@ export default {
         });
         return travalWays.join(',');
     },
+    //制定查询线路
+    searchRoute(name){
+        let _this = this;
+        axios
+        .get("http://www.hctx365.cn/line/baseinfo?lineTenantId="+this.$store.state.tenantId+"&lineName="+name)
+        .then(res=>{
+            if(res.data.success){
+                _this.routeData =  res.data.data;
+            }
+        })
+    },
     getRouteData(){
         let _this = this;
         axios

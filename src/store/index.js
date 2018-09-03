@@ -10,6 +10,7 @@ Vue.use(Vuex)
 const state={
 	tenantId:"ba43dd3f-a2db-11e8-8f98-52540016ed2f",//等路人的租户Id
 	register:1,//1注册 0修改
+	lineId:'',//新建线路返回的Id
   //全局变量
 }
 
