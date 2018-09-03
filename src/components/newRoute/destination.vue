@@ -1,37 +1,66 @@
 <template>
      <div>
         <el-row>
-            <el-col :span="9">
-                <img style="width:360px" src="../../assets/pictrue/1.jpg">
-            </el-col>
-            <el-col :span="15">
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>国道318线——中国人的景观大道，藏民俗风情体验圣地;</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>新都桥——摄影家的天堂，如诗如画的世外桃源;</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>理塘县——世界高城、雪域圣地、草原明珠;</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>然乌湖——著名的高原冰川湖，面积22平方公里，海拔3850米。湖畔是茂密的原始森林，碧蓝的湖水，森林倒映，清澈见底，湖面的水鸟成群，一派仙境景色;</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>嘎啦桃花村——林芝桃花节举办地，桃花、青稞、雪山、森林相映衬，美不胜收;</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24"><i class="el-icon-star-on"></i>圣城拉萨布达拉宫——雪域高原一颗璀璨、圣洁的明珠。</el-col>
-                </el-row>
+            <el-col :span="24">
+                <!-- <div id="editorElem" style="text-align:left"></div> -->
+                <div class="edit_container">
+                    <quill-editor v-model="infoForm.a_content"
+                            ref="myQuillEditor"
+                            class="editer"
+                            :options="editorOption" @ready="onEditorReady($event)">
+                    </quill-editor>
+                </div>
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
-    
+import { quillEditor } from 'vue-quill-editor' //调用编辑器
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+export default{
+        data(){
+            return{
+                editorContent:'',
+                editorOption:{},
+                routeEditType:'',
+                infoForm: {
+                    a_title: '',
+                    a_source: '',
+                    a_content:'',
+                    editorOption: {}
+                }
+            }
+        },
+        components: {
+            //使用编辑器
+            quillEditor,
+        },
+        computed: {
+            editor() {
+                return this.$refs.myQuillEditor.quill
+            }
+        },
+        methods:{
+            onEditorReady(editor) {
+            },
+        }
+    }   
 </script>
+<style scoped>
+    .quill-editor {
+        height: 445px;
+    }
+    .quill-editor .ql-container {
+        height: 380px;
+    }    
+    .ql-snow .ql-editor img {
+        max-width: 480px;
+    }
 
-<style>
-
+    .ql-editor .ql-video {
+        max-width: 480px;
+    }
 </style>
