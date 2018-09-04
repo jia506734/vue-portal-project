@@ -10,7 +10,7 @@
       </router-link> -->
       <el-button type="danger" @click="deleteRoute">删除线路</el-button>
       <el-input style="width:250px;margin-right:20px" placeholder="请输入线路名称" suffix-icon="el-icon-search" v-model="input21"> </el-input>
-      <el-button type="success" @click="searchRoute">删除线路</el-button>
+      <el-button type="success" @click="searchRoute">查询</el-button>
     </div>
       
     <div class="tabs">

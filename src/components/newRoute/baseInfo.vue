@@ -8,16 +8,20 @@
             <el-form-item label="线路美图" prop="routePic">
                 <el-upload
                     class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :file-list="fileList2"
-                    list-type="picture">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-            </el-form-item>
-
+                            ref="upload"
+                            action="http://www.hctx365.cn/line/image"
+                            :on-preview="handlePreview"
+                            :before-upload="beforeAvatarUpload"
+                            :on-remove="handleRemove"
+                            :file-list="fileList"
+                            :auto-upload = 'false'
+                            :on-success = 'handleSuccess'
+                            :data="form"
+                            name="salaryBill">
+                            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
+                            </el-upload>
+            </el-form-item>            
             <el-form-item label="国内境外" prop="lineRange">
                 <el-radio-group v-model="ruleForm.lineRange">
                 <el-radio label="国内"></el-radio>
@@ -63,6 +67,19 @@
                     </el-select>
                 </el-col>
             </el-form-item>
+            <el-form-item label="线动时间" required>
+                <el-col :span="4">
+                <el-form-item prop="lineStartDate">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineStartDate"></el-date-picker>
+                </el-form-item>
+                </el-col>
+                <span class="line">至</span>
+                <el-col :span="4">
+                <el-form-item prop="lineEndDate">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineEndDate"></el-date-picker>
+                </el-form-item>
+                </el-col>
+            </el-form-item>
             <el-form-item label="出发地" prop="lineOrigin">
                 <el-input v-model="ruleForm.lineOrigin" placeholder="请输入20字以内的描述"></el-input>
             </el-form-item>
@@ -93,7 +110,8 @@
     import axios from "axios"
     export default{
         data(){
-            return{   
+            return{
+                form:{},
                 travelWay:[
                     {label:'自驾游',value:0},
                     {label:'房车自驾',value:1},
@@ -101,7 +119,7 @@
                     {label:'海外自驾',value:3},
                     {label:'海外包车',value:4},
                     {label:'海外大巴',value:5},
-                ],     
+                ],
                 lineTheme:[
                     {label:'亲子游',value:0},
                     {label:'森林探险',value:1},
@@ -109,7 +127,7 @@
                     {label:'活动赛事',value:3},
                     {label:'摄影风采',value:4},
                     {label:'民族古镇',value:5},
-                ],        
+                ],
                 days:[
                     {label:"一天",value:"1"},
                     {label:"三天",value:"3"},
@@ -122,7 +140,7 @@
                     {label:"四晚",value:"4"},
                     {label:"六晚",value:"6"},
                 ],
-                fileList2:[],
+                fileList:[],
                 ruleForm: {
                     lineName: '',
                     lineOrigin:'',
@@ -137,6 +155,8 @@
                     lineRange: '',
                     lineDay:'',
                     lineNight:'',
+                    lineStartDate:'',
+                    lineEndDate:''
                 },
                 rules: {
                     lineDay:[{ required: true, message: '请选择几天', trigger: 'change' }],
@@ -183,6 +203,34 @@
             ...mapState(["tenantId",'lineId']),
         },
         methods:{
+            submitUpload() {
+                this.$refs.upload.submit();
+            },
+            handleSuccess(res,file,fileList){
+                if(res.code===20000){
+                    this.$message({
+                        message: '上传成功！',
+                        type: 'success'
+                    });
+                }else {
+                    this.$message({
+                        message: res.msg,
+                        type: 'error'
+                    });
+                }
+            },
+            beforeAvatarUpload(file) {
+                //let Xls = file.name.split('.');
+                this.form.lineId = this.$store.state.lineId;
+                this.form.imageName = file.name.split('.')[0];
+                this.form.imageType = file.name.split('.')[1];
+                // if(Xls[1] === 'xls'||Xls[1] === 'xlsx'){
+                //     return file
+                // }else {
+                //     this.$message.error('上传文件只能是 xls/xlsx 格式!')
+                //     return false
+                // }
+            },
             handleRemove(file, fileList) {
             },
             handlePreview(file) {
@@ -250,7 +298,7 @@
                     .post("http://www.hctx365.cn/line/baseinfo",postData)
                     .then(res=>{
                         if(res.data.success){
-                             _this.$notify({                     
+                             _this.$notify({
                                 duration:2000,
                                 message: res.data.message,
                                 type: 'success'
@@ -278,5 +326,7 @@
     }
     .line{
         float: left;
+        padding-left:10px;
+        padding-right:10px;
     }
 </style>

@@ -1,35 +1,28 @@
 <template>
     <div>
          <el-form :model="ruleFormcharge" :rules="rulescharge" ref="ruleFormcharge" label-width="100px" class="demo-ruleFormcharge">
-            <el-form-item label="线动时间" required>
-                <el-col :span="6">
-                <el-form-item prop="start">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleFormcharge.start" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-                </el-col>
-                <el-col class="line" :span="2">至</el-col>
-                <el-col :span="6">
-                <el-form-item prop="end">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleFormcharge.end" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-                </el-col>
-            </el-form-item>
-            <el-form-item label="出团时间" prop="goTime">
-                <el-checkbox-group v-model="ruleFormcharge.goTime">
-                <el-checkbox label="周一" name="type"></el-checkbox>
-                <el-checkbox label="周二" name="type"></el-checkbox>
-                <el-checkbox label="周三" name="type"></el-checkbox>
-                <el-checkbox label="周四" name="type"></el-checkbox>
-                <el-checkbox label="周五" name="type"></el-checkbox>
-                <el-checkbox label="周六" name="type"></el-checkbox>
-                <el-checkbox label="周日" name="type"></el-checkbox>
+            <el-form-item label="出团时间" prop="weeks">
+                <el-checkbox-group v-model="ruleFormcharge.weeks">
+                    <el-checkbox label="周一"></el-checkbox>
+                    <el-checkbox label="周二"></el-checkbox>
+                    <el-checkbox label="周三"></el-checkbox>
+                    <el-checkbox label="周四"></el-checkbox>
+                    <el-checkbox label="周五"></el-checkbox>
+                    <el-checkbox label="周六"></el-checkbox>
+                    <el-checkbox label="周日"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="市场价格" prop="marketCharge">
-                <el-input v-model="ruleFormcharge.marketCharge"></el-input>
+            <el-form-item label="成人价" prop="lineAdultPrice  ">
+                <el-input v-model="ruleFormcharge.lineAdultPrice  "></el-input>
             </el-form-item>
-            <el-form-item label="同业价格" prop="friendCharge">
-                <el-input v-model="ruleFormcharge.friendCharge"></el-input>
+            <el-form-item label="儿童价" prop="lineChildPrice">
+                <el-input v-model="ruleFormcharge.lineChildPrice"></el-input>
+            </el-form-item>
+            <el-form-item label="俱乐部价格" prop="lineClubPrice">
+                <el-input v-model="ruleFormcharge.lineClubPrice"></el-input>
+            </el-form-item>
+            <el-form-item label="同行价格" prop="linePeerPrice">
+                <el-input v-model="ruleFormcharge.linePeerPrice"></el-input>
             </el-form-item>
         </el-form>
         <div style="margin-left:20px">
@@ -38,93 +31,20 @@
         </div>
         <div class="timeTable">
             <el-row>
-                <el-col :span="10" class="tableleft">
+                <el-col :span="24" class="tableleft">
                     <div>2018年6月</div>
                     <div>
-                            <el-table
+                        <el-table
                             :data="tableData"
                             border
                             style="width: 100%">
-                            <el-table-column
-                            prop="Sun"
-                            label="日"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Mon"
-                            label="一"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Tues"
-                            label="二"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Wed"
-                            label="三"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Thur"
-                            label="四"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Fri"
-                            label="五"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Sat"
-                            label="六"
-                            width="65">
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-col>
-                <el-col :span="10" class="tableright">
-                    <div>2018年7月</div>
-                    <div>
-                            <el-table
-                            :data="tableData"
-                            border
-                            style="width: 100%">
-                            <el-table-column
-                            prop="Sun"
-                            label="日"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Mon"
-                            label="一"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Tues"
-                            label="二"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Wed"
-                            label="三"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Thur"
-                            label="四"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Fri"
-                            label="五"
-                            width="65">
-                            </el-table-column>
-                            <el-table-column
-                            prop="Sat"
-                            label="六"
-                            width="65">
-                            </el-table-column>
+                            <el-table-column prop="Sun" label="日"></el-table-column>
+                            <el-table-column prop="Mon" label="一" ></el-table-column>
+                            <el-table-column prop="Tues" label="二" ></el-table-column>
+                            <el-table-column prop="Wed" label="三" ></el-table-column>
+                            <el-table-column prop="Thur" label="四" ></el-table-column>
+                            <el-table-column prop="Fri" label="五" ></el-table-column>
+                            <el-table-column prop="Sat" label="六" ></el-table-column>
                         </el-table>
                     </div>
                 </el-col>
@@ -134,30 +54,23 @@
 </template>
 
 <script>
+    import {mapActions, mapState} from 'vuex'
+    import axios from "axios"
     export default{
         data(){
             return{
                 ruleFormcharge:{
-                    start:'',
-                    end:'',
-                    goTime:[],
-                    marketCharge:'',
+                    lineAdultPrice:'',
+                    lineChildPrice:'',
+                    lineClubPrice:'',
+                    linePeerPrice:'',
+                    weeks:[],
+                    lineStartDate:'2018-05-05',
+                    lineEndDate:'2018-05-25'
                 },
                 rulescharge:{
-                    start: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                    ],
-                    end: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                    ],
-                    goTime: [
+                    weeks: [
                         { type: 'array', required: true, message: '请至少选择一个出团时间', trigger: 'change' }
-                    ],
-                    marketCharge: [
-                        { required: true, message: '请输入市场价格', trigger: 'blur' },
-                    ],
-                    friendCharge: [
-                        { required: true, message: '请输入同业价格', trigger: 'blur' },
                     ],
                 },
                 tableData:[
@@ -165,14 +78,65 @@
                 ],
             }
         },
+        computed:{
+            ...mapState(["tenantId",'lineId']),
+        },
         methods:{
+            getWeekNum(days){
+                let dayNum =[];
+                if(days.indexOf('周日')>-1){
+                    dayNum.push(1);
+                }
+                if(days.indexOf('周一')>-1){
+                    dayNum.push(2);
+                }
+                if(days.indexOf('周二')>-1){
+                    dayNum.push(3);
+                }
+                if(days.indexOf('周三')>-1){
+                    dayNum.push(4);
+                }
+                if(days.indexOf('周四')>-1){
+                    dayNum.push(5);
+                }
+                if(days.indexOf('周五')>-1){
+                    dayNum.push(6);
+                }
+                if(days.indexOf('周六')>-1){
+                    dayNum.push(7);
+                }
+                return dayNum.join(',');
+            },
             //应用价格
             applyCharge(){
-
+                debugger
+                let postData = this.ruleFormcharge;
+                postData.lineId = this.$store.state.lineId;
+                postData.weeks = this.getWeekNum(postData.weeks);
+                if(this.ruleFormcharge.weeks.length==0){
+                    this.$notify({
+                        duration:2000,
+                        message: '请勾选出团时间',
+                        type: 'warning'
+                    });
+                }else{
+                    axios
+                    .post("http://www.hctx365.cn/line/price",postData)
+                    .then(res=>{
+                        if(res.data.success){
+                             _this.$notify({
+                                duration:2000,
+                                message: res.data.message,
+                                type: 'success'
+                            });
+                            _this.$store.state.lineId = res.data.data.lineId;
+                        }
+                    })
+                }
             },
             //清除价格
             clearCharge(){
-                this.ruleFormcharge.goTime=[];
+                this.ruleFormcharge.weeks=[];
             },
         },
 
@@ -189,8 +153,7 @@
         margin-top: 20px;
     }
     .tableleft{
-        margin-left: 30px;
-        margin-top: 20px;
+        margin:15px;
     }
     .timeTable{
         width:100%;
