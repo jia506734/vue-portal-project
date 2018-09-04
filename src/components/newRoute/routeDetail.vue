@@ -29,11 +29,11 @@
             </el-form-item>
             <el-form-item class="textCenter">
                 <el-button-group>
-                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext">保存并编辑后一天</el-button>      
-                  <el-button type="success" icon="el-icon-circle-check-outline">保存</el-button>
+                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext(true)">保存并编辑后一天</el-button>      
+                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext">保存</el-button>
                 </el-button-group>
-                <el-button type="warning" icon="el-icon-circle-close-outline">取消</el-button>
-                <el-button type="danger" icon="el-icon-delete">删除</el-button>
+                <el-button type="warning" icon="el-icon-circle-close-outline" @click="cancle">取消</el-button>
+                <el-button type="danger" icon="el-icon-delete" @click="deleteDay">删除</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -107,7 +107,7 @@ import axios from "axios"
                     }
                 })
             },
-            saveAndNext(){
+            saveAndNext(state){
                 let _this = this
                 axios
                 .post("http://www.hctx365.cn/line/detailinfo",this.ruleForm)
@@ -119,26 +119,44 @@ import axios from "axios"
                             type: 'success'
                         });
                         _this.dayId.push(res.data.data.lineDetailId)
-                        _this.ruleDetailArr.push(_this.ruleForm)
-                        _this.ruleForm = {
-                            lineId: "7a6bd05e-d9af-411a-99e1-cd726023125a",
-                            lineTripTitle: '',
-                            lineTotalTrip:'',
-                            lineMeals:'',
-                            lineHotel:'',
-                            lineTripIntroduce:'',
-                            lineTips:'',
-                            lineGatheringDay:'',
-                            createdBy:''
+                        _this.ruleDetailArr.push(JSON.parse(JSON.stringify(_this.ruleForm)))
+                        if(state){
+                            _this.$refs['ruleForm'].resetFields();
+                            _this.activeDay ++
                         }
-                        _this.activeDay ++
                     }
                 })
             },
             stepClick(e) {
                 this.activeDay = e.target.innerText - 1
-                this.ruleForm = this.ruleDetailArr[this.activeDay]        
+                this.ruleForm = this.ruleDetailArr[this.activeDay]
             },
+            cancle(){
+                if(this.activeDay>0){
+                    this.activeDay --
+                    this.ruleForm = this.ruleDetailArr[this.activeDay]
+                }
+            },
+            deleteDay(){
+                if(this.activeDay>=0){
+                    let _this = this
+                    let param =[{lineDetailInfoId:this.dayId[this.activeDay]}];
+                    axios
+                    .delete("http://www.hctx365.cn/line/detailinfo",{data: param})
+                    .then(res=>{
+                        if(res.data.success){
+                             _this.$notify({                     
+                                duration:2000,
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.ruleDetailArr.splice(this.activeDay,1)
+                            _this.dayId.splice(this.activeDay,1)
+                            _this.activeDay --
+                        }
+                    }) 
+                }
+            }
         }
     }
 </script>

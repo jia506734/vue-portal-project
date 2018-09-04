@@ -2,10 +2,7 @@
   	<div class="login_page fillcontain">
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer" v-show="showLogin">
-		  		<div class="manage_tip">
-		  			<h1>LOGO</h1>
-		  		</div>
-				<div class="text_left" style="margin-bottom:20px;">LOGIN 登录</div>
+				<div class="text_left" style="margin-bottom:10px;">LOGIN 登录</div>
 		    	<el-form :model="loginForm" :rules="rules" ref="loginForm">
 					<el-form-item prop="username">
 						<div class="text_left">用户名</div>
@@ -111,7 +108,7 @@
 		border-radius: 5px;
 		text-align: center;
 		background-color: #fff;
-		width: 20%;
+		width: 23%;
 		transform: translate(-50%,-50%);
 		-webkit-transform:translate(-50%,-50%);
 		-ms-transform: translate(-50%,-50%);
