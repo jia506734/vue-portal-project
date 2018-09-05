@@ -2,8 +2,8 @@
     <div style="margin-left:20px;">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item prop="day">
-                <el-steps :active="activeDay" align-center @click.native="stepClick">
-                  <el-step v-for="(item,index) in ruleDetailArr.length+1" :title="'第'+(index+1)+'天'" description=""></el-step>
+                <el-steps class="marginNo" :active="activeDay" align-center @click.native="stepClick">
+                  <el-step v-for="(item,index) in countRuleDetail" :title="'第'+(index+1)+'天'" description=""></el-step>
                 </el-steps>
             </el-form-item>
             <el-form-item label="行程标题" prop="lineTripTitle">
@@ -29,11 +29,11 @@
             </el-form-item>
             <el-form-item class="textCenter">
                 <el-button-group>
-                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext(true)">保存并编辑后一天</el-button>      
-                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext">保存</el-button>
+                  <el-button type="success" icon="el-icon-circle-check-outline" @click="saveAndNext" :disabled="state || activeDay+1<countRuleDetail">保存并编辑后一天</el-button>      
+                  <el-button type="success" icon="el-icon-circle-check-outline" @click="save" :disabled="state">保存</el-button>
                 </el-button-group>
-                <el-button type="warning" icon="el-icon-circle-close-outline" @click="cancle">取消</el-button>
-                <el-button type="danger" icon="el-icon-delete" @click="deleteDay">删除</el-button>
+                <el-button type="warning" icon="el-icon-circle-close-outline" @click="cancle" :disabled="state || activeDay!=ruleDetailArr.length || ruleDetailArr.length<=1">取消</el-button>
+                <el-button type="danger" icon="el-icon-delete" @click="deleteDay" :disabled="state || ruleDetailArr.length<=1">删除</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -47,6 +47,8 @@ import axios from "axios"
                 activeDay: 0 ,
                 dayId:[],
                 ruleDetailArr:[],
+                countRuleDetail:1,
+                state:false,
                 ruleForm: {
                     lineId: "7a6bd05e-d9af-411a-99e1-cd726023125a",
                     lineTripTitle: '',
@@ -107,38 +109,95 @@ import axios from "axios"
                     }
                 })
             },
-            saveAndNext(state){
+            saveAndNext(){
                 let _this = this
-                axios
-                .post("http://www.hctx365.cn/line/detailinfo",this.ruleForm)
-                .then(res=>{
-                    if(res.data.success){
-                         _this.$notify({                     
-                            duration:2000,
-                            message: res.data.message,
-                            type: 'success'
-                        });
-                        _this.dayId.push(res.data.data.lineDetailId)
-                        _this.ruleDetailArr.push(JSON.parse(JSON.stringify(_this.ruleForm)))
-                        if(state){
-                            _this.$refs['ruleForm'].resetFields();
-                            _this.activeDay ++
+                this.$refs['ruleForm'].validate((valid) => {
+                    if(valid){
+                        if(this.activeDay<=this.ruleDetailArr.length){
+                            this.ruleForm['lineDetailId']=this.dayId[this.activeDay]
                         }
+                        this.state = true
+                        axios
+                        .post("http://www.hctx365.cn/line/detailinfo",this.ruleForm)
+                        .then(res=>{
+                            if(res.data.success){
+                                 _this.$notify({                     
+                                    duration:2000,
+                                    message: res.data.message,
+                                    type: 'success'
+                                });
+                                _this.dayId[_this.activeDay] = res.data.data.lineDetailId
+                                _this.ruleDetailArr[_this.activeDay] = JSON.parse(JSON.stringify(_this.ruleForm))
+                                _this.countRuleDetail ++
+                                _this.$refs['ruleForm'].resetFields();
+                                _this.activeDay ++
+                            }
+                            _this.state = false
+                        })
+                    }
+                }) 
+            },
+            save(){
+                let _this = this
+                this.$refs['ruleForm'].validate((valid) => {
+                    if(valid){
+                        if(this.activeDay+1>this.dayId.length){
+                            //保存
+                            this.state = true
+                            axios
+                            .post("http://www.hctx365.cn/line/detailinfo",this.ruleForm)
+                            .then(res=>{
+                                if(res.data.success){
+                                     _this.$notify({                     
+                                        duration:2000,
+                                        message: res.data.message,
+                                        type: 'success'
+                                    });
+                                    _this.dayId[_this.activeDay] = res.data.data.lineDetailId
+                                    _this.ruleDetailArr[_this.activeDay] = JSON.parse(JSON.stringify(_this.ruleForm))
+                                }
+                                _this.state = false
+                            }) 
+                        }else{//编辑
+                            this.state = true
+                            this.ruleForm['lineDetailId']=this.dayId[this.activeDay]
+                            axios
+                            .put("http://www.hctx365.cn/line/detailinfo",this.ruleForm)
+                            .then(res=>{
+                                if(res.data.success){
+                                     _this.$notify({                     
+                                        duration:2000,
+                                        message: res.data.message,
+                                        type: 'success'
+                                    });
+                                    _this.dayId[_this.activeDay] = res.data.data.lineDetailId
+                                    _this.ruleDetailArr[_this.activeDay] = JSON.parse(JSON.stringify(_this.ruleForm))
+                                }
+                                _this.state = false
+                            }) 
+                        }
+                        
                     }
                 })
             },
             stepClick(e) {
-                this.activeDay = e.target.innerText - 1
-                this.ruleForm = this.ruleDetailArr[this.activeDay]
+                this.activeDay = e.target.innerText.replace('第','').replace('天','') - 1
+                if(this.activeDay<=this.ruleDetailArr.length-1){
+                   this.ruleForm = JSON.parse(JSON.stringify(this.ruleDetailArr[this.activeDay])) 
+               }else{
+                   this.$refs['ruleForm'].resetFields(); 
+               }
             },
             cancle(){
                 if(this.activeDay>0){
                     this.activeDay --
-                    this.ruleForm = this.ruleDetailArr[this.activeDay]
+                    this.countRuleDetail --
+                    this.ruleForm = JSON.parse(JSON.stringify(this.ruleDetailArr[this.activeDay]))
                 }
             },
             deleteDay(){
                 if(this.activeDay>=0){
+                    this.state = true
                     let _this = this
                     let param =[{lineDetailInfoId:this.dayId[this.activeDay]}];
                     axios
@@ -147,13 +206,20 @@ import axios from "axios"
                         if(res.data.success){
                              _this.$notify({                     
                                 duration:2000,
-                                message: '删除成功',
+                                message: res.data.message,
                                 type: 'success'
                             });
                             _this.ruleDetailArr.splice(this.activeDay,1)
                             _this.dayId.splice(this.activeDay,1)
-                            _this.activeDay --
+                            if(_this.activeDay==0){
+                                _this.activeDay = 0
+                            }else{
+                               _this.activeDay -- 
+                            }
+                            _this.countRuleDetail --
+                            _this.ruleForm = JSON.parse(JSON.stringify(_this.ruleDetailArr[_this.activeDay]))
                         }
+                        _this.state = false
                     }) 
                 }
             }
