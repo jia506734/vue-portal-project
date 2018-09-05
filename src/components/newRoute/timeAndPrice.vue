@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="timeAndPrice">
          <el-form :model="ruleFormcharge" :rules="rulescharge" ref="ruleFormcharge" label-width="100px" class="demo-ruleFormcharge">
             <el-form-item label="出团时间" prop="weeks">
                 <el-checkbox-group v-model="ruleFormcharge.weeks">
@@ -32,19 +32,158 @@
         <div class="timeTable">
             <el-row>
                 <el-col :span="24" class="tableleft">
-                    <div>2018年6月</div>
                     <div>
                         <el-table
-                            :data="tableData"
+                            :data="priceTable"
                             border
                             style="width: 100%">
-                            <el-table-column prop="Sun" label="日"></el-table-column>
-                            <el-table-column prop="Mon" label="一" ></el-table-column>
-                            <el-table-column prop="Tues" label="二" ></el-table-column>
-                            <el-table-column prop="Wed" label="三" ></el-table-column>
-                            <el-table-column prop="Thur" label="四" ></el-table-column>
-                            <el-table-column prop="Fri" label="五" ></el-table-column>
-                            <el-table-column prop="Sat" label="六" ></el-table-column>
+                            <el-table-column label="日">
+                                 <template slot-scope="scope">
+                                   <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sun.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sun.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sun.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sun.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sun.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Mon" label="一" >
+                                <template slot-scope="scope">
+                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Mon.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Mon.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Mon.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Mon.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Mon.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Tues" label="二" >
+                                <template slot-scope="scope">
+                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Tues.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Tues.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Tues.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Tues.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Tues.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Wed" label="三" >
+                                <template slot-scope="scope">
+                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Wed.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Wed.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Wed.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Wed.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Wed.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Thur" label="四" >
+                                <template slot-scope="scope">
+                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Thur.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Thur.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Thur.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Thur.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Thur.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Fri" label="五" >
+                                <template slot-scope="scope">
+                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Fri.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Fri.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Fri.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Fri.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Fri.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="Sat" label="六" >
+                                <template slot-scope="scope">
+                                 <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sat.linePriceDate)}}</div>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">成人价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sat.lineAdultPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">儿童价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sat.lineChildPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">俱乐部价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sat.lineClubPrice"></el-input></el-col>
+                                   </el-row>
+                                   <el-row style="margin-left: 20px;margin-bottom: 3px">
+                                     <el-col :span="6">同业价</el-col>
+                                     <el-col :span="18"><el-input v-model="scope.row.Sat.linePeerPrice"></el-input></el-col>
+                                   </el-row>
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </div>
                 </el-col>
@@ -59,6 +198,7 @@
     export default{
         data(){
             return{
+                priceTable:[],
                 ruleFormcharge:{
                     lineAdultPrice:'',
                     lineChildPrice:'',
@@ -80,6 +220,9 @@
         },
         computed:{
             ...mapState(["tenantId",'lineId']),
+        },
+        created(){
+            
         },
         methods:{
             getWeekNum(days){
@@ -105,11 +248,17 @@
                 if(days.indexOf('周六')>-1){
                     dayNum.push(7);
                 }
-                return dayNum.join(',');
+                return dayNum;
+            },
+            getDay(date){
+              let day = date ? date.split('-')[2] : '';
+              return day;
             },
             //应用价格
             applyCharge(){
-                debugger
+                this.priceTable = [];
+                let week7=[],week1=[],week2=[],week3=[],week4=[],week5=[],week6=[],forEachData=[];
+                let _this = this;
                 let postData = this.ruleFormcharge;
                 postData.lineId = this.$store.state.lineId;
                 postData.weeks = this.getWeekNum(postData.weeks);
@@ -129,7 +278,32 @@
                                 message: res.data.message,
                                 type: 'success'
                             });
-                            _this.$store.state.lineId = res.data.data.lineId;
+                            debugger
+                            let resKeys =Object.keys(res.data.data);
+                            let resValues =Object.values(res.data.data);
+                            resValues.forEach(function(element,index){
+                              if(resKeys[index]=='1'){week7= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='2'){week1= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='3'){week2= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='4'){week3= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='5'){week4= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='6'){week5= resValues[index];forEachData=resValues[index];}
+                              if(resKeys[index]=='7'){week6= resValues[index];forEachData=resValues[index];}
+                            })
+                            // let arr = _this.priceTable;
+                            debugger
+                            forEachData.forEach(function(item, index){
+                              _this.priceTable.push({
+                                Sun:week7[index]?week7[index]:[],
+                                Mon:week1[index]?week1[index]:[],
+                                Tues:week2[index]?week2[index]:[],
+                                Wed:week3[index]?week3[index]:[],
+                                Thur:week4[index]?week4[index]:[],
+                                Fri:week5[index]?week5[index]:[],
+                                Sat:week6[index]?week6[index]:[]
+                              })
+                            })
+                            console.log(_this.priceTable);
                         }
                     })
                 }
@@ -144,7 +318,22 @@
         
     }
 </script>
+<style>
+    .timeAndPrice tbody td{
+        height:100px;
+    }
+    .timeTable .el-input--small .el-input__inner{
+      height: 24px !important;
+    }
+    .timeTable .el-table--border th{
+      background: #ddd;
+    }
+</style>
 <style scoped>
+    .tableDiv{
+      border: 1px solid #ddd;
+      height: 120%; 
+    }
     .line{
         padding-left: 35px;
     }
@@ -156,11 +345,7 @@
         margin:15px;
     }
     .timeTable{
-        width:100%;
-        height:500px;
-        background:#ddd;
-        margin-left: 20px;
-        margin-top: 20px;
+      width: calc(100% - 30px);
     }
     .demo-ruleFormcharge .el-input--small{
         width: 20%;
