@@ -1,27 +1,25 @@
 <template>
     <div>
-
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="线路名称" prop="lineName">
                 <el-input v-model="ruleForm.lineName" placeholder="请输入线路名称"></el-input>
             </el-form-item>
-            <el-form-item label="线路美图" prop="routePic">
+            <!--<el-form-item label="线路美图" prop="routePic">
                 <el-upload
                     class="upload-demo"
-                            ref="upload"
-                            action="http://www.hctx365.cn/line/image"
-                            :on-preview="handlePreview"
-                            :before-upload="beforeAvatarUpload"
-                            :on-remove="handleRemove"
-                            :file-list="fileList"
-                            :auto-upload = 'false'
-                            :on-success = 'handleSuccess'
-                            :data="form"
-                            name="salaryBill">
-                            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
-                            </el-upload>
-            </el-form-item>            
+                    ref="upload"
+                    action="http://www.hctx365.cn/line/image"
+                    :on-preview="handlePreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-remove="handleRemove"
+                    :file-list="fileList"
+                    :auto-upload = 'false'
+                    :on-success = 'handleSuccess'
+                    name="salaryBill">
+                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
+                </el-upload>
+            </el-form-item>            -->
             <el-form-item label="国内境外" prop="lineRange">
                 <el-radio-group v-model="ruleForm.lineRange">
                 <el-radio label="国内"></el-radio>
@@ -73,7 +71,7 @@
                     <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineStartDate"></el-date-picker>
                 </el-form-item>
                 </el-col>
-                <span class="line">至</span>
+                <span class="line" style="margin-left: -40px;">至</span>
                 <el-col :span="4">
                 <el-form-item prop="lineEndDate">
                     <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineEndDate"></el-date-picker>
@@ -220,16 +218,9 @@
                 }
             },
             beforeAvatarUpload(file) {
-                //let Xls = file.name.split('.');
                 this.form.lineId = this.$store.state.lineId;
                 this.form.imageName = file.name.split('.')[0];
                 this.form.imageType = file.name.split('.')[1];
-                // if(Xls[1] === 'xls'||Xls[1] === 'xlsx'){
-                //     return file
-                // }else {
-                //     this.$message.error('上传文件只能是 xls/xlsx 格式!')
-                //     return false
-                // }
             },
             handleRemove(file, fileList) {
             },
@@ -241,18 +232,20 @@
             },
             //保存基本信息
             saveBaseInfo(){
+                let _this = this
                 this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
-                    if(this.ruleForm.lineNight==""||this.ruleForm.lineDay==""){
-                        this.$notify({
+                    let postData =JSON.parse(JSON.stringify(_this.ruleForm));
+                    if(postData.lineNight==""||postData.lineDay==""){
+                        _this.$notify({
                             duration: '2000',
                             message: '请填写行程天数',
                             type: 'warning'
                         });
                         return false;
                     }
-                    this.ruleForm.lineTenantId = this.$store.state.tenantId;
-                    let postData = this.ruleForm;
+                    postData.lineTenantId = _this.$store.state.tenantId;
+                    
                     let lineTravelWay = [];
                     let lineTheme = [];
                     if(postData.lineRange=='国内'){
@@ -293,7 +286,7 @@
                     })
                     postData.lineTravelWay = lineTravelWay.join(',');
                     postData.lineTheme = lineTheme.join(',');
-                    let _this = this
+
                     axios
                     .post("http://www.hctx365.cn/line/baseinfo",postData)
                     .then(res=>{
@@ -304,6 +297,7 @@
                                 type: 'success'
                             });
                             _this.$store.state.lineId = res.data.data.lineId;
+                            _this.$emit('next');
                         }
                     })
                 } else {
