@@ -50,7 +50,7 @@ import axios from "axios"
                 countRuleDetail:1,
                 state:false,
                 ruleForm: {
-                    lineId: "7a6bd05e-d9af-411a-99e1-cd726023125a",
+                    lineId: "",
                     lineTripTitle: '',
                     lineTotalTrip:'',
                     lineMeals:'',
@@ -93,6 +93,9 @@ import axios from "axios"
         components: {
         },
         computed: {
+        },
+        created(){
+            this.ruleForm.lineId = this.$store.state.lineId;
         },
         methods:{
             getLineDetail(){
