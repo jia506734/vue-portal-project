@@ -72,7 +72,7 @@ export default {
     this.getRouteData();
   },
   computed:{
-  ...mapState(["tenantId"]),
+  ...mapState(["tenantId","lineId"]),
   },
   methods:{
     deleteRoute(){
@@ -88,7 +88,7 @@ export default {
             this.$confirm('确认删除？')
                 .then(_ => {
                 let param =[];
-                this.multipleSelection.forEach(element => {
+                this.multipleSelection.forEach(element => {                    
                     param.push({lineId:element.lineId});
                 });
                 axios
@@ -185,7 +185,8 @@ export default {
         })
       },
       handleEdit(index, row){
-
+          this.$store.state.lineId = row.lineId;
+          this.$router.push('/newRoute');
       },
       handleDelete(index, row) {
         console.log(index, row);

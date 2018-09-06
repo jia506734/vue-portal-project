@@ -22,8 +22,8 @@
             </el-form-item>            -->
             <el-form-item label="国内境外" prop="lineRange">
                 <el-radio-group v-model="ruleForm.lineRange">
-                <el-radio label="国内"></el-radio>
-                <el-radio label="海外"></el-radio>
+                <el-radio label="国内" value="0"></el-radio>
+                <el-radio label="海外" value="1"></el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="出行方式" prop="lineTravelWay">
@@ -200,7 +200,55 @@
         computed:{
             ...mapState(["tenantId",'lineId']),
         },
+        created(){
+            if(this.$store.state.lineId){
+                this.getBaseIfoDate();
+            }
+        },
         methods:{
+            //获取已有基本信息
+            getBaseIfoDate(){
+                if(this.$store.state.lineId==""){return false}
+                let vm = this;
+                 axios
+                .get("http://www.hctx365.cn/line/baseinfo?lineTenantId="+this.$store.state.tenantId+"&lineId="+this.$store.state.lineId)
+                .then(res=>{
+                    if(res.data.data){
+                        let data = res.data.data[0];
+                        vm.ruleForm= {
+                            lineName: data.lineName,
+                            lineOrigin:data.lineOrigin,
+                            lineDestination:data.lineDestination,
+                            lineNotice:data.lineNotice,
+                            lineSignUpInfo:data.lineSignUpInfo,
+                            lineUnsubscribeEnsure:data.lineUnsubscribeEnsure,
+                            lineEnter:data.lineEnter,
+                            lineServiceTel:data.lineServiceTel,
+                            lineTravelWay: data.lineTravelWay.split(','),
+                            lineTheme:data.lineTheme.split(','),
+                            lineRange: data.lineRange,
+                            lineDay:vm.getLineDay(data.lineDay),
+                            lineNight:vm.getLineNight(data.lineNight),
+                            lineStartDate:data.lineStartDate,
+                            lineEndDate:data.lineEndDate,
+                        }
+                    }
+                })
+            },
+            getLineNight(lineNight){
+                this.nights.forEach(function(el){
+                    if(el.value == lineNight){
+                        return el.label;
+                    }
+                })
+            },
+            getLineDay(lineDay){                
+                this.days.forEach(function(el){
+                    if(el.value == lineDay){
+                        return el.label;
+                    }
+                })
+            },
             submitUpload() {
                 this.$refs.upload.submit();
             },
