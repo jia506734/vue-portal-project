@@ -12,6 +12,12 @@
                 </div>
             </el-col>
         </el-row>
+        <el-row>
+            <el-col :span="24" class="save">
+                <el-button @click="reset">清 空</el-button>
+                <el-button type="primary" @click="save">保 存</el-button>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -20,6 +26,7 @@ import { quillEditor } from 'vue-quill-editor' //调用编辑器
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import axios from "axios"
 export default{
         data(){
             return{
@@ -46,21 +53,45 @@ export default{
         methods:{
             onEditorReady(editor) {
             },
-        }
+            save(){
+                let params = {
+                    lineId:this.$store.state.lineId,
+                    imageDesc:this.infoForm.a_content
+                }
+                axios
+                .post("http://www.hctx365.cn/line/image",params)
+                .then(res=>{
+                    if(res.data.success){
+                         _this.$notify({                     
+                            duration:2000,
+                            message: res.data.message,
+                            type: 'success'
+                        });
+                    }
+                })
+            },
+            reset(){
+                this.infoForm = {
+                    a_title: '',
+                    a_source: '',
+                    a_content:'',
+                    editorOption: {}
+                }
+            }
+        },
     }   
 </script>
-<style scoped>
-    .quill-editor {
-        height: 445px;
-    }
-    .quill-editor .ql-container {
-        height: 380px;
-    }    
+<style scoped> 
     .ql-snow .ql-editor img {
         max-width: 480px;
     }
-
     .ql-editor .ql-video {
         max-width: 480px;
+    }
+    .save{
+        text-align: center;
+    }
+    .save button{
+        margin: 10px 20px 20px 0;
     }
 </style>
