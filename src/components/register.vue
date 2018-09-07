@@ -147,7 +147,7 @@
         background-size: 100% 100%;
         background-repeat: no-repeat;
         right: 0;
-		background-image: url("../assets/pictrue/7.jpg")
+		background-image: url("../../static/image/login-background.jpg")
 	}
 	.manage_tip{
 		position: absolute;
