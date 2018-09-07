@@ -16,7 +16,7 @@
                 </div>
             </el-form-item>
             <el-form-item label="成人价" prop="lineAdultPrice  ">
-                <el-input v-model="ruleFormcharge.lineAdultPrice" @focus="focusPrice" @blur="blurPrice"></el-input>
+                <el-input v-model="ruleFormcharge.lineAdultPrice"></el-input>
             </el-form-item>
             <el-form-item label="儿童价" prop="lineChildPrice">
                 <el-input v-model="ruleFormcharge.lineChildPrice"></el-input>
@@ -48,7 +48,8 @@
                                    <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sun.linePriceDate)}}</div>
                                    <el-row style="margin-bottom: 3px">
                                      <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sun.lineAdultPrice"></el-input></el-col>
+                                     <el-col :span="13"><el-input v-model="scope.row.Sun.lineAdultPrice" @focus="focusPrice(scope.row.Sun.lineAdultPrice)" 
+                                     @blur="blurPrice(scope.row.Sun.lineAdultPrice)"></el-input></el-col>
                                    </el-row>
                                    <el-row style="margin-bottom: 3px">
                                      <el-col :span="11">儿童价</el-col>
@@ -222,6 +223,7 @@
                         { type: 'array', required: true, message: '请至少选择一个出团时间', trigger: 'change' }
                     ],
                 },
+                focuedPrice:'',
             }
         },
         computed:{
@@ -232,16 +234,19 @@
         },
         methods:{
             //获取焦点
-            focusPrice(){
-                
+            focusPrice(price){
+                this.focuedPrice = price;
             },
             //失去焦点 
-            blurPrice(){
+            blurPrice(name){
+                if(name==this.focuedPrice){
+                    return false;
+                }else{
 
+                }
             },
             getPriceData(){
                 let _this = this;
-                debugger
                 axios
                 .get("http://www.hctx365.cn/line/price?lineId ="+this.$store.state.lineId)
                 .then(res=>{
