@@ -28,6 +28,7 @@
 	export default {
 	    data(){
 			return {
+				
 				loginForm: {
 					username: '',
 					password: '',
@@ -73,14 +74,14 @@
 		text-align: left;
 	}
 	.login_page{
-		    left: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    right: 0;
-		background-image: url("/static/image/login-background.jpg")
+		left: 0;
+		top: 0;
+		bottom: 0;
+		position: absolute;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		right: 0;
+		background-image: url("../../static/image/login-background.jpg")
 	}
 	.else-button{
  		font-size:12px;

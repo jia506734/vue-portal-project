@@ -239,6 +239,7 @@
             },
             //失去焦点 
             blurPrice(name){
+                debugger
                 if(name==this.focuedPrice){
                     return false;
                 }else{
