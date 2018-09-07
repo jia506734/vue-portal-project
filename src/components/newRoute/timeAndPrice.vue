@@ -16,7 +16,7 @@
                 </div>
             </el-form-item>
             <el-form-item label="成人价" prop="lineAdultPrice  ">
-                <el-input v-model="ruleFormcharge.lineAdultPrice  "></el-input>
+                <el-input v-model="ruleFormcharge.lineAdultPrice" @focus="focusPrice" @blur="blurPrice"></el-input>
             </el-form-item>
             <el-form-item label="儿童价" prop="lineChildPrice">
                 <el-input v-model="ruleFormcharge.lineChildPrice"></el-input>
@@ -231,6 +231,14 @@
             this.getPriceData();
         },
         methods:{
+            //获取焦点
+            focusPrice(){
+                
+            },
+            //失去焦点 
+            blurPrice(){
+
+            },
             getPriceData(){
                 let _this = this;
                 debugger
