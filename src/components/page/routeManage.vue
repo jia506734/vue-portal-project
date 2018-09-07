@@ -16,13 +16,13 @@
     <div class="tabs">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我的" name="my">
-          <common-route :type="tabName" ref="routemgt"></common-route>
+          <my-route ref="routemgt"></my-route>
         </el-tab-pane>
         <el-tab-pane label="同业" name="trade">
-          <!--<common-route :type="tabName"></common-route>-->
+          <trade-route ref="routemgt"></trade-route>
         </el-tab-pane>
         <el-tab-pane label="网店" name="store">
-          <!--<common-route :type="tabName"></common-route>-->
+          <store-route ref="routemgt"></store-route>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -30,7 +30,9 @@
 </template>
 
 <script>
-import commonRoute from '../common/commonRoute'
+import myRoute from '../common/commonRoute/myRoute'
+import storeRoute from '../common/commonRoute/storeRoute'
+import tradeRoute from '../common/commonRoute/tradeRoute'
 import route from '../../router'
 import { mapState} from 'vuex'
 // import axios from "axios"
@@ -44,10 +46,12 @@ export default {
     }
   },
     components:{
-      commonRoute,
+      myRoute,
+      storeRoute,
+      tradeRoute
   },
   computed:{
-    ...mapState(["tenantId",'lineId']),
+    ...mapState(["tenantId",'lineId','lineCreate']),
   },
   methods:{      
       deleteRoute(){
@@ -55,9 +59,19 @@ export default {
       },
       handleClick(tab, event) {
         this.tabName =this.activeName
+        if(this.activeName == '我的'){
+          
+        }
+        if(this.activeName == '同业'){
+          
+        }
+        if(this.activeName == '网店'){
+          
+        }
       },
       toNewRoute(){
-        this.$router.push('/newRoute')
+        this.$store.state.lineCreate = true;
+        this.$router.push('/newRoute');
       },
       searchRoute(){
         this.$refs['routemgt'].searchRoute(this.input21);

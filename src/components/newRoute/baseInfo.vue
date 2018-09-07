@@ -4,22 +4,6 @@
             <el-form-item label="线路名称" prop="lineName">
                 <el-input v-model="ruleForm.lineName" placeholder="请输入线路名称"></el-input>
             </el-form-item>
-            <!--<el-form-item label="线路美图" prop="routePic">
-                <el-upload
-                    class="upload-demo"
-                    ref="upload"
-                    action="http://www.hctx365.cn/line/image"
-                    :on-preview="handlePreview"
-                    :before-upload="beforeAvatarUpload"
-                    :on-remove="handleRemove"
-                    :file-list="fileList"
-                    :auto-upload = 'false'
-                    :on-success = 'handleSuccess'
-                    name="salaryBill">
-                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
-                </el-upload>
-            </el-form-item>            -->
             <el-form-item label="国内境外" prop="lineRange">
                 <el-radio-group v-model="ruleForm.lineRange">
                 <el-radio label="国内" value="0"></el-radio>
@@ -104,7 +88,7 @@
 </template>
 
 <script>
-    import {mapActions, mapState} from 'vuex'
+    import {mapState} from 'vuex'
     import axios from "axios"
     export default{
         data(){
@@ -154,7 +138,8 @@
                     lineDay:'',
                     lineNight:'',
                     lineStartDate:'',
-                    lineEndDate:''
+                    lineEndDate:'',
+                    lineStatus:''
                 },
                 rules: {
                     lineDay:[{ required: true, message: '请选择几天', trigger: 'change' }],
@@ -198,7 +183,7 @@
             }
         },
         computed:{
-            ...mapState(["tenantId",'lineId']),
+            ...mapState(["tenantId",'lineId','lineCreate']),
         },
         created(){
             if(this.$store.state.lineId){
@@ -224,62 +209,47 @@
                             lineUnsubscribeEnsure:data.lineUnsubscribeEnsure,
                             lineEnter:data.lineEnter,
                             lineServiceTel:data.lineServiceTel,
-                            lineTravelWay: data.lineTravelWay.split(','),
-                            lineTheme:data.lineTheme.split(','),
-                            lineRange: data.lineRange,
-                            lineDay:vm.getLineDay(data.lineDay),
-                            lineNight:vm.getLineNight(data.lineNight),
+                            lineTravelWay: vm.getlineTravelWay(data.lineTravelWay),
+                            lineTheme:vm.getlineTheme(data.lineTheme),
+                            lineRange: data.lineRange=='0'?'国内':'海外',
+                            lineDay:data.lineDay.toString(),
+                            lineNight:data.lineNight.toString(),
                             lineStartDate:data.lineStartDate,
                             lineEndDate:data.lineEndDate,
+                            lineStatus:data.lineStatus,
                         }
                     }
                 })
             },
-            getLineNight(lineNight){
-                this.nights.forEach(function(el){
-                    if(el.value == lineNight){
-                        return el.label;
+            getlineTravelWay(lineTravelWay){
+                let way = [];
+                this.travelWay.forEach(function(el){
+                    if(lineTravelWay.indexOf(el.value) > -1){
+                        way.push(el.label);
                     }
                 })
+                return way;
             },
-            getLineDay(lineDay){                
-                this.days.forEach(function(el){
-                    if(el.value == lineDay){
-                        return el.label;
+             getlineTheme(lineTheme){
+                let theme = [];
+                this.lineTheme.forEach(function(el){
+                    if(lineTheme.indexOf(el.value) > -1){
+                        theme.push(el.label);
                     }
                 })
+                return theme;
             },
             submitUpload() {
                 this.$refs.upload.submit();
             },
-            handleSuccess(res,file,fileList){
-                if(res.code===20000){
-                    this.$message({
-                        message: '上传成功！',
-                        type: 'success'
-                    });
-                }else {
-                    this.$message({
-                        message: res.msg,
-                        type: 'error'
-                    });
-                }
-            },
-            beforeAvatarUpload(file) {
-                this.form.lineId = this.$store.state.lineId;
-                this.form.imageName = file.name.split('.')[0];
-                this.form.imageType = file.name.split('.')[1];
-            },
-            handleRemove(file, fileList) {
-            },
-            handlePreview(file) {
-            },
+
             //重置基本信息表单
             resetFields(){
                 this.$refs['ruleForm'].resetFields();
             },
             //保存基本信息
             saveBaseInfo(){
+                debugger
                 let _this = this
                 this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
@@ -334,20 +304,36 @@
                     })
                     postData.lineTravelWay = lineTravelWay.join(',');
                     postData.lineTheme = lineTheme.join(',');
-
-                    axios
-                    .post("http://www.hctx365.cn/line/baseinfo",postData)
-                    .then(res=>{
-                        if(res.data.success){
-                             _this.$notify({
-                                duration:2000,
-                                message: res.data.message,
-                                type: 'success'
-                            });
-                            _this.$store.state.lineId = res.data.data.lineId;
-                            _this.$emit('next');
-                        }
-                    })
+                    if(this.$store.state.lineCreate){
+                        axios
+                        .post("http://www.hctx365.cn/line/baseinfo",postData)
+                        .then(res=>{
+                            if(res.data.success){
+                                _this.$notify({
+                                    duration:2000,
+                                    message: res.data.message,
+                                    type: 'success'
+                                });
+                                _this.$store.state.lineId = res.data.data.lineId;
+                                _this.$emit('next');
+                            }
+                        })
+                    }else{
+                        axios
+                        .put("http://www.hctx365.cn/line/baseinfo",postData)
+                        .then(res=>{
+                            if(res.data.success){
+                                _this.$notify({
+                                    duration:2000,
+                                    message: res.data.message,
+                                    type: 'success'
+                                });
+                                _this.$store.state.lineId = res.data.data.lineId;
+                                _this.$emit('next');
+                            }
+                        })
+                    }
+                    
                 } else {
                     this.$notify({
                         duration: '2000',

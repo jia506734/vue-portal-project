@@ -1,13 +1,14 @@
 <template>
     <div style="width:100%">
         <div class="route-manage" >
-            <span class="route-manage-top">线路管理 > 新建线路</span>
+            <span class="route-manage-top" v-if="lineCreate">{{nameCreate}}</span>
+            <span class="route-manage-top" v-else>{{nameEdit}}</span>
         </div>
         <div class="tab-top">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick" :before-leave="beforeLeave">                
                 <el-tab-pane label="基本信息" name="first">
                     <base-info ref="baseInfo" @next="next"></base-info>
-                    <div style="margin-bottom: 20px;text-align: center">
+                    <div style=" margin-top: -60px;text-align: center">
                         <el-button type="success" @click="submitForm('ruleForm')">保存并下一步</el-button>
                         <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
                     </div>
@@ -36,6 +37,8 @@ export default {
     data(){
         return{
             activeName: 'first',
+            nameCreate:'线路管理 > 新建线路',
+            nameEdit:'线路管理 > 编辑线路',
         }
     },
     components: {
@@ -45,7 +48,7 @@ export default {
         destination
     },
     computed:{
-        ...mapState(["tenantId",'lineId']),
+        ...mapState(["tenantId",'lineId','lineCreate']),
     },
     methods: {
         submitForm(formName) {
