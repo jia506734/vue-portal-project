@@ -32,12 +32,15 @@
             <el-button type="success" @click="applyCharge">应用价格</el-button>
             <el-button type="primary" @click="clearCharge">清除价格</el-button>
         </div>
-        <div class="timeTable">
+        <div class="timeTable" v-for="item in priceTable" :key="item.month">
+            <el-row style="margin-left: 15px;">
+                <el-col :span="6">{{item.month}}</el-col>
+            </el-row>
             <el-row>
                 <el-col :span="24" class="tableleft">
                     <div>
                         <el-table
-                            :data="priceTable"
+                            :data="item.priceData"
                             border
                             style="width: 100%">
                             <el-table-column label="日">
@@ -192,6 +195,7 @@
                 </el-col>
             </el-row>
         </div>
+        
     </div>
 </template>
 
@@ -201,6 +205,7 @@
     export default{
         data(){
             return{
+                allMonth:[],
                 priceTable:[],
                 selectAll:false,
                 ruleFormcharge:{
@@ -286,31 +291,36 @@
                                 message: res.data.message,
                                 type: 'success'
                             });
-                            debugger
                             let resKeys =Object.keys(res.data.data);
                             let resValues =Object.values(res.data.data);
+                            _this.allMonth=Object.values(resKeys).slice(0);
+                            let priceTable = [];
                             resValues.forEach(function(element,index){
-                              if(resKeys[index]=='1'){week7= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='2'){week1= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='3'){week2= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='4'){week3= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='5'){week4= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='6'){week5= resValues[index];forEachData=resValues[index];}
-                              if(resKeys[index]=='7'){week6= resValues[index];forEachData=resValues[index];}
+                                let perKeys =Object.keys(element);
+                                let perValues =Object.values(element);
+                                perValues.forEach(function(item,num){
+                                    if(perKeys[num]=='1'){week7= item;forEachData=item;}
+                                    if(perKeys[num]=='2'){week1= item;forEachData=item;}
+                                    if(perKeys[num]=='3'){week2= item;forEachData=item;}
+                                    if(perKeys[num]=='4'){week3= item;forEachData=item;}
+                                    if(perKeys[num]=='5'){week4= item;forEachData=item;}
+                                    if(perKeys[num]=='6'){week5= item;forEachData=item;}
+                                    if(perKeys[num]=='7'){week6= item;forEachData=item;}
+                                })
+                                forEachData.forEach(function(item, index){
+                                    priceTable.push({
+                                        Sun:week7[index]?week7[index]:[],
+                                        Mon:week1[index]?week1[index]:[],
+                                        Tues:week2[index]?week2[index]:[],
+                                        Wed:week3[index]?week3[index]:[],
+                                        Thur:week4[index]?week4[index]:[],
+                                        Fri:week5[index]?week5[index]:[],
+                                        Sat:week6[index]?week6[index]:[]
+                                    })
+                                })
+                                _this.priceTable.push({month:resKeys[index],priceData:priceTable});
                             })
-                            // let arr = _this.priceTable;
-                            debugger
-                            forEachData.forEach(function(item, index){
-                              _this.priceTable.push({
-                                Sun:week7[index]?week7[index]:[],
-                                Mon:week1[index]?week1[index]:[],
-                                Tues:week2[index]?week2[index]:[],
-                                Wed:week3[index]?week3[index]:[],
-                                Thur:week4[index]?week4[index]:[],
-                                Fri:week5[index]?week5[index]:[],
-                                Sat:week6[index]?week6[index]:[]
-                              })
-                            })
+                            
                             console.log(_this.priceTable);
                         }
                     })
@@ -367,7 +377,10 @@
         margin:15px;
     }
     .timeTable{
-      width: 46%;
+        width: 46%;
+        display: inline-block;
+        margin-left: 20px;
+        margin-top: 20px;
     }
     .demo-ruleFormcharge .el-input--small{
         width: 20%;
