@@ -181,7 +181,12 @@ export default {
       handleEdit(index, row){
           this.$store.state.lineId = row.lineId;
           this.$store.state.lineCreate = false;
-          this.$router.push('/newRoute');
+          this.$router.push({
+              path: '/newRoute',
+              query: {
+                lineId: row.lineId
+              }
+            });
       },
       handleDelete(index, row) {
         console.log(index, row);

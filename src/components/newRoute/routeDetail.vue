@@ -96,19 +96,21 @@ import axios from "axios"
         },
         created(){
             this.ruleForm.lineId = this.$store.state.lineId;
+            this.getLineDetail();
         },
         methods:{
             getLineDetail(){
                 let _this = this
                 axios
-                .get("http://www.hctx365.cn/line/detailinfo",{lineId:this.$store.state.lineId})
-                .then(res=>{
+                .get("http://www.hctx365.cn/line/detailinfo?lineId="+this.$route.query.lineId).then(res=>{
                     if(res.data.success){
-                         _this.$notify({                     
-                            duration:2000,
-                            message: res.data.message,
-                            type: 'success'
-                        });
+                        _this.ruleDetailArr = JSON.parse(JSON.stringify(res.data.data))
+                        for(let key in _this.ruleDetailArr){
+                            _this.dayId.push(_this.ruleDetailArr[key].lineDetailId)
+                        }
+                        _this.countRuleDetail = _this.ruleDetailArr.length
+                        _this.activeDay = 0
+                        _this.ruleForm = _this.ruleDetailArr[_this.activeDay]
                     }
                 })
             },

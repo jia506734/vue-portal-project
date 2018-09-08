@@ -50,14 +50,26 @@ export default{
                 return this.$refs.myQuillEditor.quill
             }
         },
+        created(){
+            this.getEdit()
+        },
         methods:{
+            getEdit(){
+                let _this = this
+                axios
+                .get("http://www.hctx365.cn/line/image?lineId="+this.$route.query.lineId).then(res=>{
+                    if(res.data.success){
+                        _this.infoForm.a_content = res.data.data[0].imageDesc
+                    }
+                })
+            },
             onEditorReady(editor) {
             },
             save(){
-                let params = {
+                let params = [{
                     lineId:this.$store.state.lineId,
                     imageDesc:this.infoForm.a_content
-                }
+                }]
                 axios
                 .post("http://www.hctx365.cn/line/image",params)
                 .then(res=>{
