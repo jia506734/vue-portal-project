@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import manage from '@/components/manage'
+import manageCenter from '@/components/manageCenter'
 import login from '@/components/login'
 import register from '@/components/register'
 
@@ -18,7 +18,7 @@ import tenantManage from '@/components/authorMgt/tenantManage'
 import newRoute from '@/components/page/newRoute'
 import newTicket from '@/components/page/newTicket'
 import mainPage from '@/components/page/mainPage'
-
+import showRouteDetail from '@/components/page/showRouteDetail'
 
 Vue.use(Router)
 export default new Router({
@@ -34,8 +34,13 @@ export default new Router({
       meta: ['用户管理'],
     },
     {
-      path: '/manage',
-      component: manage,
+      path: '/showRouteDetail',
+      component: showRouteDetail,
+      meta: ['线路详情'],
+    },
+    {
+      path: '/manageCenter',
+      component: manageCenter,
       name: '',
       children: [
         {

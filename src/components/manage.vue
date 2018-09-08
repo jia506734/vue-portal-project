@@ -9,18 +9,8 @@
                 <el-col :span="1" class="notify-style">{{ $t('manage.Notify') }}</el-col>
                 <el-col :span="1" class="logout-style">{{ $t('manage.LogOut') }}</el-col>
             </el-row>
-            <!--<div><span>慧程天下</span>慧程天下</div>-->
-        
-            <!--<div class="header_left">
-                <div>慧程天下</div>
-            </div>
-            <div class="header_right">
-                <span class="header_tiplist">wulongbin-2@16.. </span>
-                <span class="header_tiplist">{{ $t('manage.Notify') }}</span>
-                <span class="header_tiplist">{{ $t('manage.LogOut') }}</span>
-            </div>-->
         </div>
-        <manage-center></manage-center>
+        <!-- <manage-center></manage-center> -->
     </div>
 </template>
 <script>

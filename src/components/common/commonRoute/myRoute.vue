@@ -18,22 +18,24 @@
                   <el-button  size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">下架</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="lineName" label="线路名称"></el-table-column>
+            <el-table-column label="线路名称">
+                <template slot-scope="scope"><span @click="showRouteDetail(scope.row)" class="route-name">{{ getstate(scope.row.lineName) }}</span></template>
+            </el-table-column>
             <el-table-column label="线路国内海外">
-                <template slot-scope="scope"><span>{{ getdic(scope.row.lineRange) }}</span></template>>
+                <template slot-scope="scope"><span>{{ getdic(scope.row.lineRange) }}</span></template>
             </el-table-column>
             <el-table-column label="出行方式" width="140">
-                <template slot-scope="scope"><span>{{ getway(scope.row.lineTravelWay) }}</span></template>>
+                <template slot-scope="scope"><span>{{ getway(scope.row.lineTravelWay) }}</span></template>
             </el-table-column>
             <el-table-column label="线路主题" width="140">
-                <template slot-scope="scope"><span>{{ gettheme(scope.row.lineTheme) }}</span></template>>
+                <template slot-scope="scope"><span>{{ gettheme(scope.row.lineTheme) }}</span></template>
             </el-table-column>
             <el-table-column prop="lineOrigin" label="出发起始地"></el-table-column>
             <el-table-column prop="lineDestination" label="目的地"></el-table-column>
             <el-table-column prop="lineEnter" label="线路录入人"></el-table-column>
             <el-table-column prop="lineServiceTel" label="客服电话"></el-table-column>
             <el-table-column label="线路状态">
-               <template slot-scope="scope"><span >{{ getstate(scope.row.lineStatus) }}</span></template>>
+               <template slot-scope="scope"><span >{{ getstate(scope.row.lineStatus) }}</span></template>
             </el-table-column>
             <el-table-column prop="lineDay" label="几天"></el-table-column>
             <el-table-column prop="lineNight" label="几夜"></el-table-column>
@@ -93,6 +95,10 @@ export default {
                 })
             },() => {})
         }
+    },
+    //点击进入线路详情
+    showRouteDetail(row){
+        this.$router.push('showRouteDetail');
     },
     handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -200,6 +206,10 @@ export default {
 </style>
 
 <style scoped>
+    .route-name {
+        cursor: pointer;
+        color:#4D88BB;
+    }
     .el-button--mini, .el-button--mini.is-round{
         padding: 5px 9px !important;
     }
