@@ -1,6 +1,6 @@
 <template>
   	<div class="login_page fillcontain">
-		<div ><img :src="url"/></div>
+		<div id="indexContainer"><img :src="url"/></div>
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer" v-show="showLogin">
 				<div class="text_left" style="margin-bottom:10px;">LOGIN 登录</div>
@@ -70,7 +70,12 @@
 	}
 </script>
 
-<style  scoped>
+<style  scoped>	
+	#indexContainer img{
+		position: absolute;
+    	width: 100%;
+    	height: 100%;
+	}
 	.text_left{
 		text-align: left;
 	}
