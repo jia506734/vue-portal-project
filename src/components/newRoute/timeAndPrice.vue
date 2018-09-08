@@ -44,207 +44,228 @@
                             border
                             style="width: 100%">
                             <el-table-column label="日">
-                                 <template slot-scope="scope">
-                                   <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sun.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sun.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Sun.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Sun)">
-                                     </el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sun.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Sun.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sun.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Sun.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sun.linePeerPrice"
-                                    @focus="focusPrice(scope.row.Sun.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
-                                   </el-row>
+                                <template slot-scope="scope">
+                                    <div :class="{backcolor:scope.row.Sun.lineAdultPrice!=null||scope.row.Sun.lineChildPrice!=null
+                                    ||scope.row.Sun.lineClubPrice!=null||scope.row.Sun.linePeerPrice!=null,display:scope.row.Sun.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sun.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sun.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Sun.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Sun)">
+                                            </el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sun.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Sun.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sun.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Sun.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sun.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Sun.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Sun)"></el-input></el-col>
+                                        </el-row>
+                                   </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Mon" label="一" >
                                 <template slot-scope="scope">
-                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Mon.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Mon.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Mon.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Mon.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Mon.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Mon.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Mon.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Mon.linePeerPrice"
-                                     @focus="focusPrice(scope.row.Mon.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
-                                   </el-row>
+                                    <div :class="{backcolor:scope.row.Mon.lineAdultPrice!=null||scope.row.Mon.lineChildPrice!=null
+                                    ||scope.row.Mon.lineClubPrice!=null||scope.row.Mon.linePeerPrice!=null,display:scope.row.Mon.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Mon.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Mon.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Mon.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Mon.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Mon.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Mon.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Mon.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Mon.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Mon.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Mon)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Tues" label="二" >
                                 <template slot-scope="scope">
-                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Tues.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Tues.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Tues.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Tues.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Tues.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Tues.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Tues.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Tues.linePeerPrice"
-                                     @focus="focusPrice(scope.row.Tues.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
-                                   </el-row>
+                                    <div :class="{backcolor:scope.row.Tues.lineAdultPrice!=null||scope.row.Tues.lineChildPrice!=null
+                                    ||scope.row.Tues.lineClubPrice!=null||scope.row.Tues.linePeerPrice!=null,display:scope.row.Tues.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Tues.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Tues.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Tues.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Tues.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Tues.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Tues.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Tues.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Tues.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Tues.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Tues)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Wed" label="三" >
                                 <template slot-scope="scope">
-                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Wed.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Wed.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Wed.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Wed.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Wed.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Wed.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Wed.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Wed.linePeerPrice"
-                                     @focus="focusPrice(scope.row.Wed.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
-                                   </el-row>
+                                    <div :class="{backcolor:scope.row.Wed.lineAdultPrice!=null||scope.row.Wed.lineChildPrice!=null
+                                    ||scope.row.Wed.lineClubPrice!=null||scope.row.Wed.linePeerPrice!=null,display:scope.row.Wed.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Wed.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Wed.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Wed.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Wed.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Wed.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Wed.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Wed.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Wed.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Wed.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Wed)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Thur" label="四" >
                                 <template slot-scope="scope">
-                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Thur.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Thur.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Thur.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Thur.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Thur.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Thur.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Thur.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Thur.linePeerPrice"
-                                     @focus="focusPrice(scope.row.Thur.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
-                                   </el-row>
+                                     <div :class="{backcolor:scope.row.Thur.lineAdultPrice!=null||scope.row.Thur.lineChildPrice!=null
+                                     ||scope.row.Thur.lineClubPrice!=null||scope.row.Thur.linePeerPrice!=null,display:scope.row.Thur.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Thur.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Thur.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Thur.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Thur.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Thur.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Thur.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Thur.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Thur.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Thur.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Thur)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Fri" label="五" >
                                 <template slot-scope="scope">
-                                  <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Fri.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Fri.lineAdultPrice"
-                                     @focus="focusPrice(scope.row.Fri.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Fri.lineChildPrice"
-                                     @focus="focusPrice(scope.row.Fri.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Fri.lineClubPrice"
-                                     @focus="focusPrice(scope.row.Fri.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Fri.linePeerPrice"
-                                     @focus="focusPrice(scope.row.Fri.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
-                                   </el-row>
+                                     <div :class="{backcolor:scope.row.Fri.lineAdultPrice!=null||scope.row.Fri.lineChildPrice!=null
+                                     ||scope.row.Fri.lineClubPrice!=null||scope.row.Fri.linePeerPrice!=null,display:scope.row.Fri.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Fri.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Fri.lineAdultPrice"
+                                            @focus="focusPrice(scope.row.Fri.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Fri.lineChildPrice"
+                                            @focus="focusPrice(scope.row.Fri.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Fri.lineClubPrice"
+                                            @focus="focusPrice(scope.row.Fri.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Fri.linePeerPrice"
+                                            @focus="focusPrice(scope.row.Fri.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row.Fri)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="Sat" label="六" >
                                 <template slot-scope="scope">
-                                 <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sat.linePriceDate)}}</div>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">成人价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sat.lineAdultPrice"
-                                     @focus="focusPrice(scope.row. Sat.lineAdultPrice)" 
-                                     @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">儿童价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sat.lineChildPrice"
-                                     @focus="focusPrice(scope.row. Sat.lineChildPrice)" 
-                                     @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">俱乐部</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sat.lineClubPrice"
-                                     @focus="focusPrice(scope.row. Sat.lineClubPrice)" 
-                                     @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
-                                   </el-row>
-                                   <el-row style="margin-bottom: 3px">
-                                     <el-col :span="11">同业价</el-col>
-                                     <el-col :span="13"><el-input v-model="scope.row.Sat.linePeerPrice"
-                                     @focus="focusPrice(scope.row. Sat.linePeerPrice)" 
-                                     @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
-                                   </el-row>
+                                     <div :class="{backcolor:scope.row.Sat.lineAdultPrice!=null||scope.row.Sat.lineChildPrice!=null
+                                     ||scope.row.Sat.lineClubPrice!=null||scope.row.Sat.linePeerPrice!=null,display:scope.row.Sat.padding}">
+                                        <div style="font-size: 20px;text-align: left;">{{getDay(scope.row.Sat.linePriceDate)}}</div>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">成人价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sat.lineAdultPrice"
+                                            @focus="focusPrice(scope.row. Sat.lineAdultPrice)" 
+                                            @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">儿童价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sat.lineChildPrice"
+                                            @focus="focusPrice(scope.row. Sat.lineChildPrice)" 
+                                            @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">俱乐部</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sat.lineClubPrice"
+                                            @focus="focusPrice(scope.row. Sat.lineClubPrice)" 
+                                            @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
+                                        </el-row>
+                                        <el-row style="margin-bottom: 3px">
+                                            <el-col :span="11">同业价</el-col>
+                                            <el-col :span="13"><el-input v-model="scope.row.Sat.linePeerPrice"
+                                            @focus="focusPrice(scope.row. Sat.linePeerPrice)" 
+                                            @blur="blurPrice(scope.row. Sat)"></el-input></el-col>
+                                        </el-row>
+                                    </div>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -324,11 +345,44 @@
             },
             getPriceData(){
                 let _this = this;
+                let emptyObj = {
+                    padding:true,
+                };
                 axios
-                .get("http://www.hctx365.cn/line/price?lineId ="+this.$store.state.lineId)
+                .get("http://www.hctx365.cn/line/price?lineId="+this.$store.state.lineId)
                 .then(res=>{
                     if(res.data && res.data.data){
-                       // _this.ruleFormcharge = {};
+                        let resKeys =Object.keys(res.data.data);
+                        let resValues =Object.values(res.data.data);
+                        _this.allMonth=Object.values(resKeys).slice(0);
+                        resValues.forEach(function(element,index){
+                            let week7=[],week1=[],week2=[],week3=[],week4=[],week5=[],week6=[],forEachData=['1','1','1','1','1'];
+                            let priceTable = [];
+                            let perKeys =Object.keys(element);
+                            let perValues =Object.values(element);
+                            perValues.forEach(function(item,num){
+                                if(perKeys[num]=='1'){week7= item}
+                                if(perKeys[num]=='2'){week1= item}
+                                if(perKeys[num]=='3'){week2= item}
+                                if(perKeys[num]=='4'){week3= item}
+                                if(perKeys[num]=='5'){week4= item}
+                                if(perKeys[num]=='6'){week5= item}
+                                if(perKeys[num]=='7'){week6= item}
+                            })
+                            forEachData.forEach(function(item, index){
+                                priceTable.push({
+                                    Sun:week7[index]?week7[index]:emptyObj,
+                                    Mon:week1[index]?week1[index]:emptyObj,
+                                    Tues:week2[index]?week2[index]:emptyObj,
+                                    Wed:week3[index]?week3[index]:emptyObj,
+                                    Thur:week4[index]?week4[index]:emptyObj,
+                                    Fri:week5[index]?week5[index]:emptyObj,
+                                    Sat:week6[index]?week6[index]:emptyObj
+                                })
+                            })
+                            _this.priceTable.push({month:resKeys[index],priceData:priceTable});
+                        })
+                        console.log(_this.priceTable);
                     }
                 })
             },
@@ -383,6 +437,9 @@
                         type: 'warning'
                     });
                 }else{
+                    let emptyObj = {
+                        padding:true,
+                    };
                     axios
                     .post("http://www.hctx365.cn/line/price",postData)
                     .then(res=>{
@@ -396,28 +453,28 @@
                             let resValues =Object.values(res.data.data);
                             _this.allMonth=Object.values(resKeys).slice(0);
                             resValues.forEach(function(element,index){
-                                let week7=[],week1=[],week2=[],week3=[],week4=[],week5=[],week6=[],forEachData=[];
+                                let week7=[],week1=[],week2=[],week3=[],week4=[],week5=[],week6=[],forEachData=['1','1','1','1','1'];
                                 let priceTable = [];
                                 let perKeys =Object.keys(element);
                                 let perValues =Object.values(element);
                                 perValues.forEach(function(item,num){
-                                    if(perKeys[num]=='1'){week7= item;forEachData=item;}
-                                    if(perKeys[num]=='2'){week1= item;forEachData=item;}
-                                    if(perKeys[num]=='3'){week2= item;forEachData=item;}
-                                    if(perKeys[num]=='4'){week3= item;forEachData=item;}
-                                    if(perKeys[num]=='5'){week4= item;forEachData=item;}
-                                    if(perKeys[num]=='6'){week5= item;forEachData=item;}
-                                    if(perKeys[num]=='7'){week6= item;forEachData=item;}
+                                    if(perKeys[num]=='1'){week7= item}
+                                    if(perKeys[num]=='2'){week1= item}
+                                    if(perKeys[num]=='3'){week2= item}
+                                    if(perKeys[num]=='4'){week3= item}
+                                    if(perKeys[num]=='5'){week4= item}
+                                    if(perKeys[num]=='6'){week5= item}
+                                    if(perKeys[num]=='7'){week6= item}
                                 })
                                 forEachData.forEach(function(item, index){
                                     priceTable.push({
-                                        Sun:week7[index]?week7[index]:[],
-                                        Mon:week1[index]?week1[index]:[],
-                                        Tues:week2[index]?week2[index]:[],
-                                        Wed:week3[index]?week3[index]:[],
-                                        Thur:week4[index]?week4[index]:[],
-                                        Fri:week5[index]?week5[index]:[],
-                                        Sat:week6[index]?week6[index]:[]
+                                        Sun:week7[index]?week7[index]:emptyObj,
+                                        Mon:week1[index]?week1[index]:emptyObj,
+                                        Tues:week2[index]?week2[index]:emptyObj,
+                                        Wed:week3[index]?week3[index]:emptyObj,
+                                        Thur:week4[index]?week4[index]:emptyObj,
+                                        Fri:week5[index]?week5[index]:emptyObj,
+                                        Sat:week6[index]?week6[index]:emptyObj
                                     })
                                 })
                                 _this.priceTable.push({month:resKeys[index],priceData:priceTable});
@@ -459,9 +516,25 @@
     .timeTable .el-table--border th{
       background: #ddd;
     }
+    .timeTable .el-table td {
+        padding: 0 !important;
+    }
+     .timeTable .el-table .cell {
+        padding: 0 !important;
+        text-align: center;
+     }
     
 </style>
 <style scoped>
+    .display{
+        display:none;
+        min-height:131px;
+    }
+    .backcolor{
+        background: #fffcec;
+        height: 100%;
+        width: 100%;        
+    }
     .all-select{
         position: absolute;
         top: 0px;
@@ -484,8 +557,9 @@
     }
     .timeTable{
         width: 48%;
-        display: inline-block;
-        margin-left: 20px;
+        /* display: inline-block; */
+        float: left;
+        margin-right: 20px;
         margin-top: 20px;
     }
     .demo-ruleFormcharge .el-input--small{

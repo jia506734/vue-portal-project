@@ -1,5 +1,6 @@
 <template>
   	<div class="login_page fillcontain">
+		<div ><img :src="url"/></div>
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer" v-show="showLogin">
 				<div class="text_left" style="margin-bottom:10px;">LOGIN 登录</div>
@@ -28,7 +29,7 @@
 	export default {
 	    data(){
 			return {
-				
+				url:require( '../../static/image/login-background.jpg'),
 				loginForm: {
 					username: '',
 					password: '',
@@ -81,7 +82,7 @@
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
 		right: 0;
-		background-image: url("../../static/image/login-background.jpg")
+		/* background-image: url("../../static/image/login-background.jpg") */
 	}
 	.else-button{
  		font-size:12px;
@@ -109,13 +110,13 @@
 		border-radius: 5px;
 		text-align: center;
 		background-color: #fff;
-		width: 23%;
+		width: 20%;
 		transform: translate(-50%,-50%);
 		-webkit-transform:translate(-50%,-50%);
 		-ms-transform: translate(-50%,-50%);
 		-moz-transform: translate(-50%,-50%);
 		position: absolute;
-		left: 50%;
+		left: 49%;
 		top: 50%;
 	}
 	.tip{

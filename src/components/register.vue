@@ -1,10 +1,10 @@
 <template>
   	<div class="login_page fillcontain">
-		<div style="height: 100%;width: 100%;"><img :src="url"/></div>
+		<div ><img :src="url"/></div>
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer">
 		  		<div class="manage_tip">
-		  			<h1>LOGO</h1>
+		  			<!-- <h1>LOGO</h1> -->
 		  		</div>
 				<div class="text_left" style="margin-bottom:20px;">{{formName}}</div>
 		    	<el-form :model="ruleFormAcount" :rules="rulesAcount" ref="ruleFormAcount" label-width="100px">
