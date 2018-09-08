@@ -29,7 +29,7 @@
 	export default {
 	    data(){
 			return {
-				url:require( '../../static/image/login-background.jpg'),
+				url:require( '../../static/image/login_back.jpg'),
 				loginForm: {
 					username: '',
 					password: '',

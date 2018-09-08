@@ -1,6 +1,6 @@
 <template>
   	<div class="login_page fillcontain">
-		<div ><img :src="url"/></div>
+		<!-- <div ><img :src="url"/></div> -->
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer">
 		  		<div class="manage_tip">
@@ -53,19 +53,8 @@
 	import {mapActions, mapState} from 'vuex'
 	export default {
 	    data(){
-			// var checkPass = (rule, value, callback) => {
-			// 	if (!value) {
-			// 	return callback(new Error('确认密码不能为空'));
-			// 	}
-			// 	setTimeout(() => {
-			// 		if (value!=this.ruleFormForget.acountPass) {
-			// 			callback(new Error('两次密码不一致'));
-			// 			this.ruleFormForget.acountAgainPass ="";
-			// 		} 
-			// 	}, 1000);
-			// };
 			return {
-				url:require( '../../static/image/login-background.jpg'),
+				// url:require( '../../static/image/login_back.jpg'),
                 formName:'',
 				ruleFormAcount:{
 					acountName:'',
@@ -149,7 +138,7 @@
         background-size: 100% 100%;
         background-repeat: no-repeat;
         right: 0;
-		/* background-image: url("/static/image/login-background.jpg") */
+		background-image: url("../../static/image/login_back.jpg")
 	}
 	.manage_tip{
 		position: absolute;
