@@ -69,19 +69,23 @@
                 <el-input v-model="ruleForm.lineDestination" placeholder="请输入20字以内的描述"></el-input>
             </el-form-item>
             <el-form-item label="注意事项" prop="lineNotice">
-                <el-input v-model="ruleForm.lineNotice" placeholder="请输入1000字以内的描述"></el-input>
+                <el-input type="textarea" :rows="2" v-model="ruleForm.lineNotice" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
             <el-form-item label="报名须知" prop="lineSignUpInfo">
-                <el-input v-model="ruleForm.lineSignUpInfo" placeholder="请输入1000字以内的描述"></el-input>
+                <el-input type="textarea" :rows="2" v-model="ruleForm.lineSignUpInfo" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
             <el-form-item label="退订保证" prop="lineUnsubscribeEnsure">
-                <el-input v-model="ruleForm.lineUnsubscribeEnsure" placeholder="请输入1000字以内的描述"></el-input>
+                <el-input type="textarea" :rows="2" v-model="ruleForm.lineUnsubscribeEnsure" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
             <el-form-item label="线路录入人" prop="lineEnter">
                 <el-input v-model="ruleForm.lineEnter" placeholder="请输入录入人名称"></el-input>
             </el-form-item>
             <el-form-item label="客服电话" prop="lineServiceTel">
                 <el-input v-model="ruleForm.lineServiceTel" placeholder="请输入客服电话"></el-input>
+            </el-form-item>
+            <el-form-item style="text-align: center">
+                <el-button type="primary" @click="saveBaseInfo()">保存并下一步</el-button>
+                <el-button @click="resetFields()">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -249,7 +253,6 @@
             },
             //保存基本信息
             saveBaseInfo(){
-                debugger
                 let _this = this
                 this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
@@ -258,6 +261,14 @@
                         _this.$notify({
                             duration: '2000',
                             message: '请填写行程天数',
+                            type: 'warning'
+                        });
+                        return false;
+                    }
+                    if(postData.lineStartDate > postData.lineEndDate){
+                        _this.$notify({
+                            duration: '2000',
+                            message: '开始时间不能大于结束时间',
                             type: 'warning'
                         });
                         return false;

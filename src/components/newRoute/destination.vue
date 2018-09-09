@@ -58,14 +58,24 @@ export default{
                 let _this = this
                 axios
                 .get("http://www.hctx365.cn/line/image?lineId="+this.$route.query.lineId).then(res=>{
-                    if(res.data.success){
-                        _this.infoForm.a_content = res.data.data[0].imageDesc
+                    if(res.data.data&&res.data.data.length>0){
+                        _this.infoForm.a_content = res.data.data?res.data.data[0].imageDesc:'';
                     }
                 })
             },
             onEditorReady(editor) {
             },
             save(){
+                if(this.infoForm.a_content ==""){
+                    this.$notify({                     
+                        duration:2000,
+                        message: "请添加简介",
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                debugger
+                let _this = this;
                 let params = [{
                     lineId:this.$store.state.lineId,
                     imageDesc:this.infoForm.a_content

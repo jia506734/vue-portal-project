@@ -3,7 +3,7 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item prop="day">
                 <el-steps class="marginNo" :active="activeDay" align-center @click.native="stepClick">
-                  <el-step v-for="(item,index) in countRuleDetail" :title="'第'+(index+1)+'天'" description=""></el-step>
+                  <el-step v-for="(item,index) in countRuleDetail" :key="index" :title="'第'+(index+1)+'天'" description=""></el-step>
                 </el-steps>
             </el-form-item>
             <el-form-item label="行程标题" prop="lineTripTitle">
@@ -103,7 +103,7 @@ import axios from "axios"
                 let _this = this
                 axios
                 .get("http://www.hctx365.cn/line/detailinfo?lineId="+this.$route.query.lineId).then(res=>{
-                    if(res.data.success){
+                    if(res.data.data&&res.data.data.length>0){
                         _this.ruleDetailArr = JSON.parse(JSON.stringify(res.data.data))
                         for(let key in _this.ruleDetailArr){
                             _this.dayId.push(_this.ruleDetailArr[key].lineDetailId)
