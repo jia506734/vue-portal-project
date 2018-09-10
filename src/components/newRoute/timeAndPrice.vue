@@ -292,8 +292,6 @@
                     lineClubPrice:'',
                     linePeerPrice:'',
                     weeks:[],
-                    lineStartDate:'2018-05-05',
-                    lineEndDate:'2018-06-25'
                 },
                 rulescharge:{
                     weeks: [
