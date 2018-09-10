@@ -16,13 +16,13 @@
     <div class="tabs">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我的" name="my">
-          <my-route ref="routemgt"></my-route>
+          <my-route ref="myroutemgt"></my-route>
         </el-tab-pane>
         <el-tab-pane label="同业" name="trade">
-          <trade-route ref="routemgt"></trade-route>
+          <trade-route ref="traderoutemgt"></trade-route>
         </el-tab-pane>
         <el-tab-pane label="网店" name="store">
-          <store-route ref="routemgt"></store-route>
+          <store-route ref="storeroutemgt"></store-route>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -55,10 +55,13 @@ export default {
   },
   methods:{      
       deleteRoute(){
-        this.$refs['routemgt'].deleteRoute();
+        if(this.activeName=="my"){
+          this.$refs['myroutemgt'].deleteRoute();
+        }
+        
       },
       handleClick(tab, event) {
-        this.tabName =this.activeName
+        
         if(this.activeName == '我的'){
           
         }
