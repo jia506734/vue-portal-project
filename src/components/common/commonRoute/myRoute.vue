@@ -19,7 +19,7 @@
               </template>
             </el-table-column>
             <el-table-column label="线路名称">
-                <template slot-scope="scope"><span @click="showRouteDetail(scope.row)" class="route-name">{{ getstate(scope.row.lineName) }}</span></template>
+                <template slot-scope="scope"><span @click="showRouteDetail(scope.row)" class="route-name">{{ scope.row.lineName}}</span></template>
             </el-table-column>
             <el-table-column label="线路国内海外">
                 <template slot-scope="scope"><span>{{ getdic(scope.row.lineRange) }}</span></template>

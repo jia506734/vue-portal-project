@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="base-info">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="线路名称" prop="lineName">
-                <el-input v-model="ruleForm.lineName" placeholder="请输入线路名称"></el-input>
+                <el-input v-model="ruleForm.lineName" placeholder="请输入线路名称" style="width:50%"></el-input>
             </el-form-item>
             <el-form-item label="国内境外" prop="lineRange">
                 <el-radio-group v-model="ruleForm.lineRange">
@@ -50,23 +50,19 @@
                 </el-col>
             </el-form-item>
             <el-form-item label="线动时间" required>
-                <el-col :span="4">
-                <el-form-item prop="lineStartDate">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineStartDate"></el-date-picker>
-                </el-form-item>
-                </el-col>
-                <span class="line" style="margin-left: -40px;">至</span>
-                <el-col :span="4">
-                <el-form-item prop="lineEndDate">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.lineEndDate"></el-date-picker>
-                </el-form-item>
-                </el-col>
+                <el-date-picker
+                    v-model="ruleForm.lineDate"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                </el-date-picker>
             </el-form-item>
             <el-form-item label="出发地" prop="lineOrigin">
-                <el-input v-model="ruleForm.lineOrigin" placeholder="请输入20字以内的描述"></el-input>
+                <el-input v-model="ruleForm.lineOrigin" placeholder="请输入20字以内的描述" style="width:50%"></el-input>
             </el-form-item>
             <el-form-item label="目的地" prop="lineDestination">
-                <el-input v-model="ruleForm.lineDestination" placeholder="请输入20字以内的描述"></el-input>
+                <el-input v-model="ruleForm.lineDestination" placeholder="请输入20字以内的描述" style="width:50%"></el-input>
             </el-form-item>
             <el-form-item label="注意事项" prop="lineNotice">
                 <el-input type="textarea" :rows="2" v-model="ruleForm.lineNotice" placeholder="请输入1000字以内的描述"></el-input>
@@ -78,10 +74,10 @@
                 <el-input type="textarea" :rows="2" v-model="ruleForm.lineUnsubscribeEnsure" placeholder="请输入1000字以内的描述"></el-input>
             </el-form-item>
             <el-form-item label="线路录入人" prop="lineEnter">
-                <el-input v-model="ruleForm.lineEnter" placeholder="请输入录入人名称"></el-input>
+                <el-input v-model="ruleForm.lineEnter" placeholder="请输入录入人名称" style="width:50%"></el-input>
             </el-form-item>
             <el-form-item label="客服电话" prop="lineServiceTel">
-                <el-input v-model="ruleForm.lineServiceTel" placeholder="请输入客服电话"></el-input>
+                <el-input v-model="ruleForm.lineServiceTel" placeholder="请输入客服电话" style="width:50%"></el-input>
             </el-form-item>
             <el-form-item style="text-align: center">
                 <el-button type="primary" @click="saveBaseInfo()">保存并下一步</el-button>
@@ -141,8 +137,9 @@
                     lineRange: '',
                     lineDay:'',
                     lineNight:'',
-                    lineStartDate:'',
-                    lineEndDate:'',
+                    lineDate:[],
+                    // lineStartDate:'',
+                    // lineEndDate:'',
                     lineStatus:''
                 },
                 rules: {
@@ -204,6 +201,7 @@
                 .then(res=>{
                     if(res.data.data){
                         let data = res.data.data[0];
+                        let lineDate = [data.lineStartDate,data.lineEndDate];                        
                         vm.ruleForm= {
                             lineName: data.lineName,
                             lineOrigin:data.lineOrigin,
@@ -218,8 +216,7 @@
                             lineRange: data.lineRange=='0'?'国内':'海外',
                             lineDay:data.lineDay.toString(),
                             lineNight:data.lineNight.toString(),
-                            lineStartDate:data.lineStartDate,
-                            lineEndDate:data.lineEndDate,
+                            lineDate:lineDate,
                             lineStatus:data.lineStatus,
                         }
                     }
@@ -250,6 +247,15 @@
             //重置基本信息表单
             resetFields(){
                 this.$refs['ruleForm'].resetFields();
+                this.ruleForm.lineDay= "";
+                this.ruleForm.lineNight= "";
+            },
+            getTime(date){
+                let time = new Date(date);
+                let year = time.getFullYear();
+                let month = time.getMonth()+1;
+                let day = time.getDate();
+                return (year+'-'+month+'-'+day)
             },
             //保存基本信息
             saveBaseInfo(){
@@ -313,6 +319,8 @@
                             lineTheme.push('5')
                         }
                     })
+                    postData.lineStartDate = this.getTime(postData.lineDate[0]);
+                    postData.lineEndDate = this.getTime(postData.lineDate[1]);
                     postData.lineTravelWay = lineTravelWay.join(',');
                     postData.lineTheme = lineTheme.join(',');
                     if(this.$store.state.lineCreate){
@@ -358,6 +366,12 @@
     }
 }
 </script>
+<style>
+    .base-info .el-textarea__inner{
+        width: 50% !important;
+    }
+</style>
+
 <style scoped>
     .demo-ruleForm{
         height: 811px;

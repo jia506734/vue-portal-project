@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div class="user-mgt">
       <div class="top-class"><span style="margin-left: 10px;">用户管理</span></div>
       <div style="margin-left:20px;margin-top:20px;">
         <el-row>
@@ -658,7 +658,7 @@ export default {
     .el-select{
         width: 100%;
     }
-    .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    .user-mgt .el-date-editor.el-input, .user-mgt .el-date-editor.el-input__inner{
         width: 100% !important;
     }
 </style>
